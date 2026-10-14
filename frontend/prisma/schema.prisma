@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql" 
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, token])
+}
+
+// ------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------
+
+enum ExperienceLevel {
+  ENTRY_LEVEL
+  MID_LEVEL
+  SENIOR
+  LEAD
+}
+
+// ------------------------------------------------------
+// MODELS
+// ------------------------------------------------------
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  name            String
+  
+  // User Profile / Preferences
+  jobRole         String?          // e.g. "Frontend Developer", "Full Stack Engineer"
+  experienceLevel ExperienceLevel? // Global default experience level
+  techStack       String[]         // e.g. ["React", "TypeScript", "Next.js", "Node.js"]
+  targetCompanies String[]         // e.g. ["Google", "Meta", "Headout"]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  interviews      Interview[]
+}

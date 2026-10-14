@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  name         String
+  passwordHash String
+  profile      UserProfile?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String       @id @default(uuid())
+  tokenHash String
+  expiresAt DateTime
+  revokedAt DateTime?
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId String?
+  profile   UserProfile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+
+  @@index([userId])
+}
+
+model UserProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  experienceLevel String
+  jobRole         String
+  targetCompany   String?
+  skills          String[]
+  bio             String?
+  location        String?
+  avatarUrl       String?
+
+  cvUrl      String?
+  cvFileName String?
+
+  refreshTokens RefreshToken[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
