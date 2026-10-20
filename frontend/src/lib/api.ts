@@ -63,7 +63,6 @@
 //     apiFetch<T>(endpoint, { ...options, method: "DELETE" }),
 // };
 
-
 import { cookies } from "next/headers";
 import { ApiError } from "./error";
 import { API_BASE_URL } from "./constants";
@@ -92,35 +91,54 @@ async function apiFetch<T>(
   let newAccessToken: string | undefined;
 
   if (res.status === 401 && refreshToken) {
-    const refreshRes = await fetch(
-      `${API_BASE_URL}/auth/refresh`,
-      {
-        method: "POST",
-        headers: {
-          Cookie: `refreshToken=${refreshToken}`,
-        },
-        cache: "no-store",
+    const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    });
 
     const refreshData = await refreshRes.json().catch(() => null);
 
-    if (
-      !refreshRes.ok ||
-      !refreshData?.success ||
-      !refreshData.data?.accessToken
-    ) {
+    if (!refreshRes.ok || !refreshData?.accessToken) {
+      console.error("[Auth Refresh] Backend rejected refresh:", {
+        status: refreshRes.status,
+        message: refreshData?.message,
+        error: refreshData?.error,
+      });
+
       throw new ApiError(
-        "Session expired. Please log in again.",
-        401,
+        refreshData?.message || "Session expired. Please log in again.",
+        refreshRes.status || 401,
         null,
         "UNAUTHORIZED",
       );
     }
 
-    newAccessToken = refreshData.data.accessToken;
+    newAccessToken = refreshData.accessToken;
 
-    // Retry original request exactly once using the new access token.
+    // Persist rotated tokens so the browser doesn't keep a revoked refresh token.
+    cookieStore.set("accessToken", refreshData.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 15 * 60,
+    });
+
+    if (refreshData.refreshToken) {
+      cookieStore.set("refreshToken", refreshData.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60,
+      });
+    }
+
+    // Retry the original request once.
     res = await sendRequest(newAccessToken);
   }
 
@@ -128,7 +146,8 @@ async function apiFetch<T>(
 
   if (!res.ok) {
     throw new ApiError(
-      responseData.message || responseData.error?.message ||
+      responseData.message ||
+        responseData.error?.message ||
         `Request failed with status ${res.status}`,
       res.status,
       responseData.details || responseData.error?.details || null,

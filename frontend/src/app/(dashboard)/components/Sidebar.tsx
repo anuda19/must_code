@@ -60,19 +60,20 @@ export default function Sidebar() {
 
       <div className="min-w-0">
         {/* Brand */}
-        <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden px-2 py-3">
-          <div className="flex h-10 w-10 min-w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-indigo-500/20">
-            <Sparkles size={20} />
-          </div>
-
-          <span
-            aria-hidden={isCollapsed}
-            className={`overflow-hidden whitespace-nowrap font-bold text-lg tracking-wider text-white transition-[opacity,max-width] duration-200 ${
-              isCollapsed ? "max-w-0 opacity-0" : "max-w-40 opacity-100"
-            }`}
+        <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden py-3">
+          <Link
+            href="/dashboard"
+            aria-label="Must Code home"
+            className="group flex shrink-0 items-center gap-2.5"
           >
-            NEXUS<span className="text-cyan-400">.IO</span>
-          </span>
+            <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-300/20 bg-indigo-400/[0.10] text-indigo-400 transition-colors group-hover:border-indigo-200/40 group-hover:bg-indigo-400/[0.15]">
+              <Code2 className="size-[20px]" strokeWidth={2.8} />
+            </div>
+
+            <span className="text-[25px] font-semibold tracking-[-0.055em] text-white">
+              Must<span className="text-indigo-400">Code</span>
+            </span>
+          </Link>
         </div>
 
         {/* Navigation */}
@@ -82,8 +83,7 @@ export default function Sidebar() {
               pathname === item.href ||
               (item.href !== "/dashboard" &&
                 pathname.startsWith(`${item.href}/`)) ||
-              (item.href === "/dashboard" &&
-                pathname === "/dashboard");
+              (item.href === "/dashboard" && pathname === "/dashboard");
 
             const Icon = item.icon;
 
@@ -112,9 +112,7 @@ export default function Sidebar() {
                 <span
                   aria-hidden={isCollapsed}
                   className={`ml-3 overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ${
-                    isCollapsed
-                      ? "max-w-0 opacity-0"
-                      : "max-w-48 opacity-100"
+                    isCollapsed ? "max-w-0 opacity-0" : "max-w-48 opacity-100"
                   }`}
                 >
                   {item.label}

@@ -252,3 +252,58 @@ button {
     @apply font-sans;
   }
 }
+
+
+@keyframes mic-wave {
+  0%, 100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(0.85);
+  }
+}
+
+@keyframes neural-breathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.035);
+    filter: brightness(1.12);
+  }
+}
+
+@keyframes neural-glow {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.mic-wave-bar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mic-wave 2.4s ease-in-out infinite;
+}
+
+.neural-core-pulse {
+  animation: neural-breathe 6s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+.neural-core-glow {
+  animation: neural-glow 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mic-wave-bar,
+  .neural-core-pulse,
+  .neural-core-glow {
+    animation: none;
+  }
+}
+
+/* Hero section CTA animation */

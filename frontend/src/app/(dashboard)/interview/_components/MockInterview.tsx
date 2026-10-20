@@ -1,5 +1,5 @@
 "use client";
-import { useGeminiLive } from "@/hooks/use-gemini-live";
+import { useGeminiLive } from "@/hooks/useGeminiLive";
 import { InterviewRoom } from "./InterviewRoom";
 
 export default function MockInterviewPage() {
@@ -18,6 +18,9 @@ export default function MockInterviewPage() {
       status={interview.status}
       muted={false}
       messages={interview.messages}
+      evaluation={interview.evaluation}
+      isEvaluating={interview.isEvaluating}
+      onTryAgain={interview.onTryAgain}
       error={interview.error}
       onStart={interview.start}
       onMute={() => {}}

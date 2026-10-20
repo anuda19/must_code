@@ -6,12 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { InterviewStatus, TranscriptMessage } from "@/types/interview-types";
+import { InterviewEvaluation } from "@/types/interview-evalution";
+import { InterviewScore } from "./InterviewScore";
 
 type Props = {
   status: InterviewStatus;
   muted: boolean;
   messages: TranscriptMessage[];
   error: string | null;
+  evaluation: InterviewEvaluation | null;
+  isEvaluating: boolean;
+  onTryAgain: () => void;
   onStart: () => void;
   onMute: () => void;
   onEnd: () => void;
@@ -22,6 +27,9 @@ export function InterviewRoom({
   muted,
   messages,
   error,
+  evaluation,
+  isEvaluating,
+  onTryAgain,
   onStart,
   onMute,
   onEnd,
@@ -29,9 +37,11 @@ export function InterviewRoom({
   const active = ["connecting", "listening", "speaking", "ready"].includes(
     status,
   );
-
+  if (!isEvaluating && evaluation) {
+    return <InterviewScore evaluation={evaluation} onTryAgain={onTryAgain} />;
+  }
   return (
-    <main className="min-h-svh bg-[#090b18] p-4 text-white md:p-8">
+    <main className="min-h-svh bg-[#090b18] px-4 text-white md:px-8">
       <header className="mx-auto mb-6 flex max-w-7xl flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">

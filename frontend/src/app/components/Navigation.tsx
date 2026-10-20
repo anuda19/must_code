@@ -2,6 +2,7 @@
 
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
+import { ArrowRight, Code2 } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/courses", label: "Courses" },
@@ -11,25 +12,32 @@ const NAV_ITEMS = [
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[#232838] bg-[#ffffff]">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        {/* Logo */}
+    <header className="sticky top-0 z-50 h-[72px] border-b border-white/[0.07] bg-[#080a12] text-white">
+      <div className="mx-auto flex h-full max-w-[1360px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
+        {/* Brand */}
         <Link
-          href="/"
-          className="text-base font-bold tracking-tight text-[#e7e9ef]"
+          href="/dashboard"
+          aria-label="Must Code home"
+          className="group flex shrink-0 items-center gap-2.5"
         >
-          Skillgist
+          <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-100/20 bg-indigo-400/[0.10] text-indigo-400 transition-colors group-hover:border-indigo-200/40 group-hover:bg-indigo-400/[0.15]">
+            <Code2 className="size-[20px]" strokeWidth={2.8} />
+          </div>
+
+          <span className="text-[25px] font-semibold tracking-[-0.055em] text-white">
+            Must<span className="text-indigo-400">Code</span>
+          </span>
         </Link>
 
-        {/* Nav */}
-        <NavigationMenu.Root className="flex">
+        {/* Navigation */}
+        <NavigationMenu.Root className="hidden md:flex">
           <NavigationMenu.List className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <NavigationMenu.Item key={item.href}>
                 <NavigationMenu.Link asChild>
                   <Link
                     href={item.href}
-                    className="rounded-md px-3 py-2 text-sm text-[#8891a5] transition-colors hover:text-[#e7e9ef]"
+                    className="rounded-lg px-4 py-2.5 text-[13px] font-medium text-slate-400 transition-colors duration-200 hover:bg-white/[0.04] hover:text-white"
                   >
                     {item.label}
                   </Link>
@@ -39,37 +47,23 @@ export default function Navbar() {
           </NavigationMenu.List>
         </NavigationMenu.Root>
 
-        {/* Profile */}
-        <Link href="/login" className="rounded-md px-3 py-2 text-sm text-[#8891a5] transition-colors hover:text-[#e7e9ef]">
-          Login
-        </Link>
-        <button
-          type="button"
-          aria-label="Profile"
-          className="grid h-9 w-9 place-items-center rounded-full border border-[#232838] bg-[#171b24] text-[#8891a5] transition-colors hover:text-[#e7e9ef]"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
+        {/* Actions */}
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/login"
+            className="rounded-lg px-3 py-2.5 text-[13px] font-medium text-slate-300 transition-colors hover:text-white sm:px-4"
           >
-            <circle
-              cx="12"
-              cy="8"
-              r="3.5"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            />
-            <path
-              d="M4.5 19.5c1.4-3 4-4.5 7.5-4.5s6.1 1.5 7.5 4.5"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+            Login
+          </Link>
+
+          <Link
+            href="/signup"
+            className="group inline-flex h-10 items-center gap-2 rounded-xl border border-indigo-200/20 bg-indigo-300 px-3.5 text-[12px] font-semibold text-[#10111b] transition-all duration-200 hover:bg-indigo-200 sm:px-4 sm:text-[13px]"
+          >
+            Get started
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </div>
     </header>
   );
