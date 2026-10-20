@@ -32,3 +32,13 @@ export type RefreshToken = Prisma.RefreshTokenModel
  * 
  */
 export type UserProfile = Prisma.UserProfileModel
+/**
+ * Model MockInterviewTranscript
+ * 
+ */
+export type MockInterviewTranscript = Prisma.MockInterviewTranscriptModel
+/**
+ * Model InterviewEvaluation
+ * 
+ */
+export type InterviewEvaluation = Prisma.InterviewEvaluationModel

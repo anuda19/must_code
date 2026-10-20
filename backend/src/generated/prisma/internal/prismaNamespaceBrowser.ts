@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
-  UserProfile: 'UserProfile'
+  UserProfile: 'UserProfile',
+  MockInterviewTranscript: 'MockInterviewTranscript',
+  InterviewEvaluation: 'InterviewEvaluation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -116,12 +118,70 @@ export const UserProfileScalarFieldEnum = {
 export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
 
 
+export const MockInterviewTranscriptScalarFieldEnum = {
+  id: 'id',
+  clientSessionId: 'clientSessionId',
+  userId: 'userId',
+  model: 'model',
+  status: 'status',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationSeconds: 'durationSeconds',
+  messages: 'messages',
+  events: 'events',
+  transcriptText: 'transcriptText',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MockInterviewTranscriptScalarFieldEnum = (typeof MockInterviewTranscriptScalarFieldEnum)[keyof typeof MockInterviewTranscriptScalarFieldEnum]
+
+
+export const InterviewEvaluationScalarFieldEnum = {
+  id: 'id',
+  transcriptId: 'transcriptId',
+  userId: 'userId',
+  status: 'status',
+  overallScore: 'overallScore',
+  grade: 'grade',
+  technicalAccuracy: 'technicalAccuracy',
+  problemSolving: 'problemSolving',
+  communication: 'communication',
+  relevance: 'relevance',
+  depthOfKnowledge: 'depthOfKnowledge',
+  report: 'report',
+  model: 'model',
+  promptVersion: 'promptVersion',
+  errorMessage: 'errorMessage',
+  evaluatedAt: 'evaluatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewEvaluationScalarFieldEnum = (typeof InterviewEvaluationScalarFieldEnum)[keyof typeof InterviewEvaluationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -138,4 +198,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

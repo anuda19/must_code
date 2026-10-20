@@ -54,3 +54,63 @@ model UserProfile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model MockInterviewTranscript {
+  id              String   @id @default(cuid())
+  clientSessionId String   @unique
+  userId          String
+  model           String?
+  status          String   @default("COMPLETED")
+
+  startedAt       DateTime
+  endedAt         DateTime
+  durationSeconds Int
+
+  messages        Json
+  events          Json
+  transcriptText  String   @db.Text
+  evaluation      InterviewEvaluation?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, endedAt])
+}
+
+enum InterviewEvaluationStatus {
+  NOT_STARTED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model InterviewEvaluation {
+  id           String                   @id @default(cuid())
+  transcriptId String                   @unique
+  userId       String
+  status       InterviewEvaluationStatus @default(NOT_STARTED)
+
+  overallScore Int?
+  grade        String?
+
+  technicalAccuracy Int?
+  problemSolving    Int?
+  communication     Int?
+  relevance         Int?
+  depthOfKnowledge  Int?
+
+  report       Json?
+  model        String?
+  promptVersion String @default("v1")
+
+  errorMessage String? @db.Text
+  evaluatedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  transcript   MockInterviewTranscript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}

@@ -399,7 +399,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
-  UserProfile: 'UserProfile'
+  UserProfile: 'UserProfile',
+  MockInterviewTranscript: 'MockInterviewTranscript',
+  InterviewEvaluation: 'InterviewEvaluation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "refreshToken" | "userProfile"
+    modelProps: "user" | "refreshToken" | "userProfile" | "mockInterviewTranscript" | "interviewEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +643,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MockInterviewTranscript: {
+      payload: Prisma.$MockInterviewTranscriptPayload<ExtArgs>
+      fields: Prisma.MockInterviewTranscriptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MockInterviewTranscriptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MockInterviewTranscriptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        findFirst: {
+          args: Prisma.MockInterviewTranscriptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MockInterviewTranscriptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        findMany: {
+          args: Prisma.MockInterviewTranscriptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>[]
+        }
+        create: {
+          args: Prisma.MockInterviewTranscriptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        createMany: {
+          args: Prisma.MockInterviewTranscriptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MockInterviewTranscriptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>[]
+        }
+        delete: {
+          args: Prisma.MockInterviewTranscriptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        update: {
+          args: Prisma.MockInterviewTranscriptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        deleteMany: {
+          args: Prisma.MockInterviewTranscriptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MockInterviewTranscriptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MockInterviewTranscriptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>[]
+        }
+        upsert: {
+          args: Prisma.MockInterviewTranscriptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MockInterviewTranscriptPayload>
+        }
+        aggregate: {
+          args: Prisma.MockInterviewTranscriptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMockInterviewTranscript>
+        }
+        groupBy: {
+          args: Prisma.MockInterviewTranscriptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MockInterviewTranscriptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MockInterviewTranscriptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MockInterviewTranscriptCountAggregateOutputType> | number
+        }
+      }
+    }
+    InterviewEvaluation: {
+      payload: Prisma.$InterviewEvaluationPayload<ExtArgs>
+      fields: Prisma.InterviewEvaluationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InterviewEvaluationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InterviewEvaluationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        findFirst: {
+          args: Prisma.InterviewEvaluationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InterviewEvaluationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        findMany: {
+          args: Prisma.InterviewEvaluationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>[]
+        }
+        create: {
+          args: Prisma.InterviewEvaluationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        createMany: {
+          args: Prisma.InterviewEvaluationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InterviewEvaluationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>[]
+        }
+        delete: {
+          args: Prisma.InterviewEvaluationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        update: {
+          args: Prisma.InterviewEvaluationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        deleteMany: {
+          args: Prisma.InterviewEvaluationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InterviewEvaluationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InterviewEvaluationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>[]
+        }
+        upsert: {
+          args: Prisma.InterviewEvaluationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewEvaluationPayload>
+        }
+        aggregate: {
+          args: Prisma.InterviewEvaluationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInterviewEvaluation>
+        }
+        groupBy: {
+          args: Prisma.InterviewEvaluationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewEvaluationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InterviewEvaluationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewEvaluationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -724,12 +874,70 @@ export const UserProfileScalarFieldEnum = {
 export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
 
 
+export const MockInterviewTranscriptScalarFieldEnum = {
+  id: 'id',
+  clientSessionId: 'clientSessionId',
+  userId: 'userId',
+  model: 'model',
+  status: 'status',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationSeconds: 'durationSeconds',
+  messages: 'messages',
+  events: 'events',
+  transcriptText: 'transcriptText',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MockInterviewTranscriptScalarFieldEnum = (typeof MockInterviewTranscriptScalarFieldEnum)[keyof typeof MockInterviewTranscriptScalarFieldEnum]
+
+
+export const InterviewEvaluationScalarFieldEnum = {
+  id: 'id',
+  transcriptId: 'transcriptId',
+  userId: 'userId',
+  status: 'status',
+  overallScore: 'overallScore',
+  grade: 'grade',
+  technicalAccuracy: 'technicalAccuracy',
+  problemSolving: 'problemSolving',
+  communication: 'communication',
+  relevance: 'relevance',
+  depthOfKnowledge: 'depthOfKnowledge',
+  report: 'report',
+  model: 'model',
+  promptVersion: 'promptVersion',
+  errorMessage: 'errorMessage',
+  evaluatedAt: 'evaluatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewEvaluationScalarFieldEnum = (typeof InterviewEvaluationScalarFieldEnum)[keyof typeof InterviewEvaluationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -746,6 +954,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -793,6 +1010,48 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'InterviewEvaluationStatus'
+ */
+export type EnumInterviewEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InterviewEvaluationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InterviewEvaluationStatus[]'
+ */
+export type ListEnumInterviewEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InterviewEvaluationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -949,6 +1208,8 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   refreshToken?: Prisma.RefreshTokenOmit
   userProfile?: Prisma.UserProfileOmit
+  mockInterviewTranscript?: Prisma.MockInterviewTranscriptOmit
+  interviewEvaluation?: Prisma.InterviewEvaluationOmit
 }
 
 /* Types for Logging */
