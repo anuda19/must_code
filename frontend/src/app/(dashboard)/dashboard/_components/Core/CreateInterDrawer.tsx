@@ -16,7 +16,6 @@ import { Interview } from "@/app/(dashboard)/interview/_components/Interview";
 import { Input } from "@/app/components/ui/TextInput";
 import { useUser } from "@/hooks/useUser";
 import { useQueryClient } from "@tanstack/react-query";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { hasProfileChanges } from "@/lib/normalize-profile";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
@@ -58,13 +57,7 @@ export function CreateInterviewDrawer({
   const profile = user?.profile;
   const [isEditing, setIsEditing] = useState(false);
   const queryClient = useQueryClient();
-  const {
-    value: interviewDesc,
-    setValue: setInterviewDesc,
-    removeValue: clearInterviewDesc,
-  } = useLocalStorage("interview-desc", {
-    jobDescription: "",
-  });
+
   const isDirty = hasProfileChanges(formData, profile);
 
   const canSave = isDirty && !isPending;
@@ -331,13 +324,6 @@ export function CreateInterviewDrawer({
 
                   <textarea
                     id="job-description"
-                    value={interviewDesc.jobDescription}
-                    onChange={(e) =>
-                      setInterviewDesc((prev) => ({
-                        ...prev,
-                        jobDescription: e.target.value,
-                      }))
-                    }
                     disabled={isDisabled}
                     rows={5}
                     placeholder="Paste the job description to tailor the interview to the role..."

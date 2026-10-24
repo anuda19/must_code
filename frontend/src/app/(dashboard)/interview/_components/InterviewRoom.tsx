@@ -32,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUser } from "@/hooks/useUser";
 
 type TokenResponse = {
   token: string;
@@ -438,36 +438,40 @@ export function InterviewRoom() {
   const [error, setError] = useState<string | null>(null);
   const [ended, setEnded] = useState(false);
   const [finalTranscript, setFinalTranscript] = useState<TranscriptItem[]>([]);
-  const {
-    value: interviewDesc,
-    removeValue: clearInterviewDesc,
-    isReady,
-  } = useLocalStorage("interview-draft", {
-    jobDescription: "",
-  });
-
-  if (!isReady) {
-    return <div>Loading interview setup...</div>;
-  }
-
-  const jobDescription = interviewDesc.jobDescription;
+  const { data: user } = useUser();
+  const profile = user?.profile;
 
   async function startInterview() {
     if (loading) return;
 
+    if (!profile) {
+      setError("Please complete your profile before starting an interview.");
+      return;
+    }
     setLoading(true);
     setError(null);
     setEnded(false);
     setFinalTranscript([]);
 
     try {
+      // const response = await fetch(`${API_BASE_URL}/api/livekit/token`, {
+      //   method: "GET",
+      //   headers: { Accept: "application/json" },
+      //   cache: "no-store",
+      // });
       const response = await fetch(`${API_BASE_URL}/api/livekit/token`, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
-        body: JSON.stringify({ jobDescription }),
+        body: JSON.stringify({
+          profile: {
+            experienceLevel: profile.experienceLevel,
+            jobRole: profile.jobRole,
+            targetCompany: profile.targetCompany,
+            skills: profile.skills,
+          },
+        }),
       });
 
       if (!response.ok) {
@@ -491,7 +495,6 @@ export function InterviewRoom() {
       setToken(data.token);
       setRoomName(data.roomName);
       setServerUrl(data.serverUrl);
-      clearInterviewDesc();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to start the interview.",
@@ -518,7 +521,7 @@ export function InterviewRoom() {
               {ended ? (
                 <Check className="size-9" />
               ) : (
-                <Sparkles className="size-9" />
+                <Mic className="size-9" />
               )}
             </div>
 
