@@ -16,8 +16,8 @@ import {
   Code2,
 } from "lucide-react";
 
-import { useUser } from "@/app/components/providers/AuthProvider";
 import { LogoutButton } from "@/app/components/ui/LogoutButton";
+import { useUser } from "@/hooks/useUser";
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
@@ -36,7 +36,7 @@ const NAV_ITEMS = [
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  const { user } = useUser();
+  const { data: user } = useUser();
 
   return (
     <aside

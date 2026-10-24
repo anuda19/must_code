@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 
 import { TechStackInput } from "./TechStackSelect";
-import { CompanySelect } from "./CompanySelect";
-import { RoleSelect } from "./JobRoleSelect";
 import { ExperienceLevelSelect } from "./ExperienceLevel";
 import { Label } from "@/app/components/ui/Label";
 import { updateUserProfileAction } from "@/actions/users/user-profile";
@@ -15,6 +13,11 @@ import { userProfileSchema } from "@/lib/schema/user-profile.schema";
 import { FieldError } from "@/app/components/ui/ErrorMsg";
 import { useRouter } from "next/navigation";
 import { Interview } from "@/app/(dashboard)/interview/_components/Interview";
+import { Input } from "@/app/components/ui/TextInput";
+import { useUser } from "@/hooks/useUser";
+import { useQueryClient } from "@tanstack/react-query";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { hasProfileChanges } from "@/lib/normalize-profile";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
 interface CreateInterviewDrawerProps {
@@ -44,7 +47,6 @@ export function CreateInterviewDrawer({
 }: CreateInterviewDrawerProps) {
   const [status, setStatus] = useState<"idle" | "loading">("idle");
   const [errorMsg, setErrorMsg] = useState<FormErrors>({});
-  const [detailsSaved, setDetailsSaved] = useState<boolean>(false);
   const [formData, setFormData] = useState<UserProfileData>({
     jobRole: initialData?.jobRole ?? "",
     experienceLevel: initialData?.experienceLevel ?? "MID_LEVEL",
@@ -52,6 +54,20 @@ export function CreateInterviewDrawer({
     targetCompany: initialData?.targetCompany ?? "",
     jobDescription: initialData?.jobDescription ?? "",
   });
+  const { data: user, isPending, isError } = useUser();
+  const profile = user?.profile;
+  const [isEditing, setIsEditing] = useState(false);
+  const queryClient = useQueryClient();
+  const {
+    value: interviewDesc,
+    setValue: setInterviewDesc,
+    removeValue: clearInterviewDesc,
+  } = useLocalStorage("interview-desc", {
+    jobDescription: "",
+  });
+  const isDirty = hasProfileChanges(formData, profile);
+
+  const canSave = isDirty && !isPending;
 
   const router = useRouter();
   const updateField = <K extends keyof UserProfileData>(
@@ -65,6 +81,7 @@ export function CreateInterviewDrawer({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    if(!isDirty || isPending) return;
     e.preventDefault();
     setStatus("loading");
     setErrorMsg({});
@@ -99,7 +116,7 @@ export function CreateInterviewDrawer({
     }
 
     setStatus("idle");
-    onClose();
+    // onClose();
     toast.add({
       title: "Profile Updated",
       description: "Your profile changes have been saved successfully.",
@@ -112,15 +129,30 @@ export function CreateInterviewDrawer({
       targetCompany: initialData?.targetCompany ?? "",
       jobDescription: initialData?.jobDescription ?? "",
     });
-    setDetailsSaved(true);
+    await queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+
+    setIsEditing(false);
     // onSuccess?.();
   };
 
   const handleStartInterview = () => {
     router.push("/interview/mock-interviews");
-  }
+  };
   const isDisabled = status !== "idle";
 
+  useEffect(() => {
+    if (!profile) return;
+
+    setFormData({
+      jobRole: profile.jobRole ?? "",
+      experienceLevel: profile.experienceLevel ?? "MID_LEVEL",
+      skills: profile.skills ?? [],
+      targetCompany: profile.targetCompany ?? "",
+      jobDescription: initialData?.jobDescription ?? "",
+    });
+  }, [profile, initialData?.jobDescription]);
   return (
     <Dialog.Root
       open={isOpen}
@@ -148,7 +180,7 @@ export function CreateInterviewDrawer({
             flex-col
             border-l border-slate-800
             bg-slate-900
-            p-6
+            p-5
             shadow-2xl
             focus:outline-none
             data-[state=open]:animate-slideInRight
@@ -185,14 +217,32 @@ export function CreateInterviewDrawer({
               </button>
             </Dialog.Close>
           </div>
-
-          {/* Form */}
-          {!detailsSaved ? (
-            <Interview onStartInterview={handleStartInterview} />
+          {isPending ? (
+            <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
+              Loading your profile...
+            </div>
+          ) : isError ? (
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 text-sm text-slate-400">
+              <p>Unable to load your profile.</p>
+              <button
+                type="button"
+                onClick={() =>
+                  queryClient.invalidateQueries({ queryKey: ["user"] })
+                }
+                className="text-indigo-400 hover:text-indigo-300"
+              >
+                Try again
+              </button>
+            </div>
+          ) : profile && !isEditing ? (
+            <Interview
+              onStartInterview={handleStartInterview}
+              onEditProfile={() => setIsEditing(true)}
+            />
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="mt-6 flex flex-1 flex-col justify-between overflow-y-auto drawer-scrollbar"
+              className="mt-6 flex p-1 flex-1 flex-col justify-between overflow-y-auto drawer-scrollbar"
             >
               <div className="space-y-5 pr-1">
                 {/* Job Role */}
@@ -200,15 +250,16 @@ export function CreateInterviewDrawer({
                   <Label
                     required
                     htmlFor="job-role"
-                    className="block text-xs font-medium text-slate-300"
+                    className="block text-xs font-medium text-slate-300 mb-1"
                   >
                     Job Role
                   </Label>
-
-                  <RoleSelect
+                  <Input
+                    id="job-role"
                     value={formData.jobRole}
-                    onChange={(value) => updateField("jobRole", value)}
+                    onChange={(e) => updateField("jobRole", e.target.value)}
                     disabled={isDisabled}
+                    placeholder="e.g. Software Engineer"
                   />
                   <FieldError message={errorMsg?.jobRole} />
                 </div>
@@ -251,34 +302,41 @@ export function CreateInterviewDrawer({
 
                 {/* Target Company */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-300">
-                    Target Company
-                  </label>
+                  <Label
+                    htmlFor="target-company"
+                    className="block text-xs font-medium text-slate-300 mb-1"
+                  >
+                    Target Company (Optional)
+                  </Label>
 
-                  <CompanySelect
+                  <Input
+                    id="target-company"
                     value={formData.targetCompany}
-                    onChange={(value) => updateField("targetCompany", value)}
+                    onChange={(e) =>
+                      updateField("targetCompany", e.target.value)
+                    }
+                    disabled={isDisabled}
+                    placeholder="e.g. Google, Amazon, Microsoft"
                   />
                 </div>
 
                 {/* Job Description */}
                 <div>
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="job-description"
-                      className="block text-xs font-medium text-slate-300"
-                    >
-                      Job Description
-                    </label>
-
-                    <span className="text-[11px] text-slate-600">Optional</span>
-                  </div>
+                  <Label
+                    htmlFor="job-description"
+                    className="block text-xs font-medium text-slate-300"
+                  >
+                    Job Description (Optional)
+                  </Label>
 
                   <textarea
                     id="job-description"
-                    value={formData.jobDescription}
+                    value={interviewDesc.jobDescription}
                     onChange={(e) =>
-                      updateField("jobDescription", e.target.value)
+                      setInterviewDesc((prev) => ({
+                        ...prev,
+                        jobDescription: e.target.value,
+                      }))
                     }
                     disabled={isDisabled}
                     rows={5}
@@ -308,34 +366,9 @@ export function CreateInterviewDrawer({
 
               {/* Footer */}
               <div className="mt-6 space-y-3 border-t border-slate-800 pt-6 sticky bottom-0 bg-slate-900">
-                {/* <button
-                type="submit"
-                disabled={isDisabled || formData.techStack.length === 0}
-                className="
-                  flex w-full items-center
-                  justify-center gap-2
-                  rounded-xl
-                  bg-indigo-600
-                  px-4 py-3
-                  text-sm font-medium text-white
-                  shadow-lg shadow-indigo-600/10
-                  transition-all
-                  hover:bg-indigo-500
-                  disabled:opacity-50
-                "
-              >
-                {status === "idle" ? (
-                  <>
-                    <Calendar className="h-4 w-4" />
-                    Schedule Interview
-                  </>
-                ) : (
-                  "Preparing Workspace..."
-                )}
-              </button> */}
                 <button
                   type="submit"
-                  disabled={isDisabled || formData.skills.length === 0}
+                  disabled={isDisabled || formData.skills.length === 0 || !canSave}
                   className="
                   flex w-full items-center
                   justify-center gap-2

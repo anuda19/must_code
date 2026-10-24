@@ -2,21 +2,15 @@
 'use client';
 
 import { useTransition } from 'react';
-import { useUser } from '../providers/AuthProvider';
 import { logoutAction } from '@/actions/auth/auth';
 import { Loader2, LogOut, LogOutIcon } from 'lucide-react';
 
 export function LogoutButton() {
   const [isPending, startTransition] = useTransition();
-  const { setUser } = useUser();
-
+  
   const handleLogout = () => {
     startTransition(async () => {
       await logoutAction();
-      
-      // 1. Reset client-side auth context state
-      setUser(null);
-
       // 2. Hard navigate to login page to clear any client route cache
       window.location.href = '/login';
     });

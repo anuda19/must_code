@@ -4,7 +4,6 @@
 import { User, Settings, HelpCircle, LogOut } from "lucide-react";
 import { logoutAction } from "@/actions/auth/auth";
 import { useTransition } from "react";
-import { useUser } from "@/app/components/providers/AuthProvider";
 import { Dropdown } from "@/app/components/ui/Dropdown";
 
 interface ProfileDropdownProps {
@@ -27,15 +26,9 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     .toUpperCase();
 
   const [isPending, startTransition] = useTransition();
-  const { setUser } = useUser();
   const handleLogout = () => {
     startTransition(async () => {
       await logoutAction();
-
-      // 1. Reset client-side auth context state
-      setUser(null);
-
-      // 2. Hard navigate to login page to clear any client route cache
       window.location.href = "/login";
     });
   };

@@ -1,10 +1,10 @@
-import MockInterviewPage from "../_components/MockInterview";
+import { InterviewRoom } from "../_components/InterviewRoom";
 
 
 const MockInterview = () => {
   return (
     <>
-      <MockInterviewPage />
+      <InterviewRoom />
     </>
   );
 };

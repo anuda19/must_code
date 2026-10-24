@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -8,6 +7,8 @@ import {
   CheckCircle2,
   Clock3,
   Mic,
+  Edit2Icon,
+  Edit,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,26 +17,33 @@ import { Badge } from "@/components/ui/badge";
 
 interface InterviewProps {
   onStartInterview: () => void;
+  onEditProfile: () => void;
 }
 
-export function Interview({ onStartInterview }: InterviewProps) {
+export function Interview({ onStartInterview, onEditProfile }: InterviewProps) {
   return (
     <div className="flex h-full min-h-0 flex-col text-slate-100">
       {/* Scrollable content */}
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
         <div className="space-y-5 pb-5">
           {/* Header */}
-          <div className="space-y-3">
-            <Badge
-              variant="outline"
-              className="gap-1.5 border-indigo-500/20 bg-indigo-500/10 text-indigo-400"
-            >
-              AI-Powered Interview
-            </Badge>
+          <div className="flex justify-between items-center">
+            <div className="space-y-3">
+              <Badge
+                variant="outline"
+                className="gap-1.5 border-indigo-500/20 bg-indigo-500/10 text-indigo-400"
+              >
+                AI-Powered Interview
+              </Badge>
 
-            <h2 className="text-xl font-semibold tracking-tight text-white">
-              Choose Your Interview
-            </h2>
+              <h2 className="text-xl font-semibold tracking-tight text-white">
+                Choose Your Interview
+              </h2>
+            </div>
+            <Button onClick={onEditProfile}>
+              <Edit className="text-indigo-400" />
+              Edit Profile
+            </Button>
           </div>
 
           {/* Mock Interview */}
@@ -48,9 +56,7 @@ export function Interview({ onStartInterview }: InterviewProps) {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold">
-                      Mock Interview
-                    </h3>
+                    <h3 className="text-sm font-semibold">Mock Interview</h3>
 
                     <Badge
                       variant="secondary"

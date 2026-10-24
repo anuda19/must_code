@@ -1,4 +1,4 @@
-import { AuthProvider } from "../components/providers/AuthProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#070A12] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
-      <AuthProvider>
+      <QueryProvider>
         <Sidebar />
         <div className="flex flex-1 flex-col overflow-hidden">
           <Topbar />
@@ -18,7 +18,7 @@ export default function DashboardLayout({
             <TooltipProvider>{children}</TooltipProvider>
           </main>
         </div>
-      </AuthProvider>
+      </QueryProvider>
     </div>
   );
 }

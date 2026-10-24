@@ -1,7 +1,7 @@
 "use client";
 import { Search, Bell, ShieldCheck, Loader2 } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
-import { useUser } from "@/app/components/providers/AuthProvider";
+import { useUser } from "@/hooks/useUser";
 export interface User {
   id: string;
   email: string;
@@ -11,7 +11,7 @@ export interface User {
 }
 
 export default function Topbar() {
-  const { user, isLoading } = useUser();
+  const { data: user } = useUser();
   return (
     <header className="relative z-10 flex h-16 w-full items-center justify-between border-b border-slate-800/80 bg-gradient-to-r from-[#0B0F19] via-[#0E1424] to-[#0B0F19] px-6 shadow-md">
       {/* Glow effect */}
