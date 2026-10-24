@@ -6,7 +6,6 @@ import {
   Injectable,
   BadRequestException,
 } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserProfileDto } from './dto/user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -52,15 +51,6 @@ export class UserProfileService {
           avatarUrl: dto.avatarUrl,
         },
       });
-
-      // const newInterview = await this.prisma.interview.create({
-      //   data: {
-      //     userId,
-      //     jobDescription: dto.jobDescription || null, // Specific to THIS interview
-      //     status: 'CREATED',
-      //   },
-      // });
-
       return {
         success: true,
         message: 'Profile updated successfully',

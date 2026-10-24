@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleGenAI, Modality } from '@google/genai';
+import { EndSensitivity, GoogleGenAI, Modality, StartSensitivity } from '@google/genai';
 import { PrismaService } from '../prisma/prisma.service';
 import { buildInterviewPrompt } from './prompts/interview.prompts';
 
@@ -17,16 +17,23 @@ export class InterviewService {
     });
   }
 
-  async createVoiceToken(userId: string) {
-    const profile = await this.prisma.userProfile.findUnique({
-      where: { userId },
-    });
+  async createVoiceToken(userId: string, opts?: { baseline?: boolean }) {
+    const profile = await this.prisma.userProfile.findUnique({ where: { userId } });
+  if (!profile) throw new InternalServerErrorException('User profile not found');
 
+  const model = this.config.getOrThrow<string>('GEMINI_LIVE_MODEL');
+  console.log('[Live token] model =', model);
+
+  const systemInstruction = opts?.baseline
+    ? 'You are a friendly mock interviewer. Ask one short question at a time.'
+    : buildInterviewPrompt(profile);
+
+  console.log('[Live token] prompt chars =', systemInstruction.length);
     if (!profile) {
       throw new InternalServerErrorException('User profile not found');
     }
 
-    const model = this.config.getOrThrow<string>('GEMINI_LIVE_MODEL');
+    // const model = this.config.getOrThrow<string>('GEMINI_LIVE_MODEL');
 
     // Generate Ephemeral Token scoped specifically to this live session
     const token = await this.gemini.authTokens.create({
@@ -39,6 +46,14 @@ export class InterviewService {
           config: {
             responseModalities: [Modality.AUDIO],
             systemInstruction: buildInterviewPrompt(profile),
+            realtimeInputConfig: {
+            automaticActivityDetection: {
+              startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
+              endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
+              prefixPaddingMs: 20,
+              silenceDurationMs: 400,
+            },
+          },
             inputAudioTranscription: {},
             outputAudioTranscription: {},
           },
