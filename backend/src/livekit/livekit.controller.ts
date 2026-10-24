@@ -1,42 +1,60 @@
-// import { Controller, Get, Query } from '@nestjs/common';
+// import {
+//   Controller,
+//   Get,
+//   InternalServerErrorException,
+//   Query,
+// } from '@nestjs/common';
 // import { LiveKitService } from './livekit.service';
 
 // @Controller('api/livekit')
 // export class LiveKitController {
-//   constructor(private readonly livekitService: LiveKitService) {}
+//   constructor(private readonly liveKitService: LiveKitService) {}
 
 //   @Get('token')
-//   async getToken(
-//     @Query('room') room: string,
-//     @Query('identity') identity: string,
-//   ) {
-//     const roomName = room || `room-${Math.random().toString(36).substring(7)}`;
-//     const participantName = identity || `user-${Math.random().toString(36).substring(7)}`;
-    
-//     const token = await this.livekitService.generateToken(roomName, participantName);
-    
-//     // Optional: Trigger your Gemini session setup right as the room is initialized
-//     await this.livekitService.connectRoomToGemini(roomName);
+//   async getToken(@Query('identity') identity?: string) {
+//     const result = await this.liveKitService.generateToken(identity);
 
-//     return { token, roomName };
+//     if (!result.serverUrl) {
+//       throw new InternalServerErrorException(
+//         'LIVEKIT_URL is missing from backend .env',
+//       );
+//     }
+
+//     return result;
 //   }
 // }
 
 import {
+  Body,
   Controller,
-  Get,
   InternalServerErrorException,
-  Query,
+  Post,
 } from '@nestjs/common';
 import { LiveKitService } from './livekit.service';
+import { CandidateProfile } from '../types/candidate-profile.types';
 
 @Controller('api/livekit')
 export class LiveKitController {
   constructor(private readonly liveKitService: LiveKitService) {}
 
-  @Get('token')
-  async getToken(@Query('identity') identity?: string) {
-    const result = await this.liveKitService.generateToken(identity);
+  @Post('token')
+  async getToken(
+    @Body()
+    body: {
+      profile: CandidateProfile;
+      identity?: string;
+    },
+  ) {
+    if (!body?.profile) {
+      throw new InternalServerErrorException(
+        'Candidate profile is required',
+      );
+    }
+
+    const result = await this.liveKitService.generateToken(
+      body.profile,
+      body.identity,
+    );
 
     if (!result.serverUrl) {
       throw new InternalServerErrorException(

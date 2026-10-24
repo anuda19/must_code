@@ -31,7 +31,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserProfileModule } from './user-profile/user-profile.module';
-import { InterviewModule } from './interview/interview.module';
 import { LiveKitModule } from './livekit/livekit.module';
 
 @Module({
@@ -43,7 +42,6 @@ import { LiveKitModule } from './livekit/livekit.module';
     PrismaModule,
     UserProfileModule,
     AuthModule,
-    InterviewModule,
     LiveKitModule
   ],
   controllers: [AppController],

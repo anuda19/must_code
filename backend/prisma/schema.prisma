@@ -82,6 +82,7 @@ enum InterviewEvaluationStatus {
   NOT_STARTED
   PROCESSING
   COMPLETED
+  INSUFFICIENT_DATA
   FAILED
 }
 

@@ -13,6 +13,7 @@ export const InterviewEvaluationStatus = {
   NOT_STARTED: 'NOT_STARTED',
   PROCESSING: 'PROCESSING',
   COMPLETED: 'COMPLETED',
+  INSUFFICIENT_DATA: 'INSUFFICIENT_DATA',
   FAILED: 'FAILED'
 } as const
 
