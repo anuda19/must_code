@@ -32,6 +32,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { LiveKitModule } from './livekit/livekit.module';
+import { InterviewEvaluationModule } from './interview/interview-evaluation.module';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { LiveKitModule } from './livekit/livekit.module';
     PrismaModule,
     UserProfileModule,
     AuthModule,
-    LiveKitModule
+    LiveKitModule,
+    InterviewEvaluationModule
   ],
   controllers: [AppController],
   providers: [AppService],
