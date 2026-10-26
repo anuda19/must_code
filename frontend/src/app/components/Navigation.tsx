@@ -3,6 +3,8 @@
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
 import { ArrowRight, Code2 } from "lucide-react";
+import { useUser } from "@/hooks/useUser";
+import { ROUTES } from "@/lib/routes";
 
 const NAV_ITEMS = [
   { href: "/courses", label: "Courses" },
@@ -11,12 +13,13 @@ const NAV_ITEMS = [
 ];
 
 export default function Navbar() {
+  const { data: user } = useUser();
   return (
     <header className="sticky top-0 z-50 h-[72px] border-b border-white/[0.07] bg-[#080a12] text-white">
       <div className="mx-auto flex h-full max-w-[1360px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
         {/* Brand */}
         <Link
-          href="/dashboard"
+          href="/"
           aria-label="Must Code home"
           className="group flex shrink-0 items-center gap-2.5"
         >
@@ -49,16 +52,25 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex shrink-0 items-center gap-2">
-          <Link
-            href="/login"
-            className="rounded-lg px-3 py-2.5 text-[13px] font-medium text-slate-300 transition-colors hover:text-white sm:px-4"
-          >
-            Login
-          </Link>
+          {!user ? (
+            <Link
+              href="/login"
+              className="rounded-lg px-3 py-2.5 text-[13px] font-medium text-slate-300 transition-colors hover:text-white sm:px-4"
+            >
+              Login
+            </Link>
+          ) : (
+            <Link
+              href={ROUTES.dashboard}
+              className="rounded-lg px-3 py-2.5 text-[13px] font-medium text-slate-300 transition-colors hover:text-white sm:px-4"
+            >
+              Dashboard
+            </Link>
+          )}
 
           <Link
             href="/signup"
-            className="group inline-flex h-10 items-center gap-2 rounded-xl border border-indigo-200/20 bg-indigo-300 px-3.5 text-[12px] font-semibold text-[#10111b] transition-all duration-200 hover:bg-indigo-200 sm:px-4 sm:text-[13px]"
+            className="group inline-flex h-10 items-center gap-2 rounded-xl border border-indigo-200/20 bg-indigo-500 px-3.5 text-[12px] font-semibold text-[#10111b] transition-all duration-200 hover:bg-indigo-400 sm:px-4 sm:text-[13px]"
           >
             Get started
             <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />

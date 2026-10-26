@@ -5,6 +5,7 @@ import { User, Settings, HelpCircle, LogOut } from "lucide-react";
 import { logoutAction } from "@/actions/auth/auth";
 import { useTransition } from "react";
 import { Dropdown } from "@/app/components/ui/Dropdown";
+import { ROUTES } from "@/lib/routes";
 
 interface ProfileDropdownProps {
   user: {
@@ -47,7 +48,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
   const menuGroups = [
     [
-      { label: "Profile", icon: User, href: "/dashboard/profile" },
+      { label: "Profile", icon: User, href: ROUTES.profile },
       { label: "Settings", icon: Settings, href: "/dashboard/settings" },
       { label: "FAQ", icon: HelpCircle, href: "/dashboard/faq" },
     ],

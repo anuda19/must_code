@@ -50,9 +50,9 @@ export default function Dashboard() {
     <div className="mx-auto w-full max-w-[1600px]">
       {/* Header */}
       <div className="mb-6">
-        <p className="mb-1 text-sm font-medium text-indigo-400">
+        {/* <p className="mb-1 text-sm font-medium text-indigo-400">
           Your workspace
-        </p>
+        </p> */}
       </div>
 
       {/* Main Grid */}
@@ -126,10 +126,10 @@ export default function Dashboard() {
                 </span>
               </div>
               <h2 className="text-lg font-semibold text-white">
-                Preparation Schedule
+                Practice Schedule
               </h2>
               <p className="mt-0.5 text-xs text-slate-500">
-                Plan your next preparation session.
+                Plan your next practice session.
               </p>
             </div>
           </div>

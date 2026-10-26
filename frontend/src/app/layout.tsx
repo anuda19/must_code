@@ -3,9 +3,9 @@ import { Manrope, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast";
+import { QueryProvider } from "@/providers/QueryProvider";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 // next/font self-hosts and subsets Google Fonts at build time —
 // no render-blocking external font request, which also helps Core Web Vitals (a ranking factor).
@@ -99,9 +99,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(manrope.variable, jetbrainsMono.variable, "font-sans", geist.variable)}>
+    <html
+      lang="en"
+      className={cn(
+        manrope.variable,
+        jetbrainsMono.variable,
+        "font-sans",
+        geist.variable,
+      )}
+    >
       <body>
-        <main>{children}</main>
+        <QueryProvider>
+          <main>{children}</main>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>

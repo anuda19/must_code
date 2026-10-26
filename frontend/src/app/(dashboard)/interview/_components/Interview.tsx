@@ -14,13 +14,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 
 interface InterviewProps {
-  onStartInterview: () => void;
   onEditProfile: () => void;
 }
 
-export function Interview({ onStartInterview, onEditProfile }: InterviewProps) {
+export function Interview({ onEditProfile }: InterviewProps) {
   return (
     <div className="flex h-full min-h-0 flex-col text-slate-100">
       {/* Scrollable content */}
@@ -86,14 +87,14 @@ export function Interview({ onStartInterview, onEditProfile }: InterviewProps) {
                 </div>
               </div>
 
-              <Button
+              <Link
+                href={ROUTES.mock_interview}
                 type="button"
-                onClick={onStartInterview}
-                className="mt-4 w-full gap-2 bg-indigo-600 text-white hover:bg-indigo-500"
+                className="flex justify-center items-center rounded-md p-2 mt-4 w-full gap-2 bg-indigo-600 text-white hover:bg-indigo-500"
               >
                 Start Interview
                 <ArrowRight className="h-4 w-4" />
-              </Button>
+              </Link>
             </CardContent>
           </Card>
 

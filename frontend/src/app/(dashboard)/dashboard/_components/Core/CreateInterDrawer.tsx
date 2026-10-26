@@ -130,9 +130,6 @@ export function CreateInterviewDrawer({
     // onSuccess?.();
   };
 
-  const handleStartInterview = () => {
-    router.push("/interview/mock-interviews");
-  };
   const isDisabled = status !== "idle";
 
   useEffect(() => {
@@ -152,6 +149,7 @@ export function CreateInterviewDrawer({
       onOpenChange={(open) => {
         if (!open && status === "idle") {
           onClose();
+          setIsEditing(false)
         }
       }}
     >
@@ -229,7 +227,6 @@ export function CreateInterviewDrawer({
             </div>
           ) : profile && !isEditing ? (
             <Interview
-              onStartInterview={handleStartInterview}
               onEditProfile={() => setIsEditing(true)}
             />
           ) : (

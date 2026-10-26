@@ -1,5 +1,5 @@
 "use client";
-import { Search, Bell, ShieldCheck, Loader2 } from "lucide-react";
+import { Search, Bell, ShieldCheck, Loader2, User2 } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
 import { useUser } from "@/hooks/useUser";
 export interface User {
@@ -19,21 +19,20 @@ export default function Topbar() {
 
       {/* Search Input */}
       <div className="relative flex items-center w-72">
-        <Search size={15} className="absolute left-3 text-slate-500" />
+        {/* <Search size={15} className="absolute left-3 text-slate-500" />
         <input
           type="text"
           placeholder="Search metrics or commands..."
           className="w-full rounded-xl border border-slate-800 bg-slate-900/60 py-1.5 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:border-indigo-500/60 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition-all"
-        />
+        /> */}
+        <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300 font-semibold">
+          <User2 size={14} className="text-emerald-400" />
+          <span>{user?.name && `Hi, ${user.name}`}</span>
+        </div>
       </div>
 
       {/* Right Controls */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-1.5 text-xs text-slate-300">
-          <ShieldCheck size={14} className="text-emerald-400" />
-          <span>Production</span>
-        </div>
-
         <button className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/50 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition">
           <Bell size={16} />
           <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-cyan-400 ring-2 ring-[#0B0F19]" />

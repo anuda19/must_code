@@ -192,7 +192,7 @@ export default function Hero() {
               {/* Primary CTA */}
               <Button
                 size="lg"
-                className="cta-primary-auto group relative isolate h-12 overflow-hidden rounded-xl border border-indigo-200/25 bg-indigo-300 px-5 font-semibold text-[#10111b] transition-colors duration-300 hover:bg-indigo-200"
+                className="cta-primary-auto group relative isolate h-12 overflow-hidden rounded-xl border border-indigo-200/25 bg-indigo-500 px-5 font-semibold text-white transition-colors duration-300 hover:bg-indigo-400"
               >
                 <Link
                   href="/signup"
