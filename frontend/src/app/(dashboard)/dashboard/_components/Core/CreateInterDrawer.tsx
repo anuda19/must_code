@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Sparkles } from "lucide-react";
+import {
+  X,
+  Sparkles,
+} from "lucide-react";
 
 import { TechStackInput } from "./TechStackSelect";
 import { ExperienceLevelSelect } from "./ExperienceLevel";
 import { Label } from "@/app/components/ui/Label";
-import { updateUserProfileAction } from "@/actions/users/user-profile";
 import { toast } from "@/components/ui/toast";
 import { userProfileSchema } from "@/lib/schema/user-profile.schema";
 import { FieldError } from "@/app/components/ui/ErrorMsg";
@@ -17,6 +19,9 @@ import { Input } from "@/app/components/ui/TextInput";
 import { useUser } from "@/hooks/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { hasProfileChanges } from "@/lib/normalize-profile";
+import { updateUserProfileAction } from "@/actions/users/user-profile";
+import { uploadCvAction } from "@/actions/users/upload-cv";
+import { CvUpload } from "./CvUpload";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
 interface CreateInterviewDrawerProps {
@@ -28,6 +33,8 @@ interface CreateInterviewDrawerProps {
     skills?: string[];
     targetCompany?: string;
     jobDescription?: string;
+    cvUrl?: string;
+    avatarUrl?: string;
   };
 }
 
@@ -37,6 +44,8 @@ type UserProfileData = {
   skills: string[];
   targetCompany: string;
   jobDescription: string;
+  cvUrl?: string;
+  avatarUrl?: string;
 };
 
 export function CreateInterviewDrawer({
@@ -52,17 +61,16 @@ export function CreateInterviewDrawer({
     skills: initialData?.skills ?? [],
     targetCompany: initialData?.targetCompany ?? "",
     jobDescription: initialData?.jobDescription ?? "",
+    cvUrl: initialData?.cvUrl ?? "",
   });
+
   const { data: user, isPending, isError } = useUser();
   const profile = user?.profile;
   const [isEditing, setIsEditing] = useState(false);
   const queryClient = useQueryClient();
-
   const isDirty = hasProfileChanges(formData, profile);
-
   const canSave = isDirty && !isPending;
 
-  const router = useRouter();
   const updateField = <K extends keyof UserProfileData>(
     field: K,
     value: UserProfileData[K],
@@ -73,61 +81,63 @@ export function CreateInterviewDrawer({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    if(!isDirty || isPending) return;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isDirty || isPending) return;
+
     setStatus("loading");
     setErrorMsg({});
-    const validate = userProfileSchema.safeParse(formData);
 
-    if (!validate.success) {
-      const fieldErrors: FormErrors = {};
+    try {
+      const validate = userProfileSchema.safeParse(formData);
 
-      validate.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof UserProfileData;
+      if (!validate.success) {
+        const fieldErrors: FormErrors = {};
 
-        if (field && !fieldErrors[field]) {
-          fieldErrors[field] = issue.message;
-        }
+        validate.error.issues.forEach((issue) => {
+          const field = issue.path[0] as keyof UserProfileData;
+
+          if (field && !fieldErrors[field]) {
+            fieldErrors[field] = issue.message;
+          }
+        });
+
+        setErrorMsg(fieldErrors);
+        return;
+      }
+
+      const result = await updateUserProfileAction(validate.data);
+
+      if (!result.success) {
+        toast.add({
+          title: "Error",
+          description: result.error?.message || "Failed to update profile.",
+          type: "error",
+        });
+        return;
+      }
+
+      await queryClient.invalidateQueries({
+        queryKey: ["user"],
       });
 
-      setErrorMsg(fieldErrors);
-      setStatus("idle");
-      return;
-    }
+      setIsEditing(false);
 
-    const result = await updateUserProfileAction(formData);
-
-    if (!result.success) {
-      setStatus("idle");
+      toast.add({
+        title: "Profile Updated",
+        description: "Your profile changes have been saved successfully.",
+        type: "success",
+      });
+    } catch (error) {
       toast.add({
         title: "Error",
-        description: result.error?.message || "Failed to update profile.",
+        description: "Something went wrong while saving your profile.",
         type: "error",
       });
-      return;
+    } finally {
+      setStatus("idle");
     }
-
-    setStatus("idle");
-    // onClose();
-    toast.add({
-      title: "Profile Updated",
-      description: "Your profile changes have been saved successfully.",
-      type: "success",
-    });
-    setFormData({
-      jobRole: initialData?.jobRole ?? "",
-      experienceLevel: initialData?.experienceLevel ?? "MID_LEVEL",
-      skills: initialData?.skills ?? [],
-      targetCompany: initialData?.targetCompany ?? "",
-      jobDescription: initialData?.jobDescription ?? "",
-    });
-    await queryClient.invalidateQueries({
-      queryKey: ["user"],
-    });
-
-    setIsEditing(false);
-    // onSuccess?.();
   };
 
   const isDisabled = status !== "idle";
@@ -141,15 +151,17 @@ export function CreateInterviewDrawer({
       skills: profile.skills ?? [],
       targetCompany: profile.targetCompany ?? "",
       jobDescription: initialData?.jobDescription ?? "",
+      cvUrl: profile.cvUrl ?? initialData?.cvUrl ?? "",
     });
-  }, [profile, initialData?.jobDescription]);
+  }, [profile, initialData?.jobDescription, initialData?.cvUrl]);
+
   return (
     <Dialog.Root
       open={isOpen}
       onOpenChange={(open) => {
         if (!open && status === "idle") {
           onClose();
-          setIsEditing(false)
+          setIsEditing(false);
         }
       }}
     >
@@ -182,7 +194,6 @@ export function CreateInterviewDrawer({
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <div>
               <Dialog.Title className="flex items-center gap-2 text-lg font-semibold text-white">
-                {/* <Sparkles className="h-4 w-4 text-indigo-400" /> */}
                 Setup AI Interview
               </Dialog.Title>
 
@@ -208,6 +219,7 @@ export function CreateInterviewDrawer({
               </button>
             </Dialog.Close>
           </div>
+
           {isPending ? (
             <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
               Loading your profile...
@@ -226,15 +238,22 @@ export function CreateInterviewDrawer({
               </button>
             </div>
           ) : profile && !isEditing ? (
-            <Interview
-              onEditProfile={() => setIsEditing(true)}
-            />
+            <Interview onEditProfile={() => setIsEditing(true)} />
           ) : (
             <form
               onSubmit={handleSubmit}
               className="mt-6 flex p-1 flex-1 flex-col justify-between overflow-y-auto drawer-scrollbar"
             >
               <div className="space-y-5 pr-1">
+                <div>
+                  <CvUpload
+                    value={formData.cvUrl ?? ""}
+                    onChange={(path) => updateField("cvUrl", path)}
+                    disabled={isDisabled}
+                  />
+                  <FieldError message={errorMsg?.cvUrl} />
+                </div>
+
                 {/* Job Role */}
                 <div>
                   <Label
@@ -259,7 +278,7 @@ export function CreateInterviewDrawer({
                   <Label
                     required
                     htmlFor="experience-level"
-                    className="block text-xs font-medium text-slate-300"
+                    className="block text-xs font-medium text-slate-300 mb-1"
                   >
                     Experience Level
                   </Label>
@@ -277,7 +296,7 @@ export function CreateInterviewDrawer({
                   <Label
                     required
                     htmlFor="tech-stack"
-                    className="block text-xs font-medium text-slate-300"
+                    className="block text-xs font-medium text-slate-300 mb-1"
                   >
                     Skills / Tech Stack
                   </Label>
@@ -314,30 +333,34 @@ export function CreateInterviewDrawer({
                 <div>
                   <Label
                     htmlFor="job-description"
-                    className="block text-xs font-medium text-slate-300"
+                    className="block text-xs font-medium text-slate-300 mb-1"
                   >
                     Job Description (Optional)
                   </Label>
 
                   <textarea
                     id="job-description"
+                    value={formData.jobDescription}
+                    onChange={(e) =>
+                      updateField("jobDescription", e.target.value)
+                    }
                     disabled={isDisabled}
-                    rows={5}
+                    rows={4}
                     placeholder="Paste the job description to tailor the interview to the role..."
                     className="
-                    mt-1.5 w-full resize-none
-                    rounded-xl
-                    border border-slate-800
-                    bg-slate-950
-                    px-3.5 py-3
-                    text-sm text-white
-                    placeholder:text-slate-600
-                    outline-none
-                    transition-colors
-                    focus:border-indigo-500
-                    disabled:cursor-not-allowed
-                    disabled:opacity-50
-                  "
+                      mt-1.5 w-full resize-none
+                      rounded-xl
+                      border border-slate-800
+                      bg-slate-950
+                      px-3.5 py-3
+                      text-sm text-white
+                      placeholder:text-slate-600
+                      outline-none
+                      transition-colors
+                      focus:border-indigo-500
+                      disabled:cursor-not-allowed
+                      disabled:opacity-50
+                    "
                   />
 
                   <p className="mt-1.5 text-[11px] text-slate-600">
@@ -348,22 +371,24 @@ export function CreateInterviewDrawer({
               </div>
 
               {/* Footer */}
-              <div className="mt-6 space-y-3 border-t border-slate-800 pt-6 sticky bottom-0 bg-slate-900">
+              <div className="mt-6 space-y-3 border-t border-slate-800 pt-4 sticky bottom-0 bg-slate-900">
                 <button
                   type="submit"
-                  disabled={isDisabled || formData.skills.length === 0 || !canSave}
+                  disabled={
+                    isDisabled || formData.skills.length === 0 || !canSave
+                  }
                   className="
-                  flex w-full items-center
-                  justify-center gap-2
-                  rounded-xl
-                  bg-indigo-600
-                  px-4 py-3
-                  text-sm font-medium text-white
-                  shadow-lg shadow-indigo-600/10
-                  transition-all
-                  hover:bg-indigo-500
-                  disabled:opacity-50
-                "
+                    flex w-full items-center
+                    justify-center gap-2
+                    rounded-xl
+                    bg-indigo-600
+                    px-4 py-3
+                    text-sm font-medium text-white
+                    shadow-lg shadow-indigo-600/10
+                    transition-all
+                    hover:bg-indigo-500
+                    disabled:opacity-50
+                  "
                 >
                   {status === "idle" ? (
                     <>

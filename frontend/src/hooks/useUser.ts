@@ -14,11 +14,11 @@ export type User = {
     jobRole: string;
     targetCompany: string | null;
     skills: string[];
-    // bio: string | null;
-    // location: string | null;
-    // avatarUrl: string | null;
-    // cvUrl: string | null;
-    // cvFileName: string | null;
+    bio: string | null;
+    location: string | null;
+    avatarUrl: string | null;
+    cvUrl: string | null;
+    cvFileName: string | null;
     createdAt: string;
     updatedAt: string;
   } | null;
@@ -31,7 +31,7 @@ async function fetchUser(): Promise<User> {
   });
 
   const result: ActionResponse<User> = await response.json();
-
+  
   if (!response.ok || !result.success || !result.data) {
     throw new Error(result.error?.message ?? "Failed to fetch user");
   }

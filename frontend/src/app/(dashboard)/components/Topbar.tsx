@@ -26,7 +26,7 @@ export default function Topbar() {
           className="w-full rounded-xl border border-slate-800 bg-slate-900/60 py-1.5 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:border-indigo-500/60 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition-all"
         /> */}
         <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300 font-semibold">
-          <User2 size={14} className="text-emerald-400" />
+          <User2 size={14} className="text-indigo-400" />
           <span>{user?.name && `Hi, ${user.name}`}</span>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Topbar() {
       <div className="flex items-center gap-4">
         <button className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/50 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition">
           <Bell size={16} />
-          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-cyan-400 ring-2 ring-[#0B0F19]" />
+          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-indigo-400 ring-2 ring-[#0B0F19]" />
         </button>
 
         {user && user.name && user.email ? (

@@ -5,7 +5,6 @@ import {
   LoaderCircle,
   FileText,
   Clock,
-  Sparkles,
   Volume2,
   CheckCircle2,
   ArrowRight,
@@ -13,7 +12,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import InterviewEvaluationCard from "./InterviewEvaluation";
 import Link from "next/link";
 
 export default function MockInterviewPage({
@@ -21,13 +19,9 @@ export default function MockInterviewPage({
   loading,
   error,
   startInterview,
-  evaluationStatus,
-  evaluationResult,
-  evaluationError,
-  onViewPastReports, // Handler to open past reports/history page or modal
 }: any) {
   return (
-    <main className="relative min-h-screen w-full bg-[#0A0D18] px-4 py-4 text-white antialiased sm:px-8">
+    <main className="relative min-h-screen w-full px-4 py-4 text-white antialiased sm:px-8">
       {/* Subtle Background Glows */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/15 blur-[140px]" />
       <div className="pointer-events-none absolute top-1/3 left-1/2 -z-10 h-[400px] w-[500px] -translate-x-1/2 rounded-full bg-indigo-500/10 blur-[120px]" />
