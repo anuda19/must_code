@@ -5,4 +5,6 @@ export interface CandidateProfile {
   skills: string[];
   bio: string | null;
   location: string | null;
+  cvUrl: string | null;
+  avatarUrl: string | null;
 }

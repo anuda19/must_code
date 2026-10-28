@@ -1,29 +1,3 @@
-// import {
-//   Controller,
-//   Get,
-//   InternalServerErrorException,
-//   Query,
-// } from '@nestjs/common';
-// import { LiveKitService } from './livekit.service';
-
-// @Controller('api/livekit')
-// export class LiveKitController {
-//   constructor(private readonly liveKitService: LiveKitService) {}
-
-//   @Get('token')
-//   async getToken(@Query('identity') identity?: string) {
-//     const result = await this.liveKitService.generateToken(identity);
-
-//     if (!result.serverUrl) {
-//       throw new InternalServerErrorException(
-//         'LIVEKIT_URL is missing from backend .env',
-//       );
-//     }
-
-//     return result;
-//   }
-// }
-
 import {
   Body,
   Controller,

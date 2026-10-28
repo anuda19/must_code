@@ -1,12 +1,7 @@
+import { CandidateProfile } from "../../types/candidate-profile.types";
+
 export function buildInterviewPrompt(
-  profile: {
-    experienceLevel: string;
-    jobRole: string;
-    targetCompany: string | null;
-    skills: string[];
-    bio: string | null;
-    location: string | null;
-  },
+  profile: CandidateProfile,
   jobDescription = '',
 ) {
   return `
@@ -19,6 +14,7 @@ Candidate profile:
 - Skills: ${profile.skills.length ? profile.skills.join(', ') : 'Not specified'}
 - Bio: ${profile.bio ?? 'Not provided'}
 - Location: ${profile.location ?? 'Not provided'}
+- Resume: ${profile.cvUrl ?? 'Not provided'}
 
 ${
   jobDescription.trim()

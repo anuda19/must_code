@@ -33,6 +33,7 @@ import { AppService } from './app.service';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { LiveKitModule } from './livekit/livekit.module';
 import { InterviewEvaluationModule } from './interview/interview-evaluation.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { InterviewEvaluationModule } from './interview/interview-evaluation.modu
     UserProfileModule,
     AuthModule,
     LiveKitModule,
-    InterviewEvaluationModule
+    InterviewEvaluationModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],
