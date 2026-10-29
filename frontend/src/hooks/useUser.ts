@@ -19,6 +19,7 @@ export type User = {
     avatarUrl: string | null;
     cvUrl: string | null;
     cvFileName: string | null;
+    cvText: string | null;
     createdAt: string;
     updatedAt: string;
   } | null;

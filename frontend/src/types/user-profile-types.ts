@@ -1,5 +1,18 @@
 import { api } from "@/lib/api";
 
+export type UserProfileData = {
+  jobRole: string;
+  experienceLevel: string;
+  skills: string[];
+  targetCompany: string | null;
+  jobDescription?: string;
+  cvUrl?: string | null;
+  cvText?: string | null;
+  avatarUrl?: string | null;
+  bio?: string | null;
+  location?: string | null;
+};
+
 export type UpdateProfileInput = {
   jobRole?: string;
   experienceLevel?: string;

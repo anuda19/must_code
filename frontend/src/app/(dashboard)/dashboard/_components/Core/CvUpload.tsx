@@ -1,27 +1,26 @@
-
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  UploadCloud,
-  FileText,
-  Trash2,
-  Loader2,
-} from "lucide-react";
+import { UploadCloud, FileText, Trash2, Loader2 } from "lucide-react";
 
 import { Label } from "@/app/components/ui/Label";
 import { toast } from "@/components/ui/toast";
-import { getCvSignedUrlAction, uploadCvAction } from "@/actions/users/upload-cv";
+import {
+  getCvSignedUrlAction,
+  uploadCvAction,
+} from "@/actions/users/upload-cv";
 
 interface CvUploadProps {
   value: string;
   onChange: (path: string) => void;
+  onFileSelected: (file: File | null) => void;
   disabled?: boolean;
 }
 
 export function CvUpload({
   value,
   onChange,
+  onFileSelected,
   disabled = false,
 }: CvUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -29,10 +28,64 @@ export function CvUpload({
   const [isOpening, setIsOpening] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
+  // const handleFileUpload = async (file: File) => {
+  //   if (!file) return;
+
+  //   setIsUploading(true);
+
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+
+  //     const result = await uploadCvAction(formData);
+
+  //     if (!result.success || !result.data?.path) {
+  //       throw new Error(result.error?.message || "Failed to upload CV.");
+  //     }
+
+  //     onChange(result.data.path);
+
+  //     toast.add({
+  //       title: "CV Uploaded",
+  //       description: "Your resume has been uploaded successfully.",
+  //       type: "success",
+  //     });
+  //   } catch (error) {
+  //     toast.add({
+  //       title: "Upload Failed",
+  //       description:
+  //         error instanceof Error ? error.message : "Failed to upload file.",
+  //       type: "error",
+  //     });
+  //   } finally {
+  //     setIsUploading(false);
+  //     if (fileInputRef.current) fileInputRef.current.value = "";
+  //   }
+  // };
+
   const handleFileUpload = async (file: File) => {
-    if (!file) return;
+    const extension = file.name.split(".").pop()?.toLowerCase();
+
+    if (!["pdf", "docx"].includes(extension ?? "")) {
+      toast.add({
+        title: "Unsupported File",
+        description: "Please upload a PDF or DOCX file.",
+        type: "error",
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.add({
+        title: "File Too Large",
+        description: "CV must be 5MB or smaller.",
+        type: "error",
+      });
+      return;
+    }
 
     setIsUploading(true);
+    onFileSelected(file);
 
     try {
       const formData = new FormData();
@@ -52,6 +105,8 @@ export function CvUpload({
         type: "success",
       });
     } catch (error) {
+      onFileSelected(null);
+
       toast.add({
         title: "Upload Failed",
         description:
@@ -172,7 +227,10 @@ export function CvUpload({
 
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={() => {
+              onChange("");
+              onFileSelected(null);
+            }}
             disabled={disabled || isOpening}
             className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800 hover:text-red-400 disabled:opacity-50"
             title="Remove CV"

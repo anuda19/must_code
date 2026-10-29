@@ -22,7 +22,7 @@ import { ROUTES } from "@/lib/routes";
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard", href: ROUTES.dashboard },
-  { icon: Mic, label: "Mock Interviews", href: ROUTES.mock_interview },
+  { icon: Mic, label: "Mock Interviews", href: ROUTES.mock_interview.base_url },
   {
     icon: Code2,
     label: "Technical Assessments",

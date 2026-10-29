@@ -73,6 +73,7 @@ export type UserProfilePayload = {
   targetCompany?: string | null;
   cvUrl?: string | null;
   avatarUrl?: string | null;
+  cvText?: string | null;
 };
 
 export type UserProfileResponse = {
@@ -99,10 +100,13 @@ export async function updateUserProfileAction(
         skills: payload.skills,
         targetCompany: payload.targetCompany ?? null,
 
-        ...(payload.cvUrl != null &&
-          payload.cvUrl !== "" && {
-            cvUrl: payload.cvUrl,
-          }),
+        ...(payload.cvUrl !== undefined && {
+          cvUrl: payload.cvUrl || null,
+        }),
+
+        ...(payload.cvText !== undefined && {
+          cvText: payload.cvText || null,
+        }),
 
         ...(payload.avatarUrl != null &&
           payload.avatarUrl !== "" && {

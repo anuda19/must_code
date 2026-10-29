@@ -2,10 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  X,
-  Sparkles,
-} from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 
 import { TechStackInput } from "./TechStackSelect";
 import { ExperienceLevelSelect } from "./ExperienceLevel";
@@ -13,40 +10,22 @@ import { Label } from "@/app/components/ui/Label";
 import { toast } from "@/components/ui/toast";
 import { userProfileSchema } from "@/lib/schema/user-profile.schema";
 import { FieldError } from "@/app/components/ui/ErrorMsg";
-import { useRouter } from "next/navigation";
 import { Interview } from "@/app/(dashboard)/interview/_components/Interview";
 import { Input } from "@/app/components/ui/TextInput";
 import { useUser } from "@/hooks/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { hasProfileChanges } from "@/lib/normalize-profile";
 import { updateUserProfileAction } from "@/actions/users/user-profile";
-import { uploadCvAction } from "@/actions/users/upload-cv";
 import { CvUpload } from "./CvUpload";
+import { extractCvText } from "@/lib/extract-cv";
+import { UserProfileData } from "@/types/user-profile-types";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
 interface CreateInterviewDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData?: {
-    jobRole?: string;
-    experienceLevel?: string;
-    skills?: string[];
-    targetCompany?: string;
-    jobDescription?: string;
-    cvUrl?: string;
-    avatarUrl?: string;
-  };
+  initialData?: UserProfileData;
 }
-
-type UserProfileData = {
-  jobRole: string;
-  experienceLevel: string;
-  skills: string[];
-  targetCompany: string;
-  jobDescription: string;
-  cvUrl?: string;
-  avatarUrl?: string;
-};
 
 export function CreateInterviewDrawer({
   isOpen,
@@ -62,8 +41,9 @@ export function CreateInterviewDrawer({
     targetCompany: initialData?.targetCompany ?? "",
     jobDescription: initialData?.jobDescription ?? "",
     cvUrl: initialData?.cvUrl ?? "",
+    cvText: initialData?.cvText ?? "",
   });
-
+  const [cvFile, setCvFile] = useState<File | null>(null);
   const { data: user, isPending, isError } = useUser();
   const profile = user?.profile;
   const [isEditing, setIsEditing] = useState(false);
@@ -107,7 +87,30 @@ export function CreateInterviewDrawer({
         return;
       }
 
-      const result = await updateUserProfileAction(validate.data);
+      let cvText = formData.cvText ?? "";
+
+      if (!formData.cvUrl) {
+        // CV removed: clear its extracted text too.
+        cvText = "";
+      } else if (cvFile) {
+        // Parse only when saving the profile, not during upload.
+        cvText = await extractCvText(cvFile);
+
+        if (!cvText) {
+          throw new Error(
+            "No readable text found in the CV. Please upload a text-based PDF or DOCX.",
+          );
+        }
+      }
+
+      const result = await updateUserProfileAction({
+        jobRole: validate.data.jobRole,
+        experienceLevel: validate.data.experienceLevel,
+        skills: validate.data.skills,
+        targetCompany: validate.data.targetCompany || null,
+        cvUrl: formData.cvUrl || null,
+        cvText: cvText || null,
+      });
 
       if (!result.success) {
         toast.add({
@@ -121,6 +124,7 @@ export function CreateInterviewDrawer({
       await queryClient.invalidateQueries({
         queryKey: ["user"],
       });
+      setCvFile(null);
 
       setIsEditing(false);
 
@@ -132,7 +136,10 @@ export function CreateInterviewDrawer({
     } catch (error) {
       toast.add({
         title: "Error",
-        description: "Something went wrong while saving your profile.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while saving your profile.",
         type: "error",
       });
     } finally {
@@ -152,6 +159,7 @@ export function CreateInterviewDrawer({
       targetCompany: profile.targetCompany ?? "",
       jobDescription: initialData?.jobDescription ?? "",
       cvUrl: profile.cvUrl ?? initialData?.cvUrl ?? "",
+      cvText: profile.cvText ?? "",
     });
   }, [profile, initialData?.jobDescription, initialData?.cvUrl]);
 
@@ -249,6 +257,7 @@ export function CreateInterviewDrawer({
                   <CvUpload
                     value={formData.cvUrl ?? ""}
                     onChange={(path) => updateField("cvUrl", path)}
+                    onFileSelected={setCvFile}
                     disabled={isDisabled}
                   />
                   <FieldError message={errorMsg?.cvUrl} />
@@ -320,7 +329,7 @@ export function CreateInterviewDrawer({
 
                   <Input
                     id="target-company"
-                    value={formData.targetCompany}
+                    value={formData.targetCompany ?? ""}
                     onChange={(e) =>
                       updateField("targetCompany", e.target.value)
                     }

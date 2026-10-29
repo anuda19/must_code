@@ -1,54 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-// import { ArrowUpRight, Sparkles, UserRoundCheck } from "lucide-react";
-// import { CreateInterviewDrawer } from "./CreateInterDrawer";
-
-// interface StartButtonProps {
-//   userProfile?: {
-//     jobRole?: string;
-//     experienceLevel?: string;
-//     skills?: string[];
-//     targetCompanies?: string[];
-//   };
-// }
-
-// export default function StartButton({ userProfile }: StartButtonProps) {
-//   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-//   const hasProfile = !!userProfile;
-//   return (
-//     <>
-//       <button
-//         onClick={() => setIsDrawerOpen(true)}
-//         className="flex w-full items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-sm font-medium text-indigo-300 transition-all hover:border-indigo-500/40 hover:bg-indigo-500/20"
-//       >
-//         <span className="flex items-center gap-2">
-//           {hasProfile ? (
-//             <Sparkles className="h-4 w-4 text-indigo-400" />
-//           ) : (
-//             <UserRoundCheck className="h-4 w-4 text-indigo-400" />
-//           )}
-
-//           {hasProfile ? "Start AI Interview" : "Complete Profile"}
-//         </span>
-//         <ArrowUpRight className="h-4 w-4" />
-//       </button>
-
-//       {/* Offcanvas Drawer */}
-//       <CreateInterviewDrawer
-//         isOpen={isDrawerOpen}
-//         onClose={() => setIsDrawerOpen(false)}
-//         initialData={{
-//           jobRole: userProfile?.jobRole,
-//           experienceLevel: userProfile?.experienceLevel,
-//           skills: userProfile?.skills,
-//           targetCompany: userProfile?.targetCompanies?.[0],
-//         }}
-//       />
-//     </>
-//   );
-// }
-
 "use client";
 
 import { useState } from "react";
@@ -58,19 +7,14 @@ import {
   CircleAlert,
   UserRoundCheck,
   Loader2,
+  Mic,
 } from "lucide-react";
 import { CreateInterviewDrawer } from "./CreateInterDrawer";
 import { useUser } from "@/hooks/useUser";
+import { UserProfileData } from "@/types/user-profile-types";
 
 interface StartButtonProps {
-  userProfile?: {
-    jobRole?: string;
-    experienceLevel?: string;
-    skills?: string[];
-    targetCompany?: string;
-    cvUrl?: string;
-    avatarUrl: string;
-  } | null;
+  userProfile?: UserProfileData | null;
 }
 
 export default function StartButton({ userProfile }: StartButtonProps) {
@@ -136,7 +80,7 @@ export default function StartButton({ userProfile }: StartButtonProps) {
             }`}
           >
             {hasProfile ? (
-              <Sparkles className="h-[18px] w-[18px] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <Mic className="h-[18px] w-[18px] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
             ) : (
               <>
                 <UserRoundCheck className="h-[18px] w-[18px]" />
@@ -173,10 +117,13 @@ export default function StartButton({ userProfile }: StartButtonProps) {
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         initialData={{
-          jobRole: user?.profile?.jobRole || userProfile?.jobRole,
-          experienceLevel: user?.profile?.experienceLevel || userProfile?.experienceLevel,
-          skills: user?.profile?.skills || userProfile?.skills,
-          targetCompany: user?.profile?.targetCompany || userProfile?.targetCompany,
+          jobRole: (user?.profile?.jobRole || userProfile?.jobRole) ?? "",
+          experienceLevel:
+            (user?.profile?.experienceLevel || userProfile?.experienceLevel) ??
+            "",
+          skills: (user?.profile?.skills || userProfile?.skills) ?? [],
+          targetCompany:
+            (user?.profile?.targetCompany || userProfile?.targetCompany) ?? "",
         }}
       />
     </>

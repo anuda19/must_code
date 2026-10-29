@@ -1,25 +1,8 @@
-
-export type ProfileFormValues = {
-  jobRole: string;
-  experienceLevel: string;
-  targetCompany: string;
-  skills: string[];
-  bio: string;
-  location: string;
-};
-
-type ProfileInput = {
-  jobRole?: string | null;
-  experienceLevel?: string | null;
-  targetCompany?: string | null;
-  skills?: string[] | null;
-  bio?: string | null;
-  location?: string | null;
-};
+import { UserProfileData } from "@/types/user-profile-types";
 
 export function normalizeProfile(
-  profile: ProfileInput | null | undefined,
-): ProfileFormValues {
+  profile: UserProfileData | null | undefined,
+): UserProfileData {
   return {
     jobRole: profile?.jobRole?.trim() ?? "",
     experienceLevel: profile?.experienceLevel?.trim() ?? "",
@@ -31,14 +14,15 @@ export function normalizeProfile(
           .filter(Boolean),
       ),
     ].sort(),
+    cvUrl: profile?.cvUrl ?? "",
     bio: profile?.bio?.trim() ?? "",
     location: profile?.location?.trim() ?? "",
   };
 }
 
 export function hasProfileChanges(
-  current: ProfileInput,
-  original: ProfileInput | null | undefined,
+  current: UserProfileData,
+  original: UserProfileData | null | undefined,
 ): boolean {
   return (
     JSON.stringify(normalizeProfile(current)) !==

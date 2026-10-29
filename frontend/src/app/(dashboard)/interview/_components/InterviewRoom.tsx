@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AudioLines,
   Bot,
@@ -42,6 +42,8 @@ import {
 import MockInterviewPage from "./MockInterviewPage";
 import { ConnectingDialog } from "./StartingInterviewLoader";
 import InterviewEvaluationCard from "./InterviewEvaluation";
+import { useRouter } from "next/navigation";
+import { EvaluationLoaderDialog } from "./EvaluationLoadingDialog";
 
 type TokenResponse = {
   token: string;
@@ -450,6 +452,7 @@ function InterviewRoomContent({
 }
 
 export function InterviewRoom() {
+  const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [roomName, setRoomName] = useState<string | null>(null);
   const [serverUrl, setServerUrl] = useState<string | null>(null);
@@ -469,6 +472,13 @@ export function InterviewRoom() {
 
   const { data: user } = useUser();
   const profile = user?.profile;
+
+  useEffect(() => {
+    const evaluationId = evaluationResult?.id ?? clientSessionIdRef.current;
+    if (evaluationStatus === "completed" && evaluationId) {
+      router.push(`/interview/mock-interviews/evaluation/${evaluationId}`);
+    }
+  }, [evaluationStatus, evaluationResult, router]);
 
   async function startInterview() {
     if (loading) return;
@@ -497,6 +507,7 @@ export function InterviewRoom() {
             jobRole: profile.jobRole,
             targetCompany: profile.targetCompany,
             skills: profile.skills,
+            cvText: profile.cvText,
           },
         }),
       });
@@ -663,10 +674,12 @@ export function InterviewRoom() {
   if (!token || !roomName || !serverUrl) {
     return ended ? (
       <div className="w-full pt-2">
+        <EvaluationLoaderDialog isOpen={evaluationStatus === "evaluating"} />
         <InterviewEvaluationCard
           status={evaluationStatus}
           evaluation={evaluationResult}
           error={evaluationError}
+          onClose={() => setEnded(false)}
         />
       </div>
     ) : (

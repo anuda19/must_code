@@ -102,16 +102,6 @@ export function ConnectingDialog({ isOpen, onCancel }: ConnectingDialogProps) {
 
         {/* Footer Actions / Security Notice */}
         <div className="relative z-10 flex flex-col items-center gap-4">
-          {/* <div className="flex items-center gap-4 text-[11px] text-slate-500">
-            <span className="flex items-center gap-1">
-              <Shield className="size-3 text-violet-400" /> End-to-End Encrypted
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Cpu className="size-3 text-violet-400" /> Gemini Flash Live
-            </span>
-          </div> */}
-
           {onCancel && (
             <Button
               type="button"

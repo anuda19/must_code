@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 
 export default function MockInterviewPage({
   ended,
@@ -40,7 +41,7 @@ export default function MockInterviewPage({
 
           {/* Top-Right Action Button */}
           <Link
-            href={"/interview/mock-interviews/evaluation"}
+            href={ROUTES.mock_interview.evaluation}
             className="group flex items-center justify-center gap-2 px-2 py-1 rounded-xl border-white/15 bg-white/5 text-sm font-medium text-slate-200 backdrop-blur-md hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-white transition-all duration-200"
           >
             <FileText className="size-4 text-indigo-400 transition-transform group-hover:scale-110" />
