@@ -1,5 +1,12 @@
 // dto/update-user-profile.dto.ts
-import { IsString, IsOptional, IsArray, IsNotEmpty, ArrayMinSize } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsArray,
+  IsNotEmpty,
+  ArrayMinSize,
+  MaxLength,
+} from 'class-validator';
 
 export enum ExperienceLevel {
   FRESHER = 'ENTRY_LEVEL',
@@ -9,7 +16,7 @@ export enum ExperienceLevel {
 }
 
 export class UpdateUserProfileDto {
- @IsString()
+  @IsString()
   @IsNotEmpty({ message: 'Job role is required' })
   jobRole: string;
 
@@ -44,9 +51,14 @@ export class UpdateUserProfileDto {
 
   @IsOptional()
   @IsString()
-  cvUrl?: string;
+  cvUrl?: string | null;
 
   @IsOptional()
   @IsString()
   cvFileName?: string;
+  @IsOptional()
+
+  @IsString()
+  @MaxLength(1000000)
+  cvText?: string | null;
 }

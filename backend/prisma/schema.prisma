@@ -46,8 +46,9 @@ model UserProfile {
   location        String?
   avatarUrl       String?
 
-  cvUrl      String?
-  cvFileName String?
+  cvUrl           String?
+  cvText          String? @db.Text
+  cvFileName      String?
 
   refreshTokens RefreshToken[]
 

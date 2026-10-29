@@ -34,6 +34,7 @@ export type UserProfileMinAggregateOutputType = {
   location: string | null
   avatarUrl: string | null
   cvUrl: string | null
+  cvText: string | null
   cvFileName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +50,7 @@ export type UserProfileMaxAggregateOutputType = {
   location: string | null
   avatarUrl: string | null
   cvUrl: string | null
+  cvText: string | null
   cvFileName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +67,7 @@ export type UserProfileCountAggregateOutputType = {
   location: number
   avatarUrl: number
   cvUrl: number
+  cvText: number
   cvFileName: number
   createdAt: number
   updatedAt: number
@@ -82,6 +85,7 @@ export type UserProfileMinAggregateInputType = {
   location?: true
   avatarUrl?: true
   cvUrl?: true
+  cvText?: true
   cvFileName?: true
   createdAt?: true
   updatedAt?: true
@@ -97,6 +101,7 @@ export type UserProfileMaxAggregateInputType = {
   location?: true
   avatarUrl?: true
   cvUrl?: true
+  cvText?: true
   cvFileName?: true
   createdAt?: true
   updatedAt?: true
@@ -113,6 +118,7 @@ export type UserProfileCountAggregateInputType = {
   location?: true
   avatarUrl?: true
   cvUrl?: true
+  cvText?: true
   cvFileName?: true
   createdAt?: true
   updatedAt?: true
@@ -202,6 +208,7 @@ export type UserProfileGroupByOutputType = {
   location: string | null
   avatarUrl: string | null
   cvUrl: string | null
+  cvText: string | null
   cvFileName: string | null
   createdAt: Date
   updatedAt: Date
@@ -239,6 +246,7 @@ export type UserProfileWhereInput = {
   location?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   cvUrl?: Prisma.StringNullableFilter<"UserProfile"> | string | null
+  cvText?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   cvFileName?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserProfile"> | Date | string
@@ -257,6 +265,7 @@ export type UserProfileOrderByWithRelationInput = {
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cvUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  cvText?: Prisma.SortOrderInput | Prisma.SortOrder
   cvFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -278,6 +287,7 @@ export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   cvUrl?: Prisma.StringNullableFilter<"UserProfile"> | string | null
+  cvText?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   cvFileName?: Prisma.StringNullableFilter<"UserProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserProfile"> | Date | string
@@ -296,6 +306,7 @@ export type UserProfileOrderByWithAggregationInput = {
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cvUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  cvText?: Prisma.SortOrderInput | Prisma.SortOrder
   cvFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -318,6 +329,7 @@ export type UserProfileScalarWhereWithAggregatesInput = {
   location?: Prisma.StringNullableWithAggregatesFilter<"UserProfile"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"UserProfile"> | string | null
   cvUrl?: Prisma.StringNullableWithAggregatesFilter<"UserProfile"> | string | null
+  cvText?: Prisma.StringNullableWithAggregatesFilter<"UserProfile"> | string | null
   cvFileName?: Prisma.StringNullableWithAggregatesFilter<"UserProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserProfile"> | Date | string
@@ -333,6 +345,7 @@ export type UserProfileCreateInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -351,6 +364,7 @@ export type UserProfileUncheckedCreateInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -367,6 +381,7 @@ export type UserProfileUpdateInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -385,6 +400,7 @@ export type UserProfileUncheckedUpdateInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,6 +418,7 @@ export type UserProfileCreateManyInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,6 +434,7 @@ export type UserProfileUpdateManyMutationInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -433,6 +451,7 @@ export type UserProfileUncheckedUpdateManyInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +481,7 @@ export type UserProfileCountOrderByAggregateInput = {
   location?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   cvUrl?: Prisma.SortOrder
+  cvText?: Prisma.SortOrder
   cvFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -477,6 +497,7 @@ export type UserProfileMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   cvUrl?: Prisma.SortOrder
+  cvText?: Prisma.SortOrder
   cvFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -492,6 +513,7 @@ export type UserProfileMinOrderByAggregateInput = {
   location?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   cvUrl?: Prisma.SortOrder
+  cvText?: Prisma.SortOrder
   cvFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -564,6 +586,7 @@ export type UserProfileCreateWithoutUserInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -580,6 +603,7 @@ export type UserProfileUncheckedCreateWithoutUserInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -612,6 +636,7 @@ export type UserProfileUpdateWithoutUserInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -628,6 +653,7 @@ export type UserProfileUncheckedUpdateWithoutUserInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -644,6 +670,7 @@ export type UserProfileCreateWithoutRefreshTokensInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -661,6 +688,7 @@ export type UserProfileUncheckedCreateWithoutRefreshTokensInput = {
   location?: string | null
   avatarUrl?: string | null
   cvUrl?: string | null
+  cvText?: string | null
   cvFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -692,6 +720,7 @@ export type UserProfileUpdateWithoutRefreshTokensInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -709,6 +738,7 @@ export type UserProfileUncheckedUpdateWithoutRefreshTokensInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -756,6 +786,7 @@ export type UserProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   location?: boolean
   avatarUrl?: boolean
   cvUrl?: boolean
+  cvText?: boolean
   cvFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -775,6 +806,7 @@ export type UserProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   location?: boolean
   avatarUrl?: boolean
   cvUrl?: boolean
+  cvText?: boolean
   cvFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -792,6 +824,7 @@ export type UserProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   location?: boolean
   avatarUrl?: boolean
   cvUrl?: boolean
+  cvText?: boolean
   cvFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -809,12 +842,13 @@ export type UserProfileSelectScalar = {
   location?: boolean
   avatarUrl?: boolean
   cvUrl?: boolean
+  cvText?: boolean
   cvFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "experienceLevel" | "jobRole" | "targetCompany" | "skills" | "bio" | "location" | "avatarUrl" | "cvUrl" | "cvFileName" | "createdAt" | "updatedAt", ExtArgs["result"]["userProfile"]>
+export type UserProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "experienceLevel" | "jobRole" | "targetCompany" | "skills" | "bio" | "location" | "avatarUrl" | "cvUrl" | "cvText" | "cvFileName" | "createdAt" | "updatedAt", ExtArgs["result"]["userProfile"]>
 export type UserProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.UserProfile$refreshTokensArgs<ExtArgs>
@@ -844,6 +878,7 @@ export type $UserProfilePayload<ExtArgs extends runtime.Types.Extensions.Interna
     location: string | null
     avatarUrl: string | null
     cvUrl: string | null
+    cvText: string | null
     cvFileName: string | null
     createdAt: Date
     updatedAt: Date
@@ -1282,6 +1317,7 @@ export interface UserProfileFieldRefs {
   readonly location: Prisma.FieldRef<"UserProfile", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"UserProfile", 'String'>
   readonly cvUrl: Prisma.FieldRef<"UserProfile", 'String'>
+  readonly cvText: Prisma.FieldRef<"UserProfile", 'String'>
   readonly cvFileName: Prisma.FieldRef<"UserProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"UserProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserProfile", 'DateTime'>

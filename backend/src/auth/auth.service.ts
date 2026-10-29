@@ -179,6 +179,7 @@ export class AuthService {
             avatarUrl: true,
             cvUrl: true,
             cvFileName: true,
+            cvText: true,
             createdAt: true,
             updatedAt: true,
           },

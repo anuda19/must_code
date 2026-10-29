@@ -57,8 +57,11 @@ export class UserProfileService {
           ...(dto.avatarUrl && {
             avatarUrl: dto.avatarUrl,
           }),
-          ...(dto.cvUrl && {
-            cvUrl: dto.cvUrl,
+          ...(dto.cvUrl !== undefined && {
+            cvUrl: dto.cvUrl || null,
+          }),
+          ...(dto.cvText !== undefined && {
+            cvText: dto.cvText?.trim() || null,
           }),
         },
 
@@ -72,6 +75,7 @@ export class UserProfileService {
           location: dto.location ?? null,
           avatarUrl: dto.avatarUrl || null,
           cvUrl: dto.cvUrl || null,
+          cvText: dto.cvText?.trim() || null,
         },
       });
 

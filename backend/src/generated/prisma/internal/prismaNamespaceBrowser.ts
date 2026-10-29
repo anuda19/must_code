@@ -110,6 +110,7 @@ export const UserProfileScalarFieldEnum = {
   location: 'location',
   avatarUrl: 'avatarUrl',
   cvUrl: 'cvUrl',
+  cvText: 'cvText',
   cvFileName: 'cvFileName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

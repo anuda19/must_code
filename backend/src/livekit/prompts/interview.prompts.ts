@@ -14,7 +14,7 @@ Candidate profile:
 - Skills: ${profile.skills.length ? profile.skills.join(', ') : 'Not specified'}
 - Bio: ${profile.bio ?? 'Not provided'}
 - Location: ${profile.location ?? 'Not provided'}
-- Resume: ${profile.cvUrl ?? 'Not provided'}
+- Resume: ${profile.cvText ?? 'Not provided'}
 
 ${
   jobDescription.trim()

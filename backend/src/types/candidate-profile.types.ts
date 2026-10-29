@@ -6,5 +6,6 @@ export interface CandidateProfile {
   bio: string | null;
   location: string | null;
   cvUrl: string | null;
+  cvText: string | null;
   avatarUrl: string | null;
 }
