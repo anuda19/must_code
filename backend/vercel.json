@@ -1,15 +1,7 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
   "functions": {
-    "api/index.js": {
-      "runtime": "@vercel/node"
+    "src/main.ts": {
+      "runtime": "nodejs22.x"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api"
-    }
-  ]
+  }
 }
