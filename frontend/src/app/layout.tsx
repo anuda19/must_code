@@ -27,11 +27,11 @@ const siteUrl = "https://www.groundwork.example"; // TODO: replace with your rea
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "MustCode — Know what to study before your next interview",
-    template: "%s | MustCode ",
+    default: "XCode — Know what to study before your next interview",
+    template: "%s | XCode ",
   },
   description:
-    "MustCode assesses your skills against a specific role and company, shows you exactly where the gaps are, and builds an AI-adapted preparation plan with realistic mock interviews.",
+    "XCode assesses your skills against a specific role and company, shows you exactly where the gaps are, and builds an AI-adapted preparation plan with realistic mock interviews.",
   keywords: [
     "interview preparation",
     "technical interview prep",
@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     "AI mock interview",
     "skill gap analysis",
   ],
-  authors: [{ name: "MustCode" }],
+  authors: [{ name: "XCode" }],
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "MustCode",
-    title: "MustCode — Know what to study before your next interview",
+    siteName: "XCode",
+    title: "XCode — Know what to study before your next interview",
     description:
       "Personalized skill assessment, gap analysis, and AI mock interviews for your target role and company.",
     images: [
@@ -52,13 +52,13 @@ export const metadata: Metadata = {
         url: "/og-image.png", // TODO: add a real 1200x630 image to /public
         width: 1200,
         height: 630,
-        alt: "MustCode  interview preparation platform",
+        alt: "XCode  interview preparation platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MustCode — Know what to study before your next interview",
+    title: "XCode — Know what to study before your next interview",
     description:
       "Personalized skill assessment, gap analysis, and AI mock interviews for your target role and company.",
     images: ["/og-image.png"],
@@ -87,7 +87,7 @@ export const viewport: Viewport = {
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "MustCode",
+  name: "XCode",
   url: siteUrl,
   description:
     "AI-powered interview preparation platform offering personalized skill assessment, gap analysis, and mock interviews.",

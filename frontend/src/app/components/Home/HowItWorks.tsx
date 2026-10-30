@@ -7,7 +7,7 @@ const steps = [
     icon: Target,
     title: "Set your target",
     description:
-      "Choose your target role, experience level, and company. Tell Must Code what you're working toward.",
+      "Choose your target role, experience level, and company. Tell X Code what you're working toward.",
     tag: "PERSONALIZED SETUP",
   },
   {

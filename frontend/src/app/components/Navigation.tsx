@@ -20,7 +20,7 @@ export default function Navbar() {
         {/* Brand */}
         <Link
           href="/"
-          aria-label="Must Code home"
+          aria-label="X Code home"
           className="group flex shrink-0 items-center gap-2.5"
         >
           <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-100/20 bg-indigo-400/[0.10] text-indigo-400 transition-colors group-hover:border-indigo-200/40 group-hover:bg-indigo-400/[0.15]">
@@ -28,7 +28,7 @@ export default function Navbar() {
           </div>
 
           <span className="text-[25px] font-semibold tracking-[-0.055em] text-white">
-            Must<span className="text-indigo-400">Code</span>
+            X<span className="text-indigo-400">Code</span>
           </span>
         </Link>
 

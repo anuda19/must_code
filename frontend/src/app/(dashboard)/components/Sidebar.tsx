@@ -64,7 +64,7 @@ export default function Sidebar() {
         <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden py-3">
           <Link
             href="/dashboard"
-            aria-label="Must Code home"
+            aria-label="X Code home"
             className="group flex shrink-0 items-center gap-2.5"
           >
             <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-300/20 bg-indigo-400/[0.10] text-indigo-400 transition-colors group-hover:border-indigo-200/40 group-hover:bg-indigo-400/[0.15]">
@@ -72,7 +72,7 @@ export default function Sidebar() {
             </div>
 
             <span className="text-[25px] font-semibold tracking-[-0.055em] text-white">
-              Must<span className="text-indigo-400">Code</span>
+              X<span className="text-indigo-400"> Code</span>
             </span>
           </Link>
         </div>

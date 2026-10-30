@@ -12,7 +12,7 @@ const footerGroups = [
     ],
   },
   {
-    title: "Must Code",
+    title: "X Code",
     links: [
       { label: "About", href: "/about" },
       { label: "Features", href: "#features" },
@@ -37,14 +37,14 @@ export default function Footer() {
           <div className="max-w-sm">
             <Link
               href="/"
-              aria-label="Must Code home"
+              aria-label="X Code home"
               className="group inline-flex items-center gap-2.5"
             >
               <span className="flex size-9 items-center justify-center rounded-xl border border-indigo-300/20 bg-indigo-400/10 text-indigo-200 transition-colors group-hover:border-indigo-200/40">
                 <Code2 className="size-[18px]" strokeWidth={1.8} />
               </span>
               <span className="text-[17px] font-semibold tracking-[-0.055em]">
-                Must<span className="text-indigo-300">Code</span>
+                X<span className="text-indigo-300">Code</span>
               </span>
             </Link>
 
@@ -85,7 +85,7 @@ export default function Footer() {
 
         <div className="flex flex-col gap-4 border-t border-white/[0.07] py-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} Must Code. All rights reserved.
+            © {new Date().getFullYear()} X Code. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -105,7 +105,7 @@ export default function Footer() {
               href="/about"
               className="text-xs text-slate-500 transition-colors hover:text-slate-300"
             >
-              About Must Code
+              About X Code
             </Link>
           </div>
         </div>

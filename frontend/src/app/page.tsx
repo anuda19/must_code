@@ -9,7 +9,7 @@ import FinalCTA from "./components/Home/FinalCTA";
 import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
-  title: "MustCode — Personalized interview preparation for engineers",
+  title: "XCode — Personalized interview preparation for engineers",
   description:
     "Assess your skills against a specific role and company, see your gaps, and follow an AI-adapted preparation plan with realistic mock interviews.",
   alternates: {

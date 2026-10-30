@@ -88,7 +88,7 @@ export function Interview({ onEditProfile }: InterviewProps) {
               </div>
 
               <Link
-                href={ROUTES.mock_interview}
+                href={ROUTES.mock_interview.base_url}
                 type="button"
                 className="flex justify-center items-center rounded-md p-2 mt-4 w-full gap-2 bg-indigo-600 text-white hover:bg-indigo-500"
               >
