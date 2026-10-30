@@ -1,27 +1,18 @@
-// import { NestFactory } from '@nestjs/core';
-// import { AppModule, ObserveInstrument } from './app.module';
-
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule, {
-//     instrument: ObserveInstrument,
-//   });
-//   await app.listen(process.env.PORT ?? 3000);
-// }
-// void bootstrap();
-
-
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-    app.enableCors({
-    origin: 'http://localhost:3000',
-    credentials: true,               
+  const allowedOrigins = [
+    'http://localhost:3001',
+    process.env.NEXT_PUBLIC_API_URL,
+  ].filter(Boolean);
+
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
   });
 
   app.useGlobalPipes(
@@ -32,7 +23,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3001);
+  await app.listen(process.env.PORT ?? 3001);
 }
 
 bootstrap();

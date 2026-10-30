@@ -1,6 +1,10 @@
 {
   "name": "backend",
   "version": "0.0.1",
+  "type": "commonjs",
+  "engines": {
+    "node": "22.x"
+  },
   "description": "",
   "author": "",
   "private": true,
