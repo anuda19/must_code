@@ -2,10 +2,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PasswordInput from "@/app/components/ui/PasswordInput";
-import { resetPassword } from "@/actions/auth/reset-password";
 import { resetPasswordSchema } from "@/lib/schema/auth";
 interface ResetPasswordFormProps {
   token: string;
@@ -30,54 +29,54 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setFieldErrors({});
+    // setError(null);
+    // setSuccess(null);
+    // setFieldErrors({});
 
-    // 1. Zod Validation
-    const validation = resetPasswordSchema.safeParse({
-      token: token ?? "",
-      newPassword: formValues.newPassword,
-      confirmPassword: formValues.confirmPassword,
-    });
+    // // 1. Zod Validation
+    // const validation = resetPasswordSchema.safeParse({
+    //   token: token ?? "",
+    //   newPassword: formValues.newPassword,
+    //   confirmPassword: formValues.confirmPassword,
+    // });
 
-    if (!validation.success) {
-      const formattedErrors: {
-        newPassword?: string;
-        confirmPassword?: string;
-      } = {};
+    // if (!validation.success) {
+    //   const formattedErrors: {
+    //     newPassword?: string;
+    //     confirmPassword?: string;
+    //   } = {};
 
-      validation.error.issues.forEach((issue) => {
-        const fieldName = issue.path[0] as
-          | "newPassword"
-          | "confirmPassword"
-          | "token";
-        if (fieldName === "token") {
-          setError(issue.message);
-        } else if (fieldName && !formattedErrors[fieldName]) {
-          formattedErrors[fieldName] = issue.message;
-        }
-      });
+    //   validation.error.issues.forEach((issue) => {
+    //     const fieldName = issue.path[0] as
+    //       | "newPassword"
+    //       | "confirmPassword"
+    //       | "token";
+    //     if (fieldName === "token") {
+    //       setError(issue.message);
+    //     } else if (fieldName && !formattedErrors[fieldName]) {
+    //       formattedErrors[fieldName] = issue.message;
+    //     }
+    //   });
 
-      setFieldErrors(formattedErrors);
-      return;
-    }
+    //   setFieldErrors(formattedErrors);
+    //   return;
+    // }
 
-    // 2. Submit validated data to Server Action
-    startTransition(async () => {
-      const res = await resetPassword(
-        validation.data.token,
-        validation.data.newPassword,
-        validation.data.confirmPassword,
-      );
+    // // 2. Submit validated data to Server Action
+    // startTransition(async () => {
+    //   const res = await resetPassword(
+    //     validation.data.token,
+    //     validation.data.newPassword,
+    //     validation.data.confirmPassword,
+    //   );
 
-      if (res.success) {
-        setSuccess(res.message || "Password reset successfully.");
-        setTimeout(() => router.push("/login"), 2000);
-      } else {
-        setError(res.error ?? "Something went wrong.");
-      }
-    });
+    //   if (res.success) {
+    //     setSuccess(res.message || "Password reset successfully.");
+    //     setTimeout(() => router.push("/login"), 2000);
+    //   } else {
+    //     setError(res.error ?? "Something went wrong.");
+    //   }
+    // });
   };
 
   return (

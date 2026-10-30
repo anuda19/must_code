@@ -5,7 +5,6 @@ import { useState, useTransition } from "react";
 import * as Label from "@radix-ui/react-label";
 import Link from "next/link";
 import { Loader2, ArrowLeft, MailCheck } from "lucide-react";
-import { requestPasswordReset } from "@/actions/auth/reset-password";
 import { requestResetSchema } from "@/lib/schema/auth";
 import Button from "./ui/Button";
 
@@ -17,42 +16,42 @@ export default function ForgotPasswordForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccessMessage(null);
+    // setError(null);
+    // setSuccessMessage(null);
 
-    // 1. Validate Email with Zod
-    const validation = requestResetSchema.safeParse({ email });
+    // // 1. Validate Email with Zod
+    // const validation = requestResetSchema.safeParse({ email });
 
-    if (!validation.success) {
-      const firstError =
-        validation.error.issues[0]?.message || "Invalid email address";
-      setError(firstError);
-      return;
-    }
+    // if (!validation.success) {
+    //   const firstError =
+    //     validation.error.issues[0]?.message || "Invalid email address";
+    //   setError(firstError);
+    //   return;
+    // }
 
-    // 2. Trigger Server Action
-    startTransition(async () => {
-      try {
-        const res = await requestPasswordReset(validation.data.email);
+    // // 2. Trigger Server Action
+    // startTransition(async () => {
+    //   try {
+    //     const res = await requestPasswordReset(validation.data.email);
 
-        if (res.success) {
-          setSuccessMessage(
-            res.message ||
-              "If an account exists for this email, a reset link has been sent." +
-                validation.data.email,
-          );
-        } else {
-          // Safely access error if present on res
-          const actionError = "error" in res ? (res.error as string) : null;
-          setError(
-            actionError || "Failed to send reset link. Please try again.",
-          );
-        }
-      } catch (err) {
-        console.error("Forgot password error:", err);
-        setError("An unexpected error occurred. Please try again later.");
-      }
-    });
+    //     if (res.success) {
+    //       setSuccessMessage(
+    //         res.message ||
+    //           "If an account exists for this email, a reset link has been sent." +
+    //             validation.data.email,
+    //       );
+    //     } else {
+    //       // Safely access error if present on res
+    //       const actionError = "error" in res ? (res.error as string) : null;
+    //       setError(
+    //         actionError || "Failed to send reset link. Please try again.",
+    //       );
+    //     }
+    //   } catch (err) {
+    //     console.error("Forgot password error:", err);
+    //     setError("An unexpected error occurred. Please try again later.");
+    //   }
+    // });
   };
 
   return (

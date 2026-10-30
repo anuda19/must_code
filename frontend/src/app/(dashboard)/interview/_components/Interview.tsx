@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Clock3,
   Mic,
-  Edit2Icon,
   Edit,
 } from "lucide-react";
 
