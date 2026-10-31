@@ -25,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       rightIcon,
       id,
       disabled,
-      required,
+      required=false,
       ...props
     },
     ref
@@ -82,7 +82,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               disabled && "cursor-not-allowed opacity-50 bg-[#0e1117]",
               className
             )}
-            required
+            required={required}
             {...props}
           />
 
