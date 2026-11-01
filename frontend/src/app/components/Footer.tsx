@@ -1,13 +1,14 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Code2 } from "lucide-react";
+import { ROUTES } from "@/lib/routes";
 
 const footerGroups = [
   {
     title: "Explore",
     links: [
-      { label: "Courses", href: "/courses" },
-      { label: "Practice", href: "/practice" },
+      // { label: "Courses", href: "/courses" },
+      { label: "Pricing", href: "/pricing" },
       { label: "How it works", href: "#how-it-works" },
     ],
   },
@@ -23,7 +24,7 @@ const footerGroups = [
     title: "Account",
     links: [
       { label: "Log in", href: "/login" },
-      { label: "Get started", href: "/signup" },
+      { label: "Get started", href: ROUTES.register },
     ],
   },
 ];

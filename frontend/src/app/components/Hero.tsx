@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/routes";
 
 const WAVEFORM = [
   12, 18, 27, 15, 34, 22, 42, 29, 17, 36, 48, 25, 15, 31, 43, 21, 35, 17, 28,
@@ -172,7 +173,7 @@ export default function Hero() {
               </span>
             </div>
 
-            <h1 className="mt-7 text-[clamp(2.8rem,5.2vw,5.25rem)] font-semibold leading-[0.99] tracking-[-0.07em]">
+            <h1 className="mt-5 text-[clamp(2.8rem,5.2vw,5.25rem)] font-semibold leading-[0.99] tracking-[-0.07em]">
               Make your
               <br />
               next interview
@@ -195,10 +196,10 @@ export default function Hero() {
                 className="cta-primary-auto group relative isolate h-12 overflow-hidden rounded-xl border border-indigo-200/25 bg-indigo-500 px-5 font-semibold text-white transition-colors duration-300 hover:bg-indigo-400"
               >
                 <Link
-                  href="/signup"
+                  href={ROUTES.register}
                   className="relative z-10 inline-flex items-center"
                 >
-                  <span>Build my preparation plan</span>
+                  <span>Ace Your Next Interview</span>
                   <ArrowRight className="cta-arrow ml-2 size-4" />
                 </Link>
 
@@ -214,7 +215,7 @@ export default function Hero() {
                 size="lg"
                 className="group h-12 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 text-slate-300 transition-all duration-300 hover:border-indigo-200/20 hover:bg-white/[0.055] hover:text-white active:scale-[0.98]"
               >
-                <Link href="#how-it-works">
+                <Link href="#how-it-works" className="inline-flex items-center">
                   <span>Explore the platform</span>
                   <ArrowDownRight className="ml-2 size-4 text-slate-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:text-indigo-200" />
                 </Link>

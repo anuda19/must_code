@@ -1,6 +1,7 @@
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, BotMessageSquare, Sparkles } from "lucide-react";
+import { ROUTES } from "@/lib/routes";
 
 export default function FinalCTA() {
   return (
@@ -11,7 +12,7 @@ export default function FinalCTA() {
 
         <div className="relative mx-auto max-w-2xl">
           <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-indigo-200/20 bg-indigo-300/10 text-indigo-200">
-            <Sparkles className="size-5" />
+            <BotMessageSquare className="size-5" />
           </div>
 
           <p className="mt-6 text-xs font-semibold tracking-[0.2em] text-indigo-300">
@@ -32,8 +33,8 @@ export default function FinalCTA() {
           </p>
 
           <Link
-            href="/signup"
-            className="group mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-indigo-200/20 bg-indigo-300 px-5 text-sm font-semibold text-[#10111b] shadow-[0_0_30px_rgba(129,140,248,0.12)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-200 hover:shadow-[0_0_40px_rgba(129,140,248,0.22)]"
+            href={ROUTES.register}
+            className="group mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-indigo-200/20 bg-indigo-500 px-5 text-sm font-semibold text-[#10111b] shadow-[0_0_30px_rgba(129,140,248,0.12)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-200 hover:shadow-[0_0_40px_rgba(129,140,248,0.22)]"
           >
             Build my preparation plan
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
