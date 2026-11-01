@@ -44,6 +44,11 @@ import { ConnectingDialog } from "./StartingInterviewLoader";
 import InterviewEvaluationCard from "./InterviewEvaluation";
 import { useRouter } from "next/navigation";
 import { EvaluationLoaderDialog } from "./EvaluationLoadingDialog";
+import { startInterviewAction } from "@/actions/interview/session/start-interview";
+import {
+  evaluateInterview,
+  saveInterviewTranscript,
+} from "@/actions/interview/evaluation/interview-evaluation.actions";
 
 type TokenResponse = {
   token: string;
@@ -496,43 +501,21 @@ export function InterviewRoom() {
     setFinalTranscript([]);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/livekit/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          profile: {
-            experienceLevel: profile.experienceLevel,
-            jobRole: profile.jobRole,
-            targetCompany: profile.targetCompany,
-            skills: profile.skills,
-            cvText: profile.cvText,
-          },
-        }),
+      const result = await startInterviewAction({
+        experienceLevel: profile.experienceLevel,
+        jobRole: profile.jobRole,
+        targetCompany: profile.targetCompany,
+        skills: profile.skills,
+        cvText: profile.cvText,
       });
 
-      if (!response.ok) {
-        throw new Error(
-          `Could not get a LiveKit token (${response.status}). Check the NestJS API.`,
-        );
+      if (!result.success) {
+        throw new Error(result.error);
       }
 
-      const data: TokenResponse = await response.json();
-
-      if (
-        !data.token ||
-        !data.roomName ||
-        !data.serverUrl?.startsWith("wss://")
-      ) {
-        throw new Error(
-          "The backend must return token, roomName, and a valid wss:// serverUrl.",
-        );
-      }
-
-      setToken(data.token);
-      setRoomName(data.roomName);
-      setServerUrl(data.serverUrl);
+      setToken(result.data.token);
+      setRoomName(result.data.roomName);
+      setServerUrl(result.data.serverUrl);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to start the interview.",
@@ -572,38 +555,32 @@ export function InterviewRoom() {
         .join("\n");
 
       // Save transcript before requesting evaluation.
-      const saveResponse = await fetch("/api/interview/transcript", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          model: "gemini-3.1-flash-live-preview",
-          startedAt: new Date(startedAt).toISOString(),
-          endedAt: new Date(endedAt).toISOString(),
-          durationSeconds: Math.round((endedAt - startedAt) / 1000),
-          messages: transcript,
-          transcriptText,
-        }),
+      const saveResponse = await saveInterviewTranscript({
+        sessionId,
+        model: "gemini-3.1-flash-live-preview",
+        startedAt: new Date(startedAt).toISOString(),
+        endedAt: new Date(endedAt).toISOString(),
+        durationSeconds: Math.round((endedAt - startedAt) / 1000),
+        messages: transcript,
+        transcriptText,
       });
 
-      const saved = await saveResponse.json();
-
-      if (!saveResponse.ok || !saved.success) {
-        throw new Error(saved.message ?? "Failed to save transcript.");
+      if (!saveResponse.success) {
+        throw new Error(saveResponse.message);
       }
 
       setLoading(false);
       setEvaluationStatus("evaluating");
 
-      const response = await fetch(
-        `/api/interview/${encodeURIComponent(sessionId)}/evaluate`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        },
-      );
+      const evaluationResponse = await evaluateInterview(sessionId);
 
-      const payload: EvaluationResponse = await response.json();
+      if (!evaluationResponse.success) {
+        setEvaluationStatus("failed");
+        setEvaluationError(evaluationResponse.message);
+        return;
+      }
+
+      const payload = evaluationResponse.data;
 
       const result = payload?.data;
       const record = result?.data ?? null;
@@ -611,16 +588,11 @@ export function InterviewRoom() {
 
       setEvaluationResult(record);
 
-      if (
-        !response.ok ||
-        payload.success === false ||
-        result?.success === false
-      ) {
+      if (payload.success === false || result?.success === false) {
         setEvaluationStatus("failed");
         setEvaluationError(
           record?.errorMessage ??
             result?.message ??
-            payload.error ??
             "Interview evaluation failed.",
         );
         return;
