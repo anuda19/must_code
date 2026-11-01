@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -6,9 +7,11 @@ import {
 
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as nodemailer from 'nodemailer';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
+import { createHash, randomBytes } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -193,4 +196,158 @@ export class AuthService {
 
     return user;
   }
+  
+async forgotPassword(email: string) {
+  const user = await this.prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+
+  // Do not reveal whether the email exists.
+  if (!user) return;
+
+  // Generate a cryptographically secure random token.
+  const resetToken = randomBytes(32).toString("hex");
+
+  // Store only the SHA-256 hash.
+  const tokenHash = createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+
+  // Invalidate previously issued tokens.
+  await this.prisma.passwordResetToken.deleteMany({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  await this.prisma.passwordResetToken.create({
+    data: {
+      userId: user.id,
+      tokenHash,
+      expiresAt,
+    },
+  });
+
+  const frontendUrl = process.env.FRONTEND_URL;
+
+  if (!frontendUrl) {
+    throw new Error("FRONTEND_URL is not configured.");
+  }
+
+  const resetUrl = new URL(
+    "/reset-password",
+    frontendUrl
+  );
+
+  resetUrl.searchParams.set("token", resetToken);
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: process.env.SMTP_SECURE === "true",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM,
+    to: user.email,
+    subject: "Reset Your Password | Xcode Technologies",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#1e293b;">
+        <h2 style="color:#4f46e5;">Reset your password</h2>
+
+        <p>We received a request to reset your Xcode Technologies account password.</p>
+
+        <p>Click the button below to create a new password.</p>
+
+        <a
+          href="${resetUrl.toString()}"
+          style="display:inline-block;padding:13px 24px;background:#6366f1;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;"
+        >
+          Reset Password
+        </a>
+
+        <p style="margin-top:24px;font-size:13px;color:#64748b;">
+          This link expires in 30 minutes. If you didn't request this,
+          you can safely ignore this email.
+        </p>
+
+        <p style="font-size:12px;color:#94a3b8;">
+          Xcode Technologies
+        </p>
+      </div>
+    `,
+  });
+}
+
+async resetPassword(token: string, newPassword: string) {
+  const tokenHash = createHash('sha256').update(token).digest('hex');
+  const now = new Date();
+
+  await this.prisma.$transaction(async (tx) => {
+    const resetToken = await tx.passwordResetToken.findFirst({
+      where: {
+        tokenHash,
+        usedAt: null,
+        expiresAt: { gt: now },
+      },
+      select: {
+        id: true,
+        userId: true,
+      },
+    });
+
+    if (!resetToken) {
+      throw new BadRequestException(
+        'This password reset link is invalid or has expired.',
+      );
+    }
+
+    // Claim the token so it cannot be used again.
+    const claimed = await tx.passwordResetToken.updateMany({
+      where: {
+        id: resetToken.id,
+        usedAt: null,
+        expiresAt: { gt: now },
+      },
+      data: {
+        usedAt: now,
+      },
+    });
+
+    if (claimed.count !== 1) {
+      throw new BadRequestException(
+        'This password reset link is invalid or has expired.',
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    await tx.user.update({
+      where: { id: resetToken.userId },
+      data: { password: hashedPassword },
+    });
+
+    // Invalidate any other outstanding reset links for this user.
+    await tx.passwordResetToken.updateMany({
+      where: {
+        userId: resetToken.userId,
+        id: { not: resetToken.id },
+        usedAt: null,
+      },
+      data: {
+        usedAt: now,
+      },
+    });
+  });
+}
 }

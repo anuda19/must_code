@@ -42,3 +42,8 @@ export type MockInterviewTranscript = Prisma.MockInterviewTranscriptModel
  * 
  */
 export type InterviewEvaluation = Prisma.InterviewEvaluationModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
