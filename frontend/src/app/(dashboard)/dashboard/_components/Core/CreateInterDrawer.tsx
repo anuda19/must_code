@@ -19,6 +19,7 @@ import { updateUserProfileAction } from "@/actions/users/user-profile";
 import { CvUpload } from "./CvUpload";
 import { extractCvText } from "@/lib/extract-cv";
 import { UserProfileData } from "@/types/user-profile-types";
+import { JobRoleSelect } from "./RoleSelect";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
 interface CreateInterviewDrawerProps {
@@ -272,12 +273,11 @@ export function CreateInterviewDrawer({
                   >
                     Job Role
                   </Label>
-                  <Input
-                    id="job-role"
+                  <JobRoleSelect
                     value={formData.jobRole}
-                    onChange={(e) => updateField("jobRole", e.target.value)}
+                    onChange={(val) => updateField("jobRole", val)}
                     disabled={isDisabled}
-                    placeholder="e.g. Software Engineer"
+                    placeholder="e.g. Frontend Engineer"
                   />
                   <FieldError message={errorMsg?.jobRole} />
                 </div>
@@ -339,7 +339,7 @@ export function CreateInterviewDrawer({
                 </div>
 
                 {/* Job Description */}
-                <div>
+                {/* <div>
                   <Label
                     htmlFor="job-description"
                     className="block text-xs font-medium text-slate-300 mb-1"
@@ -376,7 +376,7 @@ export function CreateInterviewDrawer({
                     AI will use this to prioritize relevant skills,
                     responsibilities and interview questions.
                   </p>
-                </div>
+                </div> */}
               </div>
 
               {/* Footer */}

@@ -28,41 +28,6 @@ export function CvUpload({
   const [isOpening, setIsOpening] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
-  // const handleFileUpload = async (file: File) => {
-  //   if (!file) return;
-
-  //   setIsUploading(true);
-
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-
-  //     const result = await uploadCvAction(formData);
-
-  //     if (!result.success || !result.data?.path) {
-  //       throw new Error(result.error?.message || "Failed to upload CV.");
-  //     }
-
-  //     onChange(result.data.path);
-
-  //     toast.add({
-  //       title: "CV Uploaded",
-  //       description: "Your resume has been uploaded successfully.",
-  //       type: "success",
-  //     });
-  //   } catch (error) {
-  //     toast.add({
-  //       title: "Upload Failed",
-  //       description:
-  //         error instanceof Error ? error.message : "Failed to upload file.",
-  //       type: "error",
-  //     });
-  //   } finally {
-  //     setIsUploading(false);
-  //     if (fileInputRef.current) fileInputRef.current.value = "";
-  //   }
-  // };
-
   const handleFileUpload = async (file: File) => {
     const extension = file.name.split(".").pop()?.toLowerCase();
 

@@ -103,6 +103,7 @@ function MetricCard({
       transition duration-200 hover:border-indigo-400/30
       hover:bg-[#151a2b]"
     >
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent" />
       <div className="flex items-start justify-between">
         <div
           className="grid size-10 place-items-center rounded-xl

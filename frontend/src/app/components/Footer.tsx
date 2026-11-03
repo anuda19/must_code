@@ -55,7 +55,7 @@ export default function Footer() {
             </p>
 
             <Link
-              href="/signup"
+              href={ROUTES.register}
               className="group mt-5 inline-flex items-center gap-2 text-sm font-medium text-indigo-200 transition-colors hover:text-cyan-200"
             >
               Start preparing
@@ -91,19 +91,19 @@ export default function Footer() {
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link
-              href="/privacy"
+              href={ROUTES.privacy}
               className="text-xs text-slate-500 transition-colors hover:text-slate-300"
             >
               Privacy
             </Link>
             <Link
-              href="/terms"
+              href={ROUTES.terms}
               className="text-xs text-slate-500 transition-colors hover:text-slate-300"
             >
               Terms
             </Link>
             <Link
-              href="/about"
+              href={ROUTES.about}
               className="text-xs text-slate-500 transition-colors hover:text-slate-300"
             >
               About X Code

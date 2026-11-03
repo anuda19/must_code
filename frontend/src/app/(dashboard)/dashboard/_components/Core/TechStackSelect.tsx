@@ -265,7 +265,7 @@ export function TechStackInput({
   return (
     <div className="space-y-2">
       {/* Active Badges & Input Box */}
-      <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-2.5 mt-1.5 transition-colors focus-within:border-indigo-500/80">
+      <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-2.5 mt-1.5 transition-colors focus-within:border-indigo-500/80">
         {value.map((tag) => (
           <span
             key={tag}

@@ -71,7 +71,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
             }
             className={cn(
-              "w-full rounded-lg bg-[#161a23] border text-sm text-slate-100 placeholder:text-slate-500",
+              "w-full rounded-lg bg-slate-950 border text-sm text-slate-100 placeholder:text-slate-500",
               "py-2.5 px-3.5 transition duration-150 ease-in-out",
               "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent",
               leftIcon ? "pl-10" : "",

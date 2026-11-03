@@ -1,130 +1,134 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sparkles, ArrowRight, CheckCircle2, Lock } from "lucide-react";
-import { LucideIcon } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, Mail, ArrowRight, LoaderCircle, CheckCircle2, Rocket } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-interface ComingSoonFeatureCardProps {
-  title: string;
-  description: string;
-  icon: LucideIcon;
+interface ComingSoonProps {
   badgeText?: string;
-  expectedDate?: string;
-  bulletPoints?: string[];
-  onNotifyMe?: (email: string) => void | Promise<void>;
-  className?: string;
+  title?: string;
+  description?: string;
+  showWaitlist?: boolean;
+  onSubscribe?: (email: string) => Promise<void> | void;
 }
 
-export default function ComingSoonFeatureCard({
-  title,
-  description,
-  icon: Icon,
-  badgeText = "Coming Soon",
-  expectedDate,
-  bulletPoints,
-  onNotifyMe,
-  className = "",
-}: ComingSoonFeatureCardProps) {
+export function ComingSoon({
+  badgeText = "Feature in Development",
+  title = "Something Exciting is Coming Soon",
+  description = "We are crafting a powerful new feature to elevate your technical interview preparation. Join the waitlist to get early access when we launch.",
+  showWaitlist = true,
+  onSubscribe,
+}: ComingSoonProps) {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email.trim()) return;
 
-    setLoading(true);
+    setIsSubmitting(true);
+    setError(null);
+
     try {
-      if (onNotifyMe) {
-        await onNotifyMe(email);
+      if (onSubscribe) {
+        await onSubscribe(email);
       } else {
-        // Default mock delay if no handler provided
-        await new Promise((resolve) => setTimeout(resolve, 600));
+        // Fallback simulated submission delay
+        await new Promise((resolve) => setTimeout(resolve, 800));
       }
-      setSubmitted(true);
+      setIsSubmitted(true);
+      setEmail("");
     } catch (err) {
-      console.error(err);
+      setError(
+        err instanceof Error ? err.message : "Failed to join the waitlist. Please try again."
+      );
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div
-      className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.04] hover:shadow-[0_0_40px_rgba(99,102,241,0.1)] ${className}`}
-    >
-      {/* Ambient Top Glow */}
-      <div className="absolute -right-12 -top-12 size-40 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+    <div className="relative flex min-h-[70vh] w-full items-center justify-center px-4 py-12 antialiased">
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[500px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/15 blur-[140px]" />
+      <div className="pointer-events-none absolute right-1/4 top-1/3 -z-10 h-[350px] w-[450px] rounded-full bg-violet-600/10 blur-[120px]" />
 
-      {/* Top Header & Badge */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex size-12 items-center justify-center rounded-2xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
-          <Icon className="size-6" strokeWidth={2.2} />
+      <div className="relative max-w-2xl text-center space-y-8">
+        
+        {/* Animated Badge & Icon Header */}
+        <div className="space-y-4 flex flex-col items-center">
+          <div className="relative inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-indigo-300 backdrop-blur-xl">
+            <Sparkles className="size-3.5 text-indigo-400" />
+            <span>{badgeText}</span>
+          </div>
+
+          <div className="relative mt-2 flex size-20 items-center justify-center rounded-3xl border border-indigo-400/30 bg-gradient-to-b from-indigo-500/20 to-indigo-950/60 text-indigo-300 shadow-2xl shadow-indigo-950/50 backdrop-blur-2xl">
+            <div className="absolute -inset-2 rounded-3xl bg-indigo-500/20 blur-md animate-pulse" />
+            <Rocket className="relative size-9 text-indigo-300" />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {expectedDate && (
-            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-medium text-slate-400">
-              Expected {expectedDate}
-            </span>
-          )}
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-[11px] font-semibold text-indigo-300">
-            <Sparkles className="size-3 text-indigo-400 animate-pulse" />
-            {badgeText}
-          </span>
+        {/* Title & Description */}
+        <div className="space-y-3">
+          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+            {title}
+          </h1>
+          <p className="mx-auto max-w-lg text-sm text-slate-400 sm:text-base leading-relaxed">
+            {description}
+          </p>
         </div>
-      </div>
 
-      {/* Title & Description */}
-      <div className="mt-6">
-        <h3 className="text-xl font-bold tracking-tight text-white">{title}</h3>
-        <p className="mt-2 text-xs leading-relaxed text-slate-400">{description}</p>
-      </div>
-
-      {/* Optional Bullet Points (Sneak Peek Features) */}
-      {bulletPoints && bulletPoints.length > 0 && (
-        <div className="mt-6 space-y-2.5 border-t border-white/10 pt-6">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-            What to expect:
-          </span>
-          <div className="grid gap-2">
-            {bulletPoints.map((point, index) => (
-              <div key={index} className="flex items-center gap-2.5 text-xs text-slate-300">
-                <Lock className="size-3.5 text-indigo-400/70 shrink-0" />
-                <span>{point}</span>
+        {/* Waitlist Subscription Box */}
+        {showWaitlist && (
+          <div className="mx-auto max-w-md">
+            {isSubmitted ? (
+              <div className="flex items-center justify-center gap-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-6 py-4 text-sm font-medium text-emerald-300 backdrop-blur-xl animate-in fade-in duration-300">
+                <CheckCircle2 className="size-5 shrink-0 text-emerald-400" />
+                <span>You're on the list! We will notify you when this feature launches.</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <div className="relative flex-1">
+                    <Mail className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address..."
+                      className="w-full rounded-2xl border border-white/10 bg-[#0B1020]/90 pl-11 pr-4 py-3.5 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500 focus:bg-[#0B1020] focus:ring-4 focus:ring-indigo-500/15 shadow-xl"
+                    />
+                  </div>
 
-      {/* Bottom Notification Form */}
-      <div className="mt-8 border-t border-white/10 pt-6">
-        {submitted ? (
-          <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-xs font-medium text-emerald-300">
-            <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-            <span>You're on the priority notification list! We'll email you at launch.</span>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group h-[46px] rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 px-6 font-semibold text-white shadow-xl shadow-indigo-600/25 transition-all duration-300 hover:scale-[1.02] hover:shadow-indigo-600/40 active:scale-[0.98]"
+                  >
+                    {isSubmitting ? (
+                      <LoaderCircle className="size-4 animate-spin" />
+                    ) : (
+                      <>
+                        <span>Notify Me</span>
+                        <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {error && (
+                  <p className="text-xs text-rose-400 text-left px-2">
+                    {error}
+                  </p>
+                )}
+              </form>
+            )}
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="email"
-              required
-              placeholder="Enter your work email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition-colors focus:border-indigo-500/50 focus:bg-white/[0.05]"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="group inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:bg-indigo-400 disabled:opacity-50"
-            >
-              <span>{loading ? "Subscribing..." : "Notify Me"}</span>
-              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-            </button>
-          </form>
         )}
+
       </div>
     </div>
   );

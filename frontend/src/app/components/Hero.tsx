@@ -5,8 +5,10 @@ import {
   ArrowDownRight,
   ArrowRight,
   AudioLines,
+  Bot,
   Check,
   Code2,
+  Mic,
   Mic2,
   Sparkles,
   Waves,
@@ -66,16 +68,12 @@ function NeuralCore() {
             />
           ))}
         </div>
-
-        {/* Glass reflection */}
         <div className="pointer-events-none absolute inset-[8%] rounded-full bg-[linear-gradient(135deg,rgba(255,255,255,0.11),transparent_35%,transparent_72%,rgba(103,232,249,0.06))]" />
       </div>
-
-      {/* Floating transcript */}
       <div className="absolute left-0 top-[17%] w-[57%] rounded-xl border border-white/[0.12] bg-[#101321]/90 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl sm:left-[-1%] sm:w-[53%] sm:p-4">
         <div className="flex items-center gap-2">
           <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-violet-400/10 text-violet-200">
-            <Sparkles className="size-3.5" />
+            <Mic className="size-3.5" />
           </div>
           <span className="text-[9px] font-semibold tracking-[0.14em] text-slate-400 sm:text-[10px]">
             AI INTERVIEWER
@@ -166,7 +164,7 @@ export default function Hero() {
           <div className="relative z-10 mx-auto w-full max-w-[560px] lg:mx-0 lg:py-5">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.10] bg-white/[0.035] px-3.5 py-2 backdrop-blur-xl">
               <span className="flex size-5 items-center justify-center rounded-full bg-indigo-300/15 text-indigo-200">
-                <Sparkles className="size-3" />
+                <Bot className="size-3 text-indigo-400" />
               </span>
               <span className="text-[10px] font-medium tracking-wide text-slate-300 sm:text-xs">
                 AI-POWERED INTERVIEW PREPARATION

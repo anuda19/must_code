@@ -49,8 +49,8 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
   const menuGroups = [
     [
       { label: "Profile", icon: User, href: ROUTES.profile },
-      { label: "Settings", icon: Settings, href: "/dashboard/settings" },
-      { label: "FAQ", icon: HelpCircle, href: "/dashboard/faq" },
+      { label: "Settings", icon: Settings, href: ROUTES.settings },
+      { label: "FAQ", icon: HelpCircle, href: ROUTES.user_faq },
     ],
     [
       {

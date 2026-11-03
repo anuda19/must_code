@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { LogoutButton } from "@/app/components/ui/LogoutButton";
-import { useUser } from "@/hooks/useUser";
 import { ROUTES } from "@/lib/routes";
 
 const NAV_ITEMS = [
@@ -37,7 +36,6 @@ const NAV_ITEMS = [
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  const { data: user } = useUser();
 
   return (
     <aside
@@ -63,7 +61,7 @@ export default function Sidebar() {
         {/* Brand */}
         <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden py-3">
           <Link
-            href="/dashboard"
+            href={ROUTES.dashboard}
             aria-label="X Code home"
             className="group flex shrink-0 items-center gap-2.5"
           >
@@ -135,7 +133,7 @@ export default function Sidebar() {
             {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
             <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#0B0F19]" />
           </div> */}
-{/* 
+          {/* 
           <div
             aria-hidden={isCollapsed}
             className={`min-w-0 flex-1 overflow-hidden transition-[opacity,max-width] duration-200 ${
@@ -150,7 +148,11 @@ export default function Sidebar() {
             </div>
           </div> */}
 
-          {!isCollapsed && <LogoutButton />}
+          <div className="min-w-0 border-t border-slate-800/80 pt-4">
+            <div className="flex min-h-10 min-w-0 items-center justify-center">
+              <LogoutButton isCollapsed={isCollapsed} />
+            </div>
+          </div>
         </div>
       </div>
     </aside>

@@ -1,3 +1,4 @@
+import Topbar from "../../(dashboard)/components/Topbar";
 import UserProfile from "./_components/UserProfile";
 
 const UserProfilePage = () => {

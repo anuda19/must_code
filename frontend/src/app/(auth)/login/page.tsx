@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#080a12] text-white">
-      {/* Ambient background — same as registration */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-40 top-24 h-96 w-96 rounded-full bg-violet-600/15 blur-[110px]"
@@ -21,11 +20,9 @@ export default function LoginPage() {
         className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-cyan-500/[0.08] blur-[110px]"
       />
 
-      {/* Existing full-width navigation */}
       <Navbar />
 
       <section className="relative mx-auto grid w-full max-w-[1440px] flex-1 items-center gap-8 px-5 py-7 sm:px-8 lg:min-h-0 lg:grid-cols-[1fr_0.88fr] lg:gap-12 lg:px-12 lg:py-5 xl:gap-20">
-        {/* Left: Login hero */}
         <div className="flex flex-col justify-center lg:min-w-0">
           <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-violet-400/20 bg-violet-400/[0.07] px-3.5 py-1.5 text-xs font-medium text-violet-200">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
@@ -45,7 +42,6 @@ export default function LoginPage() {
             your next career milestone.
           </p>
 
-          {/* Same code visual as registration */}
           <div className="relative mt-6 hidden overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0c1020]/70 sm:block lg:mt-8">
             <div
               aria-hidden="true"
@@ -100,7 +96,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Right: Login card — identical outer treatment to registration */}
         <div className="relative mx-auto w-full max-w-[470px] lg:ml-auto lg:min-w-0">
           <div
             aria-hidden="true"

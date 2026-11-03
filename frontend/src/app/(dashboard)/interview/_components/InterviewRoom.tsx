@@ -27,15 +27,12 @@ import {
 } from "@livekit/components-react";
 import { ConnectionState, type Participant } from "livekit-client";
 import "@livekit/components-styles";
-
-import { API_BASE_URL } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUser } from "@/hooks/useUser";
 import {
-  EvaluationResponse,
   EvaluationStatus,
   InterviewEvaluation,
 } from "@/types/interview-evalution";
@@ -49,12 +46,6 @@ import {
   evaluateInterview,
   saveInterviewTranscript,
 } from "@/actions/interview/evaluation/interview-evaluation.actions";
-
-type TokenResponse = {
-  token: string;
-  roomName: string;
-  serverUrl: string;
-};
 
 type TranscriptItem = {
   id: string;
@@ -163,7 +154,6 @@ function InterviewRoomContent({
   const [ending, setEnding] = useState(false);
   const room = useRoomContext();
 
-  // Find agent participant (any participant that is not local user)
   const agentParticipant = participants.find(
     (participant) => participant.identity !== localParticipant.identity,
   );
@@ -643,6 +633,18 @@ export function InterviewRoom() {
     }
   }
 
+  function clearEvaluationState() {
+  setEnded(false);
+  setEvaluationResult(null);
+  setEvaluationStatus("idle");
+  setEvaluationError(null);
+  setError(null);
+  setFinalTranscript([]);
+
+  clientSessionIdRef.current = null;
+  startedAtRef.current = null;
+}
+
   if (!token || !roomName || !serverUrl) {
     return ended ? (
       <div className="w-full pt-2">
@@ -651,7 +653,7 @@ export function InterviewRoom() {
           status={evaluationStatus}
           evaluation={evaluationResult}
           error={evaluationError}
-          onClose={() => setEnded(false)}
+          onClose={clearEvaluationState}
         />
       </div>
     ) : (
@@ -660,9 +662,6 @@ export function InterviewRoom() {
         loading={loading}
         error={error}
         startInterview={startInterview}
-        evaluationStatus={evaluationStatus}
-        evaluationResult={evaluationResult}
-        evaluationError={evaluationError}
       />
     );
   }

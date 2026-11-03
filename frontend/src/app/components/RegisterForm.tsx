@@ -337,7 +337,7 @@ export default function RegisterForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-300 via-indigo-700 to-indigo-500 px-5 font-semibold text-white shadow-lg shadow-indigo-950/40 transition duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c1020] disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-indigo-600 hover:from-violet-500 hover:via-indigo-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-[#0E1117] disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {isPending ? (
           <>

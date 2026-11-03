@@ -11,7 +11,7 @@ const DashboardPage = async () => {
       >
         <div>
           <div
-            className="mb-2 flex items-center gap-2
+            className="mb-2 flex items-center gap-1
             text-xs font-semibold uppercase tracking-[0.18em]
             text-indigo-300"
           >

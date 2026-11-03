@@ -1,33 +1,16 @@
-// import ComingSoonFeatureCard from "@/app/components/ui/ComingSoon";
-// import { Bot } from "lucide-react";
-
-// const TechnicalAssessmentPage = () => {
-//   return (
-//     <div>
-//       <ComingSoonFeatureCard
-//         title="AI Technical Assistant & Debugger"
-//         description="Your dedicated AI pair programmer capable of analyzing stack traces, debugging complex state logic, and explaining architectural patterns in real-time."
-//         icon={Bot}
-//         badgeText="In Development"
-//         expectedDate="Q2 2026"
-//         bulletPoints={[
-//           "Instant context-aware code refactoring",
-//           "Deep integration with your project workspace",
-//           "Real-time terminal error resolution",
-//         ]}
-//         // onNotifyMe={async (email) => {
-//         //   // Call your backend API to save email subscriber
-//         //   console.log("Subscribed email:", email);
-//         // }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default TechnicalAssessmentPage;
+import { ComingSoon } from "@/app/components/ui/ComingSoon";
 
 const TechnicalAssessmentPage = () => {
-  return <div>Comming soon</div>;
+  return (
+    <div>
+      <ComingSoon
+        badgeText="Technical Assessments"
+        title="Automated Coding & System Design Assessments"
+        description="We are building an interactive coding sandbox and real-time algorithmic evaluation engine. Get ready to test your problem-solving skills under realistic technical interview conditions."
+        showWaitlist={true}
+      />
+    </div>
+  );
 };
 
 export default TechnicalAssessmentPage;

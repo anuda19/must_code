@@ -56,8 +56,8 @@ export function ExperienceLevelSelect({
       <Select.Trigger
         className="
           mt-1 flex w-full items-center justify-between
-          rounded-xl border border-slate-800
-          bg-slate-950 px-3.5 py-2.5
+          rounded-lg border border-slate-800
+          bg-slate-950 px-3.5 py-3
           text-sm text-white outline-none
           transition-colors
           hover:border-slate-700

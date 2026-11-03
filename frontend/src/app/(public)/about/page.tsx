@@ -64,9 +64,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#080a12] text-white selection:bg-indigo-500/30 selection:text-indigo-200">
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-24 pb-20 lg:pt-32 lg:pb-28">
-        {/* Background glow effects */}
+      <section className="relative overflow-hidden pb-20 pt-20">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-indigo-600/15 blur-[140px] pointer-events-none rounded-full" />
         <div className="absolute top-10 right-10 w-[300px] h-[300px] bg-blue-600/10 blur-[120px] pointer-events-none rounded-full" />
 
@@ -106,13 +104,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission & Vision Section */}
       <section className="py-20 border-t border-white/[0.08] bg-[#0c0f1d]/55 relative">
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
             
-            {/* Mission Card */}
             <div className="relative rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/20 to-[#080a12] p-8 sm:p-10 flex flex-col justify-between overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 p-8 text-indigo-500/10 pointer-events-none">
                 <Target className="size-32" />
@@ -135,8 +131,6 @@ export default function AboutPage() {
                 <span>Rigorous simulations modeled after top-tier engineering loops</span>
               </div>
             </div>
-
-            {/* Vision Card */}
             <div className="relative rounded-3xl border border-blue-500/20 bg-gradient-to-b from-blue-950/20 to-[#080a12] p-8 sm:p-10 flex flex-col justify-between overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 p-8 text-blue-500/10 pointer-events-none">
                 <Compass className="size-32" />
@@ -164,8 +158,6 @@ export default function AboutPage() {
 
         </div>
       </section>
-
-      {/* Core Values Section */}
       <section className="py-20 border-t border-white/[0.08]">
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
           
@@ -202,8 +194,6 @@ export default function AboutPage() {
 
         </div>
       </section>
-
-      {/* Ecosystem Roadmap / Milestones */}
       <section className="py-20 border-t border-white/[0.08] bg-[#0c0f1d]/30">
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8 lg:px-12">
           
@@ -247,8 +237,6 @@ export default function AboutPage() {
 
         </div>
       </section>
-
-      {/* Call to Action */}
       <section className="py-20 border-t border-white/[0.08] text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/30 to-transparent pointer-events-none" />
         
@@ -271,7 +259,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }
