@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Sparkles } from "lucide-react";
+import { X, Sparkles, BriefcaseBusiness, Settings2, Save } from "lucide-react";
 
 import { TechStackInput } from "./TechStackSelect";
 import { ExperienceLevelSelect } from "./ExperienceLevel";
@@ -22,6 +22,7 @@ import { UserProfileData } from "@/types/user-profile-types";
 import { JobRoleSelect } from "./RoleSelect";
 
 type FormErrors = Partial<Record<keyof UserProfileData, string>>;
+
 interface CreateInterviewDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -91,10 +92,8 @@ export function CreateInterviewDrawer({
       let cvText = formData.cvText ?? "";
 
       if (!formData.cvUrl) {
-        // CV removed: clear its extracted text too.
         cvText = "";
       } else if (cvFile) {
-        // Parse only when saving the profile, not during upload.
         cvText = await extractCvText(cvFile);
 
         if (!cvText) {
@@ -175,73 +174,64 @@ export function CreateInterviewDrawer({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay
-          className="
-            fixed inset-0 z-50
-            bg-black/50
-            backdrop-blur-sm
-            data-[state=open]:animate-overlayShow
-            data-[state=closed]:animate-overlayHide
-          "
-        />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-[var(--clay-ink)]/35 backdrop-blur-md data-[state=open]:animate-overlayShow data-[state=closed]:animate-overlayHide" />
 
-        <Dialog.Content
-          className="
-            fixed inset-y-0 right-0 z-50
-            flex h-full w-full max-w-lg
-            flex-col
-            border-l border-slate-800
-            bg-slate-900
-            p-5
-            shadow-2xl
-            focus:outline-none
-            data-[state=open]:animate-slideInRight
-            data-[state=closed]:animate-slideOutRight
-          "
-        >
+        <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex h-full w-full max-w-lg flex-col border-l border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[-18px_0_60px_rgba(101,70,49,0.16)] focus:outline-none data-[state=open]:animate-slideInRight data-[state=closed]:animate-slideOutRight">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
-              <Dialog.Title className="flex items-center gap-2 text-lg font-semibold text-white">
-                Setup AI Interview
-              </Dialog.Title>
+          <div className="relative shrink-0 overflow-hidden border-b border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-5 pb-5 pt-6 sm:px-7">
+            <div className="pointer-events-none absolute -right-10 -top-16 size-44 rounded-full bg-[var(--clay-peach)]/55 blur-3xl" />
 
-              <Dialog.Description className="mt-1 text-xs text-slate-400">
-                Configure the interview based on your role, experience and
-                target company.
-              </Dialog.Description>
+            <div className="relative flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div>
+                  <Dialog.Title className="text-lg font-bold tracking-tight text-[var(--clay-ink)]">
+                    {isEditing ? "Setup AI Interview" : "Choose Your Interview"}
+                  </Dialog.Title>
+
+                  <Dialog.Description className="mt-1 max-w-sm text-xs leading-5 text-[var(--clay-muted)]">
+                    {isEditing
+                      ? " Configure the interview based on your role, experience and target company."
+                      : "Choose the right path to crack your next interview."}
+                  </Dialog.Description>
+                </div>
+              </div>
+
+              <Dialog.Close asChild disabled={isDisabled}>
+                <button
+                  type="button"
+                  className="grid size-9 shrink-0 place-items-center rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-muted)] shadow-[0_3px_0_var(--clay-border)] transition-all hover:bg-[var(--clay-peach)] hover:text-[var(--clay-ink)] active:translate-y-0.5 active:shadow-none disabled:opacity-30"
+                  aria-label="Close drawer"
+                >
+                  <X className="size-4" />
+                </button>
+              </Dialog.Close>
             </div>
-
-            <Dialog.Close asChild disabled={isDisabled}>
-              <button
-                className="
-                  rounded-lg p-1.5
-                  text-slate-400
-                  transition-colors
-                  hover:bg-slate-800
-                  hover:text-white
-                  disabled:opacity-30
-                "
-                aria-label="Close drawer"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </Dialog.Close>
+            {isEditing && (
+              <div className="relative mt-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--clay-sage-ink)]">
+                <span className="size-2 rounded-full bg-[var(--clay-status)]" />
+                Personalize your interview workspace
+              </div>
+            )}
           </div>
 
           {isPending ? (
-            <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
+            <div className="flex flex-1 items-center justify-center text-sm text-[var(--clay-muted)]">
               Loading your profile...
             </div>
           ) : isError ? (
-            <div className="flex flex-1 flex-col items-center justify-center gap-3 text-sm text-slate-400">
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center text-sm text-[var(--clay-muted)]">
+              <div className="grid size-12 place-items-center rounded-2xl bg-[var(--clay-surface-warm)]">
+                <Settings2 className="size-5 text-[var(--clay-subtle)]" />
+              </div>
+
               <p>Unable to load your profile.</p>
+
               <button
                 type="button"
                 onClick={() =>
                   queryClient.invalidateQueries({ queryKey: ["user"] })
                 }
-                className="text-indigo-400 hover:text-indigo-300"
+                className="rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)] px-4 py-2 text-xs font-semibold text-[var(--clay-primary-ink)] shadow-[0_3px_0_var(--clay-coral-shadow)] transition hover:brightness-105 active:translate-y-0.5 active:shadow-none"
               >
                 Try again
               </button>
@@ -251,98 +241,129 @@ export function CreateInterviewDrawer({
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="mt-6 flex p-1 flex-1 flex-col justify-between overflow-y-auto drawer-scrollbar"
+              className="drawer-scrollbar mt-5 flex flex-1 flex-col justify-between overflow-y-auto px-5 pb-0 sm:px-7"
             >
-              <div className="space-y-5 pr-1">
+              <div className="space-y-6 pb-5">
                 <div>
-                  <CvUpload
-                    value={formData.cvUrl ?? ""}
-                    onChange={(path) => updateField("cvUrl", path)}
-                    onFileSelected={setCvFile}
-                    disabled={isDisabled}
-                  />
-                  <FieldError message={errorMsg?.cvUrl} />
+                  <div className="mb-3 flex items-center gap-2">
+                    <div className="grid size-7 place-items-center rounded-lg bg-[var(--clay-blue)] text-[var(--clay-blue-ink)]">
+                      <BriefcaseBusiness className="size-3.5" />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--clay-ink)]">
+                      Your profile
+                    </p>
+                  </div>
+
+                  <div>
+                    <CvUpload
+                      value={formData.cvUrl ?? ""}
+                      onChange={(path) => updateField("cvUrl", path)}
+                      onFileSelected={setCvFile}
+                      disabled={isDisabled}
+                    />
+                    <FieldError message={errorMsg?.cvUrl} />
+                  </div>
                 </div>
 
-                {/* Job Role */}
+                <div className="h-px bg-[var(--clay-border)]" />
+
                 <div>
-                  <Label
-                    required
-                    htmlFor="job-role"
-                    className="block text-xs font-medium text-slate-300 mb-1"
-                  >
-                    Job Role
-                  </Label>
-                  <JobRoleSelect
-                    value={formData.jobRole}
-                    onChange={(val) => updateField("jobRole", val)}
-                    disabled={isDisabled}
-                    placeholder="e.g. Frontend Engineer"
-                  />
-                  <FieldError message={errorMsg?.jobRole} />
+                  <div className="mb-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--clay-ink)]">
+                      Interview preferences
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-[var(--clay-subtle)]">
+                      Help tailor your technical questions to your experience.
+                    </p>
+                  </div>
+
+                  <div className="space-y-5">
+                    <div>
+                      <Label
+                        required
+                        htmlFor="job-role"
+                        className="mb-1.5 block text-xs font-semibold text-[var(--clay-ink)]"
+                      >
+                        Job Role
+                      </Label>
+
+                      <JobRoleSelect
+                        value={formData.jobRole}
+                        onChange={(val) => updateField("jobRole", val)}
+                        disabled={isDisabled}
+                        placeholder="e.g. Frontend Engineer"
+                      />
+
+                      <FieldError message={errorMsg?.jobRole} />
+                    </div>
+
+                    <div>
+                      <Label
+                        required
+                        htmlFor="experience-level"
+                        className="mb-1.5 block text-xs font-semibold text-[var(--clay-ink)]"
+                      >
+                        Experience Level
+                      </Label>
+
+                      <ExperienceLevelSelect
+                        value={formData.experienceLevel}
+                        onChange={(value) =>
+                          updateField("experienceLevel", value)
+                        }
+                        disabled={isDisabled}
+                      />
+
+                      <FieldError message={errorMsg?.experienceLevel} />
+                    </div>
+
+                    <div>
+                      <Label
+                        required
+                        htmlFor="tech-stack"
+                        className="mb-1.5 block text-xs font-semibold text-[var(--clay-ink)]"
+                      >
+                        Skills / Tech Stack
+                      </Label>
+
+                      <TechStackInput
+                        value={formData.skills}
+                        onChange={(value) => updateField("skills", value)}
+                        selectedRole={formData.jobRole}
+                      />
+
+                      <FieldError message={errorMsg?.skills} />
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="target-company"
+                        className="mb-1.5 block text-xs font-semibold text-[var(--clay-ink)]"
+                      >
+                        Target Company{" "}
+                        <span className="font-normal text-[var(--clay-subtle)]">
+                          (Optional)
+                        </span>
+                      </Label>
+
+                      <Input
+                        id="target-company"
+                        value={formData.targetCompany ?? ""}
+                        onChange={(e) =>
+                          updateField("targetCompany", e.target.value)
+                        }
+                        disabled={isDisabled}
+                        placeholder="e.g. Google, Amazon, Microsoft"
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                {/* Experience */}
-                <div>
-                  <Label
-                    required
-                    htmlFor="experience-level"
-                    className="block text-xs font-medium text-slate-300 mb-1"
-                  >
-                    Experience Level
-                  </Label>
-
-                  <ExperienceLevelSelect
-                    value={formData.experienceLevel}
-                    onChange={(value) => updateField("experienceLevel", value)}
-                    disabled={isDisabled}
-                  />
-                  <FieldError message={errorMsg?.experienceLevel} />
-                </div>
-
-                {/* Tech Stack */}
-                <div>
-                  <Label
-                    required
-                    htmlFor="tech-stack"
-                    className="block text-xs font-medium text-slate-300 mb-1"
-                  >
-                    Skills / Tech Stack
-                  </Label>
-
-                  <TechStackInput
-                    value={formData.skills}
-                    onChange={(value) => updateField("skills", value)}
-                    selectedRole={formData.jobRole}
-                  />
-                  <FieldError message={errorMsg?.skills} />
-                </div>
-
-                {/* Target Company */}
-                <div>
-                  <Label
-                    htmlFor="target-company"
-                    className="block text-xs font-medium text-slate-300 mb-1"
-                  >
-                    Target Company (Optional)
-                  </Label>
-
-                  <Input
-                    id="target-company"
-                    value={formData.targetCompany ?? ""}
-                    onChange={(e) =>
-                      updateField("targetCompany", e.target.value)
-                    }
-                    disabled={isDisabled}
-                    placeholder="e.g. Google, Amazon, Microsoft"
-                  />
-                </div>
-
-                {/* Job Description */}
+                {/* Job Description remains intentionally unchanged and disabled in the UI. */}
                 {/* <div>
                   <Label
                     htmlFor="job-description"
-                    className="block text-xs font-medium text-slate-300 mb-1"
+                    className="mb-1 block text-xs font-medium text-[var(--clay-ink)]"
                   >
                     Job Description (Optional)
                   </Label>
@@ -356,56 +377,35 @@ export function CreateInterviewDrawer({
                     disabled={isDisabled}
                     rows={4}
                     placeholder="Paste the job description to tailor the interview to the role..."
-                    className="
-                      mt-1.5 w-full resize-none
-                      rounded-xl
-                      border border-slate-800
-                      bg-slate-950
-                      px-3.5 py-3
-                      text-sm text-white
-                      placeholder:text-slate-600
-                      outline-none
-                      transition-colors
-                      focus:border-indigo-500
-                      disabled:cursor-not-allowed
-                      disabled:opacity-50
-                    "
+                    className="mt-1.5 w-full resize-none rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-3.5 py-3 text-sm text-[var(--clay-ink)] placeholder:text-[var(--clay-subtle)] outline-none transition focus:border-[var(--clay-primary)] focus:ring-4 focus:ring-[var(--clay-primary)]/10 disabled:cursor-not-allowed disabled:opacity-50 clay-inset"
                   />
 
-                  <p className="mt-1.5 text-[11px] text-slate-600">
+                  <p className="mt-1.5 text-[11px] text-[var(--clay-subtle)]">
                     AI will use this to prioritize relevant skills,
                     responsibilities and interview questions.
                   </p>
                 </div> */}
               </div>
 
-              {/* Footer */}
-              <div className="mt-6 space-y-3 border-t border-slate-800 pt-4 sticky bottom-0 bg-slate-900">
+              {/* Sticky footer */}
+              <div className="sticky bottom-0 -mx-5 mt-auto border-t border-[var(--clay-border)] bg-[var(--clay-surface)] px-5 pb-5 pt-4 sm:-mx-7 sm:px-7">
                 <button
                   type="submit"
                   disabled={
                     isDisabled || formData.skills.length === 0 || !canSave
                   }
-                  className="
-                    flex w-full items-center
-                    justify-center gap-2
-                    rounded-xl
-                    bg-indigo-600
-                    px-4 py-3
-                    text-sm font-medium text-white
-                    shadow-lg shadow-indigo-600/10
-                    transition-all
-                    hover:bg-indigo-500
-                    disabled:opacity-50
-                  "
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-primary)] px-4 py-3.5 text-sm font-bold text-[var(--clay-primary-ink)] shadow-[inset_3px_3px_7px_rgba(255,255,255,0.45),0_5px_0_var(--clay-coral-shadow),0_10px_18px_rgba(216,102,73,0.12)] transition-all hover:brightness-105 active:translate-y-1 active:shadow-[inset_3px_3px_7px_rgba(255,255,255,0.45),0_1px_0_var(--clay-coral-shadow)] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
                 >
                   {status === "idle" ? (
                     <>
-                      <Sparkles className="h-4 w-4" />
-                      Start Interview
+                      <Save className="size-4" />
+                      Save Profile
                     </>
                   ) : (
-                    "Preparing Workspace..."
+                    <>
+                      <span className="size-4 animate-spin rounded-full border-2 border-[var(--clay-primary-ink)]/30 border-t-[var(--clay-primary-ink)]" />
+                      Preparing Workspace...
+                    </>
                   )}
                 </button>
               </div>

@@ -142,6 +142,244 @@
 //   );
 // }
 
+// "use client";
+
+// import * as Label from "@radix-ui/react-label";
+// import Link from "next/link";
+// import { useRouter } from "next/navigation";
+// import { useState, useTransition } from "react";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import {
+//   ArrowRight,
+//   Loader2,
+//   UserRound,
+//   Mail,
+//   ShieldCheck,
+//   AlertCircle,
+// } from "lucide-react";
+
+// import { Input } from "./ui/TextInput";
+// import Button from "./ui/Button";
+// import PasswordInput from "./ui/PasswordInput";
+// import { RegisterInput, registerSchema } from "@/lib/schema/auth";
+// import { registerAction } from "@/actions/auth/auth";
+// import { ROUTES } from "@/lib/routes";
+
+// export default function RegisterForm() {
+//   const [serverError, setServerError] = useState<string | null>(null);
+//   const [isPending, startTransition] = useTransition();
+//   const router = useRouter();
+
+//   const form = useForm<RegisterInput>({
+//     resolver: zodResolver(registerSchema),
+//     defaultValues: {
+//       name: "",
+//       email: "",
+//       password: "",
+//     },
+//   });
+
+//   const onSubmit = (values: RegisterInput) => {
+//     setServerError(null);
+
+//     startTransition(async () => {
+//       try {
+//         const res = await registerAction(values);
+
+//         if (!res.success) {
+//           setServerError(
+//             res.error?.message ||
+//               "We couldn't create your account. Please try again.",
+//           );
+//           return;
+//         }
+
+//         router.push(ROUTES.login);
+//         router.refresh();
+//       } catch {
+//         setServerError(
+//           "Something went wrong. Please check your connection and try again.",
+//         );
+//       }
+//     });
+//   };
+
+//   const inputClassName =
+//     "h-12 w-full rounded-xl border border-white/[0.09] bg-[#111629] pl-11 pr-4 text-sm text-white placeholder:text-slate-500 transition-colors focus-visible:border-violet-400/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/20";
+
+//   return (
+//     <form
+//       noValidate
+//       onSubmit={form.handleSubmit(onSubmit)}
+//       className="space-y-5"
+//     >
+//       {serverError && (
+//         <div
+//           role="alert"
+//           className="flex gap-3 rounded-xl border border-rose-400/20 bg-rose-400/[0.07] p-3.5 text-sm text-rose-200"
+//         >
+//           <AlertCircle size={19} className="mt-0.5 shrink-0 text-rose-400" />
+//           <p>{serverError}</p>
+//         </div>
+//       )}
+
+//       {/* Name */}
+//       <div className="space-y-2">
+//         <Label.Root
+//           htmlFor="name"
+//           className="text-sm font-medium text-slate-200"
+//         >
+//           Full name
+//         </Label.Root>
+
+//         <div className="relative flex items-center">
+//           <UserRound
+//             aria-hidden="true"
+//             size={18}
+//             className="pointer-events-none absolute left-3.5 z-10 text-slate-400"
+//           />
+
+//           <Input
+//             id="name"
+//             type="text"
+//             autoComplete="name"
+//             placeholder="Enter your full name"
+//             aria-invalid={!!form.formState.errors.name}
+//             aria-describedby={
+//               form.formState.errors.name ? "name-error" : undefined
+//             }
+//             {...form.register("name")}
+//             className={`pl-10 ${inputClassName} ${
+//               form.formState.errors.name
+//                 ? "border-rose-400/60 focus-visible:border-rose-400"
+//                 : ""
+//             }`}
+//           />
+//         </div>
+
+//         {form.formState.errors.name && (
+//           <p id="name-error" className="text-xs text-rose-400">
+//             {form.formState.errors.name.message}
+//           </p>
+//         )}
+//       </div>
+
+//       {/* Email */}
+//       <div className="space-y-2">
+//         <Label.Root
+//           htmlFor="email"
+//           className="text-sm font-medium text-slate-200"
+//         >
+//           Email address
+//         </Label.Root>
+
+//         <div className="relative flex items-center">
+//           <Mail
+//             aria-hidden="true"
+//             size={18}
+//             className="pointer-events-none absolute left-3.5 z-10 text-slate-400"
+//           />
+
+//           <Input
+//             id="email"
+//             type="email"
+//             autoComplete="email"
+//             placeholder="you@example.com"
+//             aria-invalid={!!form.formState.errors.email}
+//             aria-describedby={
+//               form.formState.errors.email ? "email-error" : undefined
+//             }
+//             {...form.register("email")}
+//             className={`pl-10 ${inputClassName} ${
+//               form.formState.errors.email
+//                 ? "border-rose-400/60 focus-visible:border-rose-400"
+//                 : ""
+//             }`}
+//           />
+//         </div>
+
+//         {form.formState.errors.email && (
+//           <p id="email-error" className="text-xs text-rose-400">
+//             {form.formState.errors.email.message}
+//           </p>
+//         )}
+//       </div>
+
+//       {/* Password */}
+//       <div className="space-y-2">
+//         <Label.Root
+//           htmlFor="password"
+//           className="text-sm font-medium text-slate-200"
+//         >
+//           Password
+//         </Label.Root>
+
+//         <PasswordInput
+//           id="password"
+//           label=""
+//           autoComplete="new-password"
+//           placeholder="Create a strong password"
+//           {...form.register("password")}
+//           value={form.watch("password")}
+//           error={form.formState.errors.password?.message}
+//         />
+//       </div>
+
+//       <div className="flex items-start gap-2.5 pt-1">
+//         <ShieldCheck size={17} className="mt-0.5 shrink-0 text-emerald-400" />
+//         <p className="text-xs leading-5 text-slate-400">
+//           Your account details are handled securely. Choose a strong, unique
+//           password to help protect your account.
+//         </p>
+//       </div>
+
+//       <Button
+//         type="submit"
+//         disabled={isPending}
+//         className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-indigo-600 hover:from-violet-500 hover:via-indigo-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-[#0E1117] disabled:opacity-60 disabled:cursor-not-allowed"
+//       >
+//         {isPending ? (
+//           <>
+//             <Loader2 size={18} className="animate-spin" />
+//             Creating your account...
+//           </>
+//         ) : (
+//           <>
+//             Create account
+//             <ArrowRight
+//               size={18}
+//               className="transition-transform group-hover:translate-x-1"
+//             />
+//           </>
+//         )}
+//       </Button>
+
+//       <div className="relative py-2">
+//         <div className="absolute inset-0 flex items-center">
+//           <span className="w-full border-t border-white/[0.08]" />
+//         </div>
+//         <div className="relative flex justify-center">
+//           <span className="bg-[#0c1020] px-3 text-xs text-slate-500">
+//             Already part of the community?
+//           </span>
+//         </div>
+//       </div>
+
+//       <p className="text-center text-sm text-slate-400">
+//         Have an account?{" "}
+//         <Link
+//           href={ROUTES.login}
+//           className="font-semibold text-violet-300 transition hover:text-cyan-300"
+//         >
+//           Login
+//         </Link>
+//       </p>
+//     </form>
+//   );
+// }
+
+
 "use client";
 
 import * as Label from "@radix-ui/react-label";
@@ -206,7 +444,7 @@ export default function RegisterForm() {
   };
 
   const inputClassName =
-    "h-12 w-full rounded-xl border border-white/[0.09] bg-[#111629] pl-11 pr-4 text-sm text-white placeholder:text-slate-500 transition-colors focus-visible:border-violet-400/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/20";
+    "clay-inset h-12 w-full rounded-xl border border-[var(--clay-border)] bg-[var(--clay-bg)] pl-11 pr-4 text-sm text-[var(--clay-ink)] placeholder:text-[var(--clay-subtle)] transition-colors focus-visible:border-[var(--clay-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--clay-primary)]/20";
 
   return (
     <form
@@ -217,9 +455,9 @@ export default function RegisterForm() {
       {serverError && (
         <div
           role="alert"
-          className="flex gap-3 rounded-xl border border-rose-400/20 bg-rose-400/[0.07] p-3.5 text-sm text-rose-200"
+          className="flex gap-3 rounded-xl border border-[var(--clay-primary)]/40 bg-[var(--clay-peach)]/50 p-3.5 text-sm text-[#a94e37]"
         >
-          <AlertCircle size={19} className="mt-0.5 shrink-0 text-rose-400" />
+          <AlertCircle size={19} className="mt-0.5 shrink-0 text-[var(--clay-primary)]" />
           <p>{serverError}</p>
         </div>
       )}
@@ -228,7 +466,7 @@ export default function RegisterForm() {
       <div className="space-y-2">
         <Label.Root
           htmlFor="name"
-          className="text-sm font-medium text-slate-200"
+          className="text-sm font-medium text-[var(--clay-ink)]"
         >
           Full name
         </Label.Root>
@@ -237,7 +475,7 @@ export default function RegisterForm() {
           <UserRound
             aria-hidden="true"
             size={18}
-            className="pointer-events-none absolute left-3.5 z-10 text-slate-400"
+            className="pointer-events-none absolute left-3.5 z-10 text-[var(--clay-subtle)]"
           />
 
           <Input
@@ -250,16 +488,16 @@ export default function RegisterForm() {
               form.formState.errors.name ? "name-error" : undefined
             }
             {...form.register("name")}
-            className={`pl-10 ${inputClassName} ${
+            className={`${inputClassName} ${
               form.formState.errors.name
-                ? "border-rose-400/60 focus-visible:border-rose-400"
+                ? "border-[var(--clay-primary)] focus-visible:border-[var(--clay-primary)]"
                 : ""
             }`}
           />
         </div>
 
         {form.formState.errors.name && (
-          <p id="name-error" className="text-xs text-rose-400">
+          <p id="name-error" className="text-xs text-[#a94e37]">
             {form.formState.errors.name.message}
           </p>
         )}
@@ -269,7 +507,7 @@ export default function RegisterForm() {
       <div className="space-y-2">
         <Label.Root
           htmlFor="email"
-          className="text-sm font-medium text-slate-200"
+          className="text-sm font-medium text-[var(--clay-ink)]"
         >
           Email address
         </Label.Root>
@@ -278,7 +516,7 @@ export default function RegisterForm() {
           <Mail
             aria-hidden="true"
             size={18}
-            className="pointer-events-none absolute left-3.5 z-10 text-slate-400"
+            className="pointer-events-none absolute left-3.5 z-10 text-[var(--clay-subtle)]"
           />
 
           <Input
@@ -291,16 +529,16 @@ export default function RegisterForm() {
               form.formState.errors.email ? "email-error" : undefined
             }
             {...form.register("email")}
-            className={`pl-10 ${inputClassName} ${
+            className={`${inputClassName} ${
               form.formState.errors.email
-                ? "border-rose-400/60 focus-visible:border-rose-400"
+                ? "border-[var(--clay-primary)] focus-visible:border-[var(--clay-primary)]"
                 : ""
             }`}
           />
         </div>
 
         {form.formState.errors.email && (
-          <p id="email-error" className="text-xs text-rose-400">
+          <p id="email-error" className="text-xs text-[#a94e37]">
             {form.formState.errors.email.message}
           </p>
         )}
@@ -310,7 +548,7 @@ export default function RegisterForm() {
       <div className="space-y-2">
         <Label.Root
           htmlFor="password"
-          className="text-sm font-medium text-slate-200"
+          className="text-sm font-medium text-[var(--clay-ink)]"
         >
           Password
         </Label.Root>
@@ -327,8 +565,8 @@ export default function RegisterForm() {
       </div>
 
       <div className="flex items-start gap-2.5 pt-1">
-        <ShieldCheck size={17} className="mt-0.5 shrink-0 text-emerald-400" />
-        <p className="text-xs leading-5 text-slate-400">
+        <ShieldCheck size={17} className="mt-0.5 shrink-0 text-[var(--clay-sage-ink)]" />
+        <p className="text-xs leading-5 text-[var(--clay-muted)]">
           Your account details are handled securely. Choose a strong, unique
           password to help protect your account.
         </p>
@@ -337,7 +575,7 @@ export default function RegisterForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-indigo-600 hover:from-violet-500 hover:via-indigo-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-[#0E1117] disabled:opacity-60 disabled:cursor-not-allowed"
+        className="clay-button-shadow flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--clay-primary)]/40 bg-[var(--clay-primary)] px-4 py-3 font-semibold text-[var(--clay-primary-ink)] transition-all duration-300 hover:bg-[var(--clay-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--clay-primary)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? (
           <>
@@ -357,20 +595,20 @@ export default function RegisterForm() {
 
       <div className="relative py-2">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-white/[0.08]" />
+          <span className="w-full border-t border-[var(--clay-border)]" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-[#0c1020] px-3 text-xs text-slate-500">
+          <span className="bg-[var(--clay-surface)] px-3 text-xs text-[var(--clay-subtle)]">
             Already part of the community?
           </span>
         </div>
       </div>
 
-      <p className="text-center text-sm text-slate-400">
+      <p className="text-center text-sm text-[var(--clay-muted)]">
         Have an account?{" "}
         <Link
           href={ROUTES.login}
-          className="font-semibold text-violet-300 transition hover:text-cyan-300"
+          className="font-semibold text-[var(--clay-primary)] transition hover:text-[var(--clay-coral-shadow)]"
         >
           Login
         </Link>

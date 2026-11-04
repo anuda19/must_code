@@ -2,169 +2,177 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
+  AudioLines,
+  BrainCircuit,
   CheckCircle2,
-  Circle,
+  ClipboardCheck,
   Code2,
-  Layers3,
-  Sparkles,
+  MessageSquareText,
+  Target,
 } from "lucide-react";
 
-const roadmap = [
+import { ROUTES } from "@/lib/routes";
+
+const evaluationAreas = [
   {
-    day: "01",
-    title: "Core concepts",
-    subtitle: "Build your foundations",
-    icon: BookOpen,
-    status: "START HERE",
-    active: true,
-  },
-  {
-    day: "02",
-    title: "Problem solving",
-    subtitle: "Practice patterns and coding",
     icon: Code2,
-    status: "UP NEXT",
-    active: false,
+    title: "Technical accuracy",
+    description: "Correctness and understanding of technical concepts.",
+    color: "bg-[var(--clay-peach)] text-[var(--clay-coral-shadow)]",
   },
   {
-    day: "03",
-    title: "Mock interview",
-    subtitle: "Put your knowledge into practice",
-    icon: Layers3,
-    status: "PRACTICE",
-    active: false,
+    icon: BrainCircuit,
+    title: "Problem-solving",
+    description: "How you approach problems and develop solutions.",
+    color: "bg-[var(--clay-sage)] text-[var(--clay-sage-ink)]",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Communication",
+    description: "How clearly you explain your reasoning.",
+    color: "bg-[var(--clay-blue)] text-[var(--clay-blue-ink)]",
+  },
+  {
+    icon: Target,
+    title: "Relevance and depth",
+    description: "How well your answers address the question and demonstrate understanding.",
+    color: "bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)]",
   },
 ];
 
 export default function PreparationRoadmap() {
   return (
     <section
-      id="roadmap"
-      className="overflow-hidden border-t border-white/[0.06] bg-[#0a0c15] px-5 py-24 text-white sm:px-8 lg:px-12 lg:py-32"
+      id="evaluation"
+      className="overflow-hidden border-t border-[var(--clay-border)] bg-[var(--clay-surface)] px-5 py-20 text-[var(--clay-ink)] sm:px-8 sm:py-24 lg:px-12 lg:py-28"
     >
-      <div className="mx-auto grid max-w-[1200px] items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <div className="mx-auto grid max-w-[1200px] items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        {/* Evaluation Preview */}
         <div className="order-2 lg:order-1">
-          <div className="relative rounded-2xl border border-white/[0.08] bg-[#0d101b] p-5 shadow-2xl shadow-black/20 sm:p-7">
-            <div className="pointer-events-none absolute -left-12 -top-12 size-48 rounded-full bg-indigo-500/[0.09] blur-[70px]" />
+          <div className="relative rounded-[26px] border border-[var(--clay-border)] bg-[var(--clay-bg)] p-5 shadow-[inset_5px_5px_12px_#fff,8px_11px_0_#ecd8c3,0_22px_38px_rgb(101_70_49/7%)] sm:p-7">
+            <div className="pointer-events-none absolute -left-12 -top-12 size-48 rounded-full bg-[var(--clay-peach)]/50 blur-[70px]" />
 
-            <div className="relative flex items-center justify-between gap-3 border-b border-white/[0.07] pb-5">
+            {/* Preview Header */}
+            <div className="relative flex items-center justify-between gap-3 border-b border-[var(--clay-border)] pb-5">
               <div>
-                <p className="text-[10px] font-semibold tracking-[0.17em] text-indigo-300">
-                  YOUR PREPARATION
+                <p className="text-[10px] font-extrabold tracking-[0.17em] text-[var(--clay-coral-shadow)]">
+                  INTERVIEW REPORT
                 </p>
-                <h3 className="mt-2 text-lg font-semibold text-white">
-                  Learning roadmap
+
+                <h3 className="mt-2 text-lg font-extrabold text-[var(--clay-ink)]">
+                  Performance evaluation
                 </h3>
+
+                <p className="mt-1 text-xs text-[var(--clay-subtle)]">
+                  Understand your interview performance
+                </p>
               </div>
-              <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-200/15 bg-indigo-300/10 text-indigo-200">
-                <Sparkles className="size-4" />
+
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-primary)] shadow-[inset_3px_3px_6px_#fff,3px_4px_0_#e5b9a4]">
+                <ClipboardCheck className="size-5" />
               </div>
             </div>
 
+            {/* Evaluation Areas */}
             <div className="relative mt-6 space-y-3">
-              <div className="absolute bottom-8 left-[21px] top-8 w-px bg-gradient-to-b from-indigo-300/50 via-violet-300/25 to-white/[0.04]" />
-
-              {roadmap.map((item) => {
+              {evaluationAreas.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <div
-                    key={item.day}
-                    className={`relative flex items-start gap-4 rounded-xl border p-4 transition-colors ${
-                      item.active
-                        ? "border-indigo-300/20 bg-indigo-300/[0.055]"
-                        : "border-white/[0.05] bg-white/[0.015]"
-                    }`}
+                    key={item.title}
+                    className="flex items-center gap-3 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3.5 shadow-[inset_2px_2px_5px_#fff,2px_3px_0_rgb(101_70_49/7%)] sm:gap-4 sm:p-4"
                   >
                     <div
-                      className={`relative z-10 flex size-[42px] shrink-0 items-center justify-center rounded-xl border ${
-                        item.active
-                          ? "border-indigo-200/20 bg-[#17182d] text-indigo-200"
-                          : "border-white/[0.07] bg-[#11131e] text-slate-500"
-                      }`}
+                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${item.color}`}
                     >
-                      <Icon className="size-[18px]" />
+                      <Icon className="size-4.5" strokeWidth={1.8} />
                     </div>
 
-                    <div className="min-w-0 flex-1 pt-0.5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[10px] text-slate-500">
-                          STEP {item.day}
-                        </span>
-                        {item.active && (
-                          <span className="rounded-full border border-indigo-200/15 bg-indigo-300/[0.08] px-2 py-0.5 text-[9px] font-medium text-indigo-200">
-                            {item.status}
-                          </span>
-                        )}
-                      </div>
-                      <h4 className="mt-2 text-sm font-medium text-slate-100">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm font-extrabold text-[var(--clay-ink)]">
                         {item.title}
                       </h4>
-                      <p className="mt-1 text-xs leading-5 text-slate-500">
-                        {item.subtitle}
+
+                      <p className="mt-1 text-xs leading-5 text-[var(--clay-muted)]">
+                        {item.description}
                       </p>
                     </div>
 
-                    <div className="pt-2 text-slate-500">
-                      {item.active ? (
-                        <CheckCircle2 className="size-4 text-indigo-200" />
-                      ) : (
-                        <Circle className="size-4" />
-                      )}
-                    </div>
+                    <CheckCircle2 className="size-4 shrink-0 text-[var(--clay-status)]" />
                   </div>
                 );
               })}
             </div>
 
-            <div className="mt-5 flex items-start gap-3 rounded-xl border border-cyan-200/10 bg-cyan-300/[0.035] p-4">
-              <Sparkles className="mt-0.5 size-4 shrink-0 text-cyan-200" />
-              <p className="text-xs leading-6 text-slate-400">
-                Start with a clear goal. Build confidence one focused practice
-                session at a time.
+            {/* Transcript Preview */}
+            <div className="relative mt-5 rounded-2xl border border-[var(--clay-blue-shadow)] bg-[var(--clay-blue)] p-4 shadow-[inset_3px_3px_7px_rgb(255_255_255/75%),inset_-3px_-3px_7px_rgb(77_129_155/8%)]">
+              <div className="flex items-center gap-2">
+                <AudioLines className="size-4 text-[var(--clay-blue-ink)]" />
+                <p className="text-xs font-extrabold text-[var(--clay-blue-ink)]">
+                  Your interview conversation
+                </p>
+              </div>
+
+              <p className="mt-2 text-xs leading-6 text-[var(--clay-muted)]">
+                Revisit your saved responses and review the discussion behind
+                your evaluation.
+              </p>
+            </div>
+
+            <div className="relative mt-5 flex items-center gap-3 rounded-xl border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] p-3.5">
+              <CheckCircle2 className="size-5 shrink-0 text-[var(--clay-green-ink)]" />
+              <p className="text-xs font-semibold leading-5 text-[var(--clay-green-ink)]">
+                Turn feedback into a more focused next practice session.
               </p>
             </div>
           </div>
         </div>
 
+        {/* Content */}
         <div className="order-1 lg:order-2">
-          <p className="text-xs font-semibold tracking-[0.2em] text-indigo-300">
-            KNOW WHAT TO DO NEXT
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[var(--clay-coral-shadow)]">
+            UNDERSTAND YOUR PERFORMANCE
           </p>
-          <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.055em] sm:text-4xl lg:text-5xl">
-            Turn preparation
+
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-[-0.05em] sm:text-4xl lg:text-5xl">
+            Know what went well.
             <br />
-            into a clear plan.
+            <span className="text-[var(--clay-coral-shadow)]">
+              Know what to improve.
+            </span>
           </h2>
-          <p className="mt-5 max-w-lg text-sm leading-7 text-slate-400 sm:text-base">
-            Preparing for interviews can feel overwhelming when everything
-            seems important. A structured roadmap helps you break your goal
-            into focused, manageable steps.
+
+          <p className="mt-5 max-w-lg text-sm leading-7 text-[var(--clay-muted)] sm:text-base">
+            Finishing an interview is only part of the process. Understanding
+            your answers is what helps you improve. XCode evaluates different
+            aspects of your interview so you can look beyond a single score.
           </p>
 
           <div className="mt-8 space-y-5">
             {[
               {
-                title: "Know your focus",
-                text: "Organize your preparation around your target role.",
+                title: "Understand your strengths",
+                text: "See which parts of your technical interview demonstrate strong understanding.",
               },
               {
-                title: "Practice with intention",
-                text: "Pair learning with hands-on problems and interview simulations.",
+                title: "Identify improvement areas",
+                text: "Recognize gaps in technical knowledge, problem-solving, and communication.",
               },
               {
-                title: "Keep improving",
-                text: "Use your session feedback to decide what to work on next.",
+                title: "Review your past sessions",
+                text: "Use saved evaluations and interview conversations to reflect on your progress.",
               },
             ].map((item) => (
               <div key={item.title} className="flex gap-3.5">
-                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-indigo-200" />
+                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-[var(--clay-status)]" />
+
                 <div>
-                  <h3 className="text-sm font-medium text-slate-200">
+                  <h3 className="text-sm font-extrabold text-[var(--clay-ink)]">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm leading-6 text-slate-500">
+
+                  <p className="mt-1 text-sm leading-6 text-[var(--clay-muted)]">
                     {item.text}
                   </p>
                 </div>
@@ -173,11 +181,11 @@ export default function PreparationRoadmap() {
           </div>
 
           <Link
-            href="/signup"
-            className="group mt-9 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm font-medium text-slate-200 transition-colors hover:border-indigo-300/25 hover:bg-white/[0.06]"
+            href={ROUTES.register}
+            className="group mt-9 inline-flex min-h-11 items-center gap-2 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-5 py-3 text-sm font-extrabold text-[var(--clay-ink)] shadow-[inset_3px_3px_6px_rgb(255_255_255/75%),3px_4px_0_#e5b9a4] transition-all duration-200 hover:-translate-y-0.5 hover:text-[var(--clay-coral-shadow)] active:translate-y-0.5 active:shadow-none"
           >
-            Build your preparation plan
-            <ArrowRight className="size-4 text-indigo-200 transition-transform group-hover:translate-x-1" />
+            Start your interview preparation
+            <ArrowRight className="size-4 text-[var(--clay-coral-shadow)] transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

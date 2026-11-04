@@ -28,15 +28,16 @@ export default function StartButton({ userProfile }: StartButtonProps) {
     return (
       <button
         disabled
-        className="flex w-full items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-sm font-semibold text-indigo-300/50 opacity-70"
+        className="flex w-full items-center justify-between rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/50 px-4 py-3 text-sm font-semibold text-[var(--clay-muted)] opacity-70"
       >
         <span className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/10">
-            <Loader2 className="h-4 w-4 animate-spin text-indigo-400" />
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--clay-peach)]">
+            <Loader2 className="h-4 w-4 animate-spin text-[var(--clay-primary)]" />
           </span>
+
           <span className="flex flex-col items-start gap-0.5">
-            <span className="h-4 w-32 animate-pulse rounded bg-indigo-400/20"></span>
-            <span className="h-3 w-44 animate-pulse rounded bg-indigo-400/10"></span>
+            <span className="h-4 w-32 animate-pulse rounded bg-[var(--clay-peach-shadow)]"></span>
+            <span className="h-3 w-44 animate-pulse rounded bg-[var(--clay-border)]"></span>
           </span>
         </span>
       </button>
@@ -53,18 +54,18 @@ export default function StartButton({ userProfile }: StartButtonProps) {
           overflow-hidden rounded-xl border px-4 py-3
           text-sm font-semibold transition-all duration-300
           focus-visible:outline-none focus-visible:ring-2
-          focus-visible:ring-offset-2 focus-visible:ring-offset-[#090b18]
+          focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--clay-bg)]
           ${
             hasProfile
-              ? "border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-violet-400/60 hover:bg-indigo-500/20 focus-visible:ring-violet-400"
-              : "animate-attention border-amber-400/40 bg-amber-500/[0.08] text-amber-200 hover:border-amber-300/70 hover:bg-amber-500/[0.14] focus-visible:ring-amber-400"
+              ? "border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/55 text-[var(--clay-primary-ink)] hover:border-[var(--clay-primary)] hover:bg-[var(--clay-peach)] focus-visible:ring-[var(--clay-primary)]"
+              : "animate-attention border-[#e8b48a] bg-[#fff0d9] text-[#8b542b] hover:border-[#d99a65] hover:bg-[#ffe8c6] focus-visible:ring-[#d99a65]"
           }
         `}
       >
         {/* Subtle moving highlight */}
         <span
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent ${
+          className={`pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent ${
             hasProfile
               ? "group-hover:translate-x-full group-hover:transition-transform group-hover:duration-700"
               : "animate-shimmer"
@@ -75,8 +76,8 @@ export default function StartButton({ userProfile }: StartButtonProps) {
           <span
             className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
               hasProfile
-                ? "bg-indigo-500/15 text-violet-300"
-                : "bg-amber-400/15 text-amber-300"
+                ? "bg-[var(--clay-primary)]/20 text-[var(--clay-primary-ink)]"
+                : "bg-[#f6d9ad] text-[#8b542b]"
             }`}
           >
             {hasProfile ? (
@@ -84,7 +85,7 @@ export default function StartButton({ userProfile }: StartButtonProps) {
             ) : (
               <>
                 <UserRoundCheck className="h-[18px] w-[18px]" />
-                <CircleAlert className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-[#111529] text-amber-400" />
+                <CircleAlert className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-[var(--clay-surface)] text-[#c47b3e]" />
               </>
             )}
           </span>
@@ -96,7 +97,9 @@ export default function StartButton({ userProfile }: StartButtonProps) {
 
             <span
               className={`text-xs font-normal ${
-                hasProfile ? "text-indigo-300/65" : "text-amber-200/65"
+                hasProfile
+                  ? "text-[var(--clay-muted)]"
+                  : "text-[#a16b3c]"
               }`}
             >
               {hasProfile
@@ -108,7 +111,9 @@ export default function StartButton({ userProfile }: StartButtonProps) {
 
         <ArrowUpRight
           className={`relative ml-2 h-4 w-4 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-            hasProfile ? "text-indigo-300" : "text-amber-300"
+            hasProfile
+              ? "text-[var(--clay-primary)]"
+              : "text-[#b8793f]"
           }`}
         />
       </button>

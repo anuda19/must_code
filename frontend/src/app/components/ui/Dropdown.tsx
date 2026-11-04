@@ -1,9 +1,8 @@
-// src/components/ui/Dropdown.tsx
-'use client';
+"use client";
 
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import Link from 'next/link';
-import { ReactNode } from 'react';
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
+import { ReactNode } from "react";
 
 export type DropdownItem = {
   label: string;
@@ -16,7 +15,7 @@ export type DropdownItem = {
 interface DropdownProps {
   trigger: ReactNode;
   header?: ReactNode;
-  items: DropdownItem[][]; // Array of groups to allow separators between them
+  items: DropdownItem[][];
 }
 
 export function Dropdown({ trigger, header, items }: DropdownProps) {
@@ -30,12 +29,13 @@ export function Dropdown({ trigger, header, items }: DropdownProps) {
         <DropdownMenu.Content
           align="end"
           sideOffset={8}
-          className="z-50 min-w-[240px] overflow-hidden rounded-xl border border-slate-800 bg-[#0B0F19]/95 p-1 text-slate-300 shadow-2xl backdrop-blur-md animate-in fade-in-80 slide-in-from-top-2"
+          className="z-50 min-w-[240px] overflow-hidden rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-1 text-[var(--clay-ink)] shadow-[0_12px_30px_rgba(101,70,49,0.16)] backdrop-blur-md animate-in fade-in-80 slide-in-from-top-2"
         >
           {header && (
             <>
               <div className="px-3 py-2.5">{header}</div>
-              <DropdownMenu.Separator className="mx-1 my-1 h-[1px] bg-slate-800" />
+
+              <DropdownMenu.Separator className="mx-1 my-1 h-[1px] bg-[var(--clay-border)]" />
             </>
           )}
 
@@ -44,13 +44,21 @@ export function Dropdown({ trigger, header, items }: DropdownProps) {
               {group.map((item) => {
                 const ItemContent = (
                   <>
-                    {item.icon && <item.icon size={16} className="mr-2 opacity-70" />}
+                    {item.icon && (
+                      <item.icon
+                        size={16}
+                        className="mr-2 shrink-0 opacity-70"
+                      />
+                    )}
+
                     <span>{item.label}</span>
                   </>
                 );
 
-                const itemClasses = `relative flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-sm outline-none transition-colors data-[highlighted]:bg-slate-800 data-[highlighted]:text-slate-100 ${
-                  item.destructive ? 'text-red-400 data-[highlighted]:bg-red-500/10 data-[highlighted]:text-red-400' : ''
+                const itemClasses = `relative flex cursor-pointer select-none items-center rounded-lg px-3 py-2 text-sm outline-none transition-colors data-[highlighted]:bg-[var(--clay-surface-warm)] data-[highlighted]:text-[var(--clay-ink)] ${
+                  item.destructive
+                    ? "text-[#b4533d] data-[highlighted]:bg-[#fbe7dd] data-[highlighted]:text-[#a34d37]"
+                    : "text-[var(--clay-muted)]"
                 }`;
 
                 return item.href ? (
@@ -60,7 +68,11 @@ export function Dropdown({ trigger, header, items }: DropdownProps) {
                     </Link>
                   </DropdownMenu.Item>
                 ) : (
-                  <DropdownMenu.Item key={item.label} onClick={item.onClick} className={itemClasses}>
+                  <DropdownMenu.Item
+                    key={item.label}
+                    onClick={item.onClick}
+                    className={itemClasses}
+                  >
                     {ItemContent}
                   </DropdownMenu.Item>
                 );
@@ -68,7 +80,7 @@ export function Dropdown({ trigger, header, items }: DropdownProps) {
 
               {/* Add separator if it's not the last group */}
               {groupIndex < items.length - 1 && (
-                <DropdownMenu.Separator className="mx-1 my-1 h-[1px] bg-slate-800" />
+                <DropdownMenu.Separator className="mx-1 my-1 h-[1px] bg-[var(--clay-border)]" />
               )}
             </div>
           ))}

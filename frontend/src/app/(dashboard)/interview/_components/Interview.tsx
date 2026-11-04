@@ -8,6 +8,7 @@ import {
   Clock3,
   Mic,
   Edit,
+  Bot,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,66 +23,69 @@ interface InterviewProps {
 
 export function Interview({ onEditProfile }: InterviewProps) {
   return (
-    <div className="flex h-full min-h-0 flex-col text-slate-100">
+    <div className="flex h-full min-h-0 flex-col text-[var(--clay-ink)]">
       {/* Scrollable content */}
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
         <div className="space-y-5 pb-5">
           {/* Header */}
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between gap-3">
             <div className="space-y-3">
               <Badge
                 variant="outline"
-                className="gap-1.5 border-indigo-500/20 bg-indigo-500/10 text-indigo-400"
+                className="gap-1.5 rounded-full border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] px-3 py-1 text-[var(--clay-coral-shadow)]"
               >
+                <Bot className="h-3.5 w-3.5" />
                 AI-Powered Interview
               </Badge>
-
-              <h2 className="text-xl font-semibold tracking-tight text-white">
-                Choose Your Interview
-              </h2>
             </div>
-            <Button onClick={onEditProfile}>
-              <Edit className="text-indigo-400" />
+
+            <Button
+              onClick={onEditProfile}
+              className="shrink-0 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-raised)] transition-all hover:bg-[var(--clay-surface-warm)] active:translate-y-0.5 active:shadow-none"
+            >
+              <Edit className="h-4 w-4 text-[var(--clay-coral-shadow)]" />
               Edit Profile
             </Button>
           </div>
 
           {/* Mock Interview */}
-          <Card className="group border-indigo-500/40 bg-indigo-500/[0.05] text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/[0.08]">
+          <Card className="group overflow-hidden rounded-2xl border border-[var(--clay-peach)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)] transition-all duration-200 hover:-translate-y-0.5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-400">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] text-[var(--clay-coral-shadow)] shadow-[var(--clay-shadow-raised)]">
                   <Mic className="h-5 w-5" />
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold">Mock Interview</h3>
+                    <h3 className="text-sm font-bold text-[var(--clay-ink)]">
+                      Mock Interview
+                    </h3>
 
                     <Badge
                       variant="secondary"
-                      className="gap-1 bg-slate-800 text-slate-300"
+                      className="gap-1 rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-muted)]"
                     >
                       <Clock3 className="h-3 w-3" />
                       15 min
                     </Badge>
                   </div>
 
-                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  <p className="mt-2 text-xs leading-relaxed text-[var(--clay-muted)]">
                     Practice a real-time AI voice interview tailored to your
                     role, experience, and technical skills.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center gap-2 text-xs text-slate-300">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-indigo-400" />
+              <div className="mt-4 space-y-2 border-t border-[var(--clay-border)] pt-3">
+                <div className="flex items-center gap-2 text-xs text-[var(--clay-ink)]">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--clay-status)]" />
                   Live AI conversation
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-slate-300">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-indigo-400" />
+                <div className="flex items-center gap-2 text-xs text-[var(--clay-ink)]">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--clay-status)]" />
                   Personalized questions
                 </div>
               </div>
@@ -89,7 +93,7 @@ export function Interview({ onEditProfile }: InterviewProps) {
               <Link
                 href={ROUTES.mock_interview.base_url}
                 type="button"
-                className="flex justify-center items-center rounded-md p-2 mt-4 w-full gap-2 bg-indigo-600 text-white hover:bg-indigo-500"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--clay-primary)] p-2.5 text-sm font-semibold text-[var(--clay-primary-ink)] shadow-[var(--clay-shadow-button)] transition-all duration-150 hover:bg-[var(--clay-primary-hover)] active:translate-y-1 active:shadow-[var(--clay-shadow-button-pressed)]"
               >
                 Start Interview
                 <ArrowRight className="h-4 w-4" />
@@ -98,51 +102,51 @@ export function Interview({ onEditProfile }: InterviewProps) {
           </Card>
 
           {/* Technical Assessment */}
-          <Card className="border-slate-800 bg-slate-950/50 text-white transition-colors hover:border-slate-700">
+          <Card className="rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-raised)] transition-all duration-200 hover:border-[var(--clay-blue-shadow)]">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-400">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-blue-shadow)] bg-[var(--clay-blue)] text-[var(--clay-blue-ink)] shadow-[var(--clay-shadow-raised)]">
                   <Code2 className="h-5 w-5" />
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold">
+                    <h3 className="text-sm font-bold text-[var(--clay-ink)]">
                       Technical Assessment
                     </h3>
 
                     <Badge
                       variant="secondary"
-                      className="gap-1 bg-slate-800 text-slate-300"
+                      className="gap-1 rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-muted)]"
                     >
                       <Clock3 className="h-3 w-3" />
                       45 min
                     </Badge>
                   </div>
 
-                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  <p className="mt-2 text-xs leading-relaxed text-[var(--clay-muted)]">
                     Solve coding challenges and system design problems in a
                     structured technical evaluation.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center gap-2 text-xs text-slate-300">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-violet-400" />
+              <div className="mt-4 space-y-2 border-t border-[var(--clay-border)] pt-3">
+                <div className="flex items-center gap-2 text-xs text-[var(--clay-ink)]">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--clay-blue-ink)]" />
                   Coding challenges
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-slate-300">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-violet-400" />
+                <div className="flex items-center gap-2 text-xs text-[var(--clay-ink)]">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--clay-blue-ink)]" />
                   System design
                 </div>
               </div>
 
-              <div className="mt-4 border-t border-slate-800 pt-3">
+              <div className="mt-4 border-t border-[var(--clay-border)] pt-3">
                 <Badge
                   variant="outline"
-                  className="border-slate-700 text-slate-400"
+                  className="rounded-full border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)]"
                 >
                   Coming soon
                 </Badge>
@@ -151,9 +155,8 @@ export function Interview({ onEditProfile }: InterviewProps) {
           </Card>
 
           {/* Info */}
-          <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-3">
-            <p className="text-xs leading-relaxed text-slate-400">
-              <Sparkles className="mr-1.5 inline h-3.5 w-3.5 text-indigo-400" />
+          <div className="rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-3 shadow-[var(--clay-shadow-raised)]">
+            <p className="text-xs leading-relaxed text-[var(--clay-muted)]">
               Customize your interview experience and practice in a realistic
               AI-powered environment.
             </p>

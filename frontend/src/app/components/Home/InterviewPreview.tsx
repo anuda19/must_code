@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   ArrowRight,
   AudioLines,
+  Bot,
   Check,
   CircleHelp,
   Code2,
@@ -11,175 +12,208 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { ROUTES } from "@/lib/routes";
+
 const promptLines = [
-  { width: "w-full", opacity: "bg-indigo-200/70" },
-  { width: "w-[83%]", opacity: "bg-indigo-200/45" },
-  { width: "w-[92%]", opacity: "bg-indigo-200/55" },
-  { width: "w-[62%]", opacity: "bg-indigo-200/35" },
+  { width: "w-full", opacity: "bg-[var(--clay-sage-shadow)]" },
+  { width: "w-[83%]", opacity: "bg-[var(--clay-blue-ink)]/45" },
+  { width: "w-[92%]", opacity: "bg-[var(--clay-sage-shadow)]/70" },
+  { width: "w-[62%]", opacity: "bg-[var(--clay-blue-ink)]/35" },
+];
+
+const benefits = [
+  "Questions tailored to your interview profile",
+  "Real-time voice-based interview practice",
+  "Saved conversations and structured evaluations",
 ];
 
 export default function InterviewPreview() {
   return (
     <section
       id="practice"
-      className="relative overflow-hidden border-t border-white/[0.06] bg-[#080a12] px-5 py-24 text-white sm:px-8 lg:px-12 lg:py-32"
+      className="relative overflow-hidden border-t border-[var(--clay-border)] bg-[var(--clay-bg)] px-5 py-20 text-[var(--clay-ink)] sm:px-8 sm:py-24 lg:px-12 lg:py-28"
     >
-      <div className="pointer-events-none absolute -right-40 top-1/4 size-[480px] rounded-full bg-violet-600/[0.08] blur-[130px]" />
+      <div className="pointer-events-none absolute -right-40 top-1/4 size-[460px] rounded-full bg-[var(--clay-blue)]/60 blur-[120px]" />
 
-      <div className="relative mx-auto grid max-w-[1200px] items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <div className="relative mx-auto grid max-w-[1200px] items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+        {/* Content */}
         <div>
-          <p className="text-xs font-semibold tracking-[0.2em] text-cyan-200">
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[var(--clay-blue-ink)]">
             PRACTICE WITH PURPOSE
           </p>
-          <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.055em] sm:text-4xl lg:text-5xl">
+
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-[-0.05em] sm:text-4xl lg:text-5xl">
             Get comfortable
             <br />
-            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-cyan-200 bg-clip-text text-transparent">
+            <span className="text-[var(--clay-coral-shadow)]">
               being challenged.
             </span>
           </h2>
-          <p className="mt-5 max-w-lg text-sm leading-7 text-slate-400 sm:text-base">
-            An interview is more than getting the right answer. Practice
-            breaking down questions, communicating your reasoning, and
-            responding to follow-ups.
+
+          <p className="mt-5 max-w-lg text-sm leading-7 text-[var(--clay-muted)] sm:text-base">
+            Technical interviews test more than what you know. They test how
+            you approach unfamiliar problems, explain your reasoning, and
+            respond to follow-up questions. Practice those skills through
+            realistic AI-led conversations.
           </p>
 
           <div className="mt-8 space-y-4">
-            {[
-              "Role-focused interview questions",
-              "Space to explain your thinking",
-              "Session review and actionable feedback",
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-3">
-                <span className="flex size-5 shrink-0 items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-300/[0.08] text-emerald-200">
-                  <Check className="size-3" />
+            {benefits.map((item) => (
+              <div key={item} className="flex items-start gap-3">
+                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)] shadow-[inset_1px_1px_3px_#fff]">
+                  <Check className="size-3" strokeWidth={2.5} />
                 </span>
-                <span className="text-sm text-slate-300">{item}</span>
+
+                <span className="text-sm leading-6 text-[var(--clay-muted)]">
+                  {item}
+                </span>
               </div>
             ))}
           </div>
 
           <Link
-            href="/signup"
-            className="group mt-9 inline-flex items-center gap-2 text-sm font-semibold text-indigo-200 transition-colors hover:text-cyan-200"
+            href={ROUTES.register}
+            className="group mt-9 inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#e8795b] bg-[var(--clay-primary)] px-5 py-3 text-sm font-extrabold text-[var(--clay-primary-ink)] shadow-[inset_3px_3px_6px_rgb(255_255_255/50%),0_4px_0_#d86649] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 active:translate-y-1 active:shadow-[inset_3px_3px_6px_rgb(255_255_255/50%),0_1px_0_#d86649]"
           >
-            Start preparing
+            Try an AI interview
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {/* Illustrative interview UI */}
-        <div className="relative mx-auto w-full max-w-[600px]">
-          <div className="absolute -inset-5 rounded-[30px] bg-indigo-500/[0.07] blur-2xl" />
+        {/* Illustrative Interview UI */}
+        <div className="relative mx-auto w-full min-w-0 max-w-[600px]">
+          <div className="pointer-events-none absolute -inset-4 rounded-[32px] bg-[var(--clay-peach)]/45 blur-2xl" />
 
-          <div className="relative overflow-hidden rounded-2xl border border-white/[0.10] bg-[#0c0f1a] shadow-2xl shadow-black/30">
-            <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-200/15 bg-indigo-300/10 text-indigo-200">
-                  <Sparkles className="size-4" />
+          <div className="relative overflow-hidden rounded-[26px] border border-[var(--clay-border)] bg-[var(--clay-surface)] shadow-[inset_5px_5px_12px_#fff,9px_12px_0_#ecd8c3,0_25px_45px_rgb(101_70_49/9%)]">
+            {/* Header */}
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--clay-border)] px-4 py-4 sm:px-5">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-border)] bg-[var(--clay-peach)] text-[var(--clay-coral-shadow)] shadow-[inset_2px_2px_5px_rgb(255_255_255/60%),2px_3px_0_#e5b9a4]">
+                  <Bot className="size-4" />
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    Mock interview
+
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-extrabold text-[var(--clay-ink)]">
+                    AI Mock Interview
                   </p>
-                  <p className="mt-0.5 text-[11px] text-slate-500">
-                    Frontend engineering
+                  <p className="mt-0.5 text-[11px] text-[var(--clay-subtle)]">
+                    Frontend Engineering
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-2.5 py-1.5">
-                <span className="size-1.5 rounded-full bg-emerald-300" />
-                <span className="text-[10px] text-emerald-200">Preview</span>
+
+              <div className="flex shrink-0 items-center gap-2 rounded-full border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] px-2.5 py-1.5">
+                <span className="size-1.5 rounded-full bg-[var(--clay-status)]" />
+                <span className="text-[10px] font-bold text-[var(--clay-green-ink)]">
+                  Preview
+                </span>
               </div>
             </div>
 
-            <div className="grid gap-0 sm:grid-cols-[1fr_155px]">
-              <div className="p-5 sm:p-6">
+            <div className="grid gap-0 sm:grid-cols-[minmax(0,1fr)_155px]">
+              {/* Main Question */}
+              <div className="min-w-0 p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold tracking-[0.16em] text-slate-500">
-                    QUESTION 01
+                  <span className="text-[10px] font-extrabold tracking-[0.16em] text-[var(--clay-subtle)]">
+                    TECHNICAL QUESTION
                   </span>
-                  <MoreHorizontal className="size-4 text-slate-500" />
+                  <MoreHorizontal className="size-4 text-[var(--clay-subtle)]" />
                 </div>
 
-                <h3 className="mt-5 text-lg font-medium leading-7 text-slate-100">
+                <h3 className="mt-5 text-lg font-extrabold leading-7 text-[var(--clay-ink)] sm:text-xl">
                   How would you optimize a React application rendering
                   thousands of items?
                 </h3>
 
-                <div className="mt-6 rounded-xl border border-indigo-300/15 bg-indigo-300/[0.04] p-4">
-                  <div className="flex items-center gap-2 text-indigo-200">
+                {/* Thinking Prompt */}
+                <div className="mt-6 rounded-2xl border border-[var(--clay-blue-shadow)] bg-[var(--clay-blue)] p-4 shadow-[inset_3px_3px_7px_rgb(255_255_255/75%),inset_-3px_-3px_7px_rgb(77_129_155/8%)]">
+                  <div className="flex items-center gap-2 text-[var(--clay-blue-ink)]">
                     <CircleHelp className="size-4" />
-                    <span className="text-xs font-medium">
+                    <span className="text-xs font-extrabold">
                       Think through your approach
                     </span>
                   </div>
+
                   <div className="mt-4 space-y-2.5">
-                    {promptLines.map((line, i) => (
+                    {promptLines.map((line, index) => (
                       <div
-                        key={i}
+                        key={index}
                         className={`h-1.5 rounded-full ${line.width} ${line.opacity}`}
                       />
                     ))}
                   </div>
-                  <p className="mt-4 text-[10px] leading-5 text-slate-500">
+
+                  <p className="mt-4 text-[10px] leading-5 text-[var(--clay-muted)]">
                     Consider rendering cost, profiling, and list
                     virtualization.
                   </p>
                 </div>
 
-                <div className="mt-5 flex items-center gap-3 rounded-xl border border-white/[0.07] bg-[#101321] p-3">
-                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-cyan-300/10 text-cyan-200">
+                {/* Candidate Response */}
+                <div className="mt-5 flex items-center gap-3 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-bg)] p-3 shadow-[inset_3px_3px_6px_#ead0c0,inset_-3px_-3px_6px_#fff6e9]">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-blue-shadow)] bg-[var(--clay-blue)] text-[var(--clay-blue-ink)]">
                     <AudioLines className="size-4" />
                   </div>
+
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-slate-200">
+                    <p className="text-xs font-extrabold text-[var(--clay-ink)]">
                       Your response
                     </p>
-                    <p className="mt-1 text-[10px] text-slate-500">
+                    <p className="mt-1 text-[10px] leading-4 text-[var(--clay-subtle)]">
                       Explain your reasoning out loud
                     </p>
                   </div>
-                  <Mic className="size-4 text-cyan-200" />
+
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--clay-peach)] text-[var(--clay-coral-shadow)]">
+                    <Mic className="size-4" />
+                  </div>
                 </div>
               </div>
 
-              <aside className="border-t border-white/[0.07] bg-white/[0.015] p-5 sm:border-l sm:border-t-0">
-                <p className="text-[10px] font-semibold tracking-[0.15em] text-slate-500">
-                  SESSION TOOLS
+              {/* Session Context */}
+              <aside className="border-t border-[var(--clay-border)] bg-[var(--clay-surface-warm)]/70 p-4 sm:border-l sm:border-t-0 sm:p-5">
+                <p className="text-[10px] font-extrabold tracking-[0.15em] text-[var(--clay-subtle)]">
+                  SESSION FOCUS
                 </p>
 
                 <div className="mt-5 flex items-center gap-2.5">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-violet-300/10 text-violet-200">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--clay-sage)] text-[var(--clay-sage-ink)]">
                     <Code2 className="size-4" />
                   </div>
-                  <span className="text-xs text-slate-300">Problem solving</span>
+                  <span className="text-xs font-semibold text-[var(--clay-ink)]">
+                    Technical skills
+                  </span>
                 </div>
 
                 <div className="mt-4 flex items-center gap-2.5">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-cyan-300/10 text-cyan-200">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--clay-blue)] text-[var(--clay-blue-ink)]">
                     <AudioLines className="size-4" />
                   </div>
-                  <span className="text-xs text-slate-300">Voice practice</span>
+                  <span className="text-xs font-semibold text-[var(--clay-ink)]">
+                    Voice practice
+                  </span>
                 </div>
 
-                <div className="mt-7 rounded-xl border border-white/[0.07] bg-[#101321] p-3">
-                  <p className="text-xs font-medium text-slate-200">
-                    Stay focused
+                <div className="mt-6 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3 shadow-[inset_2px_2px_5px_#fff,2px_3px_0_#ecd8c3]">
+                  <p className="text-xs font-extrabold text-[var(--clay-ink)]">
+                    Interview tip
                   </p>
-                  <p className="mt-2 text-[10px] leading-5 text-slate-500">
-                    Take your time. Explain the why, not just the answer.
+                  <p className="mt-2 text-[10px] leading-5 text-[var(--clay-muted)]">
+                    Take your time. Explain the reasoning behind your answer,
+                    not just the final solution.
                   </p>
                 </div>
               </aside>
             </div>
 
-            <div className="flex items-center justify-between border-t border-white/[0.07] px-5 py-3.5">
-              <span className="text-[10px] text-slate-500">
+            {/* Footer */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--clay-border)] px-4 py-3.5 sm:px-5">
+              <span className="text-[10px] font-medium text-[var(--clay-subtle)]">
                 Illustrative interface
               </span>
-              <div className="flex items-center gap-1.5 text-[10px] text-indigo-200">
-                <span className="size-1.5 rounded-full bg-indigo-300" />
+
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--clay-green-ink)]">
+                <span className="size-1.5 rounded-full bg-[var(--clay-status)]" />
                 Practice at your pace
               </div>
             </div>

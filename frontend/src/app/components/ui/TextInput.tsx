@@ -25,18 +25,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       rightIcon,
       id,
       disabled,
-      required=false,
+      required = false,
       ...props
     },
     ref
   ) => {
     const [showPassword, setShowPassword] = React.useState(false);
-    
+
     // Fallback unique ID for label accessibility if no id is passed
     const generatedId = React.useId();
     const inputId = id || generatedId;
     const isPassword = type === "password";
-    const currentType = isPassword ? (showPassword ? "text" : "password") : type;
+    const currentType = isPassword
+      ? showPassword
+        ? "text"
+        : "password"
+      : type;
 
     return (
       <div className="w-full space-y-1.5">
@@ -44,10 +48,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-slate-200"
+            className="block text-sm font-semibold text-[var(--clay-ink)]"
           >
             {label}
-            {required && <span className="ml-1 text-indigo-400">*</span>}
+            {required && (
+              <span className="ml-1 text-[var(--clay-primary)]">*</span>
+            )}
           </label>
         )}
 
@@ -55,7 +61,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div className="relative flex items-center">
           {/* Left Icon */}
           {leftIcon && (
-            <div className="absolute left-3.5 flex items-center justify-center text-slate-400 pointer-events-none">
+            <div className="pointer-events-none absolute left-3.5 flex items-center justify-center text-[var(--clay-muted)]">
               {leftIcon}
             </div>
           )}
@@ -68,18 +74,24 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             aria-invalid={!!error}
             aria-describedby={
-              error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+              error
+                ? `${inputId}-error`
+                : helperText
+                  ? `${inputId}-helper`
+                  : undefined
             }
             className={cn(
-              "w-full rounded-lg bg-slate-950 border text-sm text-slate-100 placeholder:text-slate-500",
-              "py-2.5 px-3.5 transition duration-150 ease-in-out",
-              "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent",
+              "w-full rounded-xl border bg-[var(--clay-surface)] text-sm text-[var(--clay-ink)] placeholder:text-[var(--clay-subtle)]",
+              "px-3.5 py-2.5 transition-all duration-200 ease-in-out",
+              "shadow-[var(--clay-shadow-inset)]",
+              "focus:outline-none focus:ring-2 focus:ring-[var(--clay-primary)]/35 focus:border-[var(--clay-primary)]",
               leftIcon ? "pl-10" : "",
               rightIcon || isPassword ? "pr-10" : "",
               error
-                ? "border-red-500/80 focus:ring-red-500"
-                : "border-[#232838] hover:border-slate-700",
-              disabled && "cursor-not-allowed opacity-50 bg-[#0e1117]",
+                ? "border-red-400 focus:border-red-400 focus:ring-red-400/25"
+                : "border-[var(--clay-border)] hover:border-[var(--clay-peach-shadow)]",
+              disabled &&
+                "cursor-not-allowed opacity-60 bg-[var(--clay-surface-warm)]",
               className
             )}
             required={required}
@@ -92,14 +104,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               tabIndex={-1}
-              className="absolute right-3.5 flex items-center justify-center text-slate-400 hover:text-slate-200 transition"
+              className="absolute right-3.5 flex items-center justify-center text-[var(--clay-muted)] transition-colors hover:text-[var(--clay-ink)]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           ) : (
             rightIcon && (
-              <div className="absolute right-3.5 flex items-center justify-center text-slate-400 pointer-events-none">
+              <div className="pointer-events-none absolute right-3.5 flex items-center justify-center text-[var(--clay-muted)]">
                 {rightIcon}
               </div>
             )
@@ -108,12 +124,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {/* Error Message or Helper Text */}
         {error ? (
-          <p id={`${inputId}-error`} className="flex items-center gap-1 text-xs text-red-400 mt-1">
-            <AlertCircle className="h-3.5 w-3.5" />
+          <p
+            id={`${inputId}-error`}
+            className="mt-1 flex items-center gap-1 text-xs text-red-600"
+          >
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             {error}
           </p>
         ) : helperText ? (
-          <p id={`${inputId}-helper`} className="text-xs text-slate-400 mt-1">
+          <p
+            id={`${inputId}-helper`}
+            className="mt-1 text-xs text-[var(--clay-muted)]"
+          >
             {helperText}
           </p>
         ) : null}

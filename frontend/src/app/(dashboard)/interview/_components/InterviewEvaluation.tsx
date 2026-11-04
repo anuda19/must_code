@@ -1,3 +1,697 @@
+// "use client";
+
+// import {
+//   AlertCircle,
+//   ArrowUpRight,
+//   CheckCircle2,
+//   CircleHelp,
+//   Compass,
+//   LoaderCircle,
+//   RefreshCw,
+//   Sparkles,
+//   Target,
+//   TrendingUp,
+//   X,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardHeader } from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Progress } from "@/components/ui/progress";
+
+// type DiscussionAnalysis = {
+//   topic: string;
+//   assessment: string;
+// };
+
+// type EvaluationReport = {
+//   summary?: string;
+//   strengths?: string[];
+//   improvements?: string[];
+//   actionPlan?: string[];
+//   discussionAnalysis?: DiscussionAnalysis[];
+// };
+
+// type Evaluation = {
+//   status: "COMPLETED" | "INSUFFICIENT_DATA" | "FAILED" | "PROCESSING";
+//   overallScore: number | null;
+//   grade: string | null;
+//   technicalAccuracy: number | null;
+//   problemSolving: number | null;
+//   communication: number | null;
+//   relevance: number | null;
+//   depthOfKnowledge: number | null;
+//   errorMessage?: string | null;
+//   model?: string | null;
+//   evaluatedAt?: string | null;
+//   report?: EvaluationReport | null;
+// };
+
+// type Props = {
+//   status: "idle" | "evaluating" | "completed" | "insufficient" | "failed";
+//   evaluation: Evaluation | null;
+//   error?: string | null;
+//   onClose?: () => void;
+//   onRetry?: () => void;
+// };
+
+// const dimensions = [
+//   {
+//     key: "technicalAccuracy",
+//     label: "Technical accuracy",
+//     short: "Technical",
+//     description: "Correctness of concepts and implementation.",
+//   },
+//   {
+//     key: "problemSolving",
+//     label: "Problem solving",
+//     short: "Problem solving",
+//     description: "How clearly you reasoned through the problem.",
+//   },
+//   {
+//     key: "communication",
+//     label: "Communication",
+//     short: "Communication",
+//     description: "How clearly you explained your thinking.",
+//   },
+//   {
+//     key: "relevance",
+//     label: "Relevance",
+//     short: "Relevance",
+//     description: "How directly your answers addressed the question.",
+//   },
+//   {
+//     key: "depthOfKnowledge",
+//     label: "Depth of knowledge",
+//     short: "Depth",
+//     description: "How deeply you understood the underlying concepts.",
+//   },
+// ] as const;
+
+// type DimensionKey = (typeof dimensions)[number]["key"];
+
+// function scoreTone(score: number | null | undefined) {
+//   if (score == null) return "text-slate-400";
+//   if (score >= 75) return "text-emerald-300";
+//   if (score >= 50) return "text-amber-200";
+//   return "text-rose-300";
+// }
+
+// function scoreLabel(score: number | null | undefined) {
+//   if (score == null) return "Not scored";
+//   if (score >= 85) return "Excellent";
+//   if (score >= 70) return "Strong";
+//   if (score >= 50) return "Developing";
+//   return "Needs focus";
+// }
+
+// function RadarChart({
+//   values,
+// }: {
+//   values: { label: string; score: number }[];
+// }) {
+//   const center = 150;
+//   const radius = 91;
+//   const angleFor = (index: number) =>
+//     -Math.PI / 2 + (index * 2 * Math.PI) / values.length;
+//   const point = (index: number, value: number) => {
+//     const angle = angleFor(index);
+//     const distance = radius * (value / 100);
+//     return `${center + Math.cos(angle) * distance},${center + Math.sin(angle) * distance}`;
+//   };
+//   const ringPoints = [20, 40, 60, 80, 100].map((ring) =>
+//     values.map((_, index) => point(index, ring)).join(" "),
+//   );
+//   const dataPoints = values
+//     .map((item, index) => point(index, item.score))
+//     .join(" ");
+
+//   return (
+//     <div className="mx-auto w-full max-w-[360px]">
+//       <svg
+//         viewBox="0 0 300 300"
+//         role="img"
+//         aria-label={`Performance radar chart: ${values.map((v) => `${v.label} ${v.score} out of 100`).join(", ")}`}
+//         className="w-full overflow-visible"
+//       >
+//         <defs>
+//           <linearGradient id="evaluationRadarFill" x1="0" y1="0" x2="1" y2="1">
+//             <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.42" />
+//             <stop offset="100%" stopColor="#6366f1" stopOpacity="0.12" />
+//           </linearGradient>
+//           <filter
+//             id="evaluationRadarGlow"
+//             x="-50%"
+//             y="-50%"
+//             width="200%"
+//             height="200%"
+//           >
+//             <feGaussianBlur stdDeviation="3" result="blur" />
+//             <feMerge>
+//               <feMergeNode in="blur" />
+//               <feMergeNode in="SourceGraphic" />
+//             </feMerge>
+//           </filter>
+//         </defs>
+//         {ringPoints.map((points, index) => (
+//           <polygon
+//             key={index}
+//             points={points}
+//             transform="translate(0 0)"
+//             fill="none"
+//             stroke="rgba(203,213,225,0.13)"
+//             strokeWidth="1"
+//           />
+//         ))}
+//         {values.map((item, index) => {
+//           const end = point(index, 100).split(",").map(Number);
+//           return (
+//             <line
+//               key={item.label}
+//               x1={center}
+//               y1={center}
+//               x2={end[0]}
+//               y2={end[1]}
+//               stroke="rgba(203,213,225,0.15)"
+//               strokeWidth="1"
+//             />
+//           );
+//         })}
+//         <polygon
+//           points={dataPoints}
+//           fill="url(#evaluationRadarFill)"
+//           stroke="#a78bfa"
+//           strokeWidth="2.5"
+//           strokeLinejoin="round"
+//           filter="url(#evaluationRadarGlow)"
+//         />
+//         {values.map((item, index) => {
+//           const [x, y] = point(index, item.score).split(",").map(Number);
+//           const angle = angleFor(index);
+//           const labelX = center + Math.cos(angle) * 119;
+//           const labelY = center + Math.sin(angle) * 119;
+//           const anchor =
+//             Math.cos(angle) > 0.35
+//               ? "start"
+//               : Math.cos(angle) < -0.35
+//                 ? "end"
+//                 : "middle";
+//           return (
+//             <g key={item.label}>
+//               <circle
+//                 cx={x}
+//                 cy={y}
+//                 r="4"
+//                 fill="#ddd6fe"
+//                 stroke="#7c3aed"
+//                 strokeWidth="2"
+//               />
+//               <text
+//                 x={labelX}
+//                 y={labelY - 4}
+//                 textAnchor={anchor}
+//                 fill="#cbd5e1"
+//                 fontSize="9.5"
+//                 fontWeight="500"
+//               >
+//                 {item.label}
+//               </text>
+//               <text
+//                 x={labelX}
+//                 y={labelY + 9}
+//                 textAnchor={anchor}
+//                 fill="#f8fafc"
+//                 fontSize="10.5"
+//                 fontWeight="700"
+//               >
+//                 {item.score}
+//               </text>
+//             </g>
+//           );
+//         })}
+//       </svg>
+//     </div>
+//   );
+// }
+
+// function SectionHeading({
+//   eyebrow,
+//   title,
+//   description,
+//   icon,
+// }: {
+//   eyebrow: string;
+//   title: string;
+//   description?: string;
+//   icon: React.ReactNode;
+// }) {
+//   return (
+//     <div className="flex items-start gap-3">
+//       <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-violet-300/15 bg-violet-400/[0.08] text-violet-200">
+//         {icon}
+//       </div>
+//       <div className="min-w-0">
+//         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-200/70">
+//           {eyebrow}
+//         </p>
+//         <h3 className="mt-1 text-base font-semibold tracking-tight text-white">
+//           {title}
+//         </h3>
+//         {description && (
+//           <p className="mt-1 text-sm leading-5 text-slate-400">{description}</p>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// function EvaluationStateWrapper({
+//   children,
+//   onClose,
+// }: {
+//   children: React.ReactNode;
+//   onClose?: () => void;
+// }) {
+//   return (
+//     <div className="relative">
+//       {onClose && (
+//         <Button
+//           type="button"
+//           variant="ghost"
+//           size="icon"
+//           onClick={onClose}
+//           aria-label="Close evaluation"
+//           className="absolute right-3 top-3 z-20 size-9 text-slate-400 hover:bg-white/[0.08] hover:text-white"
+//         >
+//           <X className="size-4" />
+//         </Button>
+//       )}
+
+//       {children}
+//     </div>
+//   );
+// }
+
+// export default function InterviewEvaluationCard({
+//   status,
+//   evaluation,
+//   error,
+//   onClose,
+//   onRetry,
+// }: Props) {
+//   if (status === "idle") return null;
+
+//   if (status === "evaluating") {
+//     return (
+//       <EvaluationStateWrapper onClose={onClose}>
+//         <Card className="overflow-hidden border-white/[0.08] bg-[#101321] text-white shadow-[0_24px_80px_-35px_rgba(124,58,237,0.35)]">
+//           <div className="h-1 bg-gradient-to-r from-violet-500 via-indigo-400 to-fuchsia-400" />
+//           <CardContent className="flex min-h-[330px] flex-col items-center justify-center p-8 text-center sm:p-12">
+//             <div className="relative mb-6 flex size-20 items-center justify-center rounded-[28px] border border-violet-300/20 bg-violet-500/[0.09]">
+//               <div className="absolute inset-1 rounded-[24px] border border-violet-300/10" />
+//               <LoaderCircle className="size-9 animate-spin text-violet-200" />
+//               <Sparkles className="absolute -right-2 -top-2 size-5 text-fuchsia-200" />
+//             </div>
+//             <Badge className="mb-3 border-violet-300/20 bg-violet-400/10 text-violet-100 hover:bg-violet-400/10">
+//               <Sparkles className="mr-1.5 size-3" /> AI interview insights
+//             </Badge>
+//             <h2 className="text-2xl font-semibold tracking-tight">
+//               Turning your answers into insights
+//             </h2>
+//             <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
+//               Reviewing technical accuracy, reasoning, communication, and the
+//               details behind each answer. Your report will appear here shortly.
+//             </p>
+//             <div className="mt-7 h-1.5 w-56 overflow-hidden rounded-full bg-white/[0.07]">
+//               <div className="h-full w-2/5 animate-pulse rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-400" />
+//             </div>
+//             <p className="mt-3 text-xs text-slate-500">
+//               Keep this page open while the evaluation finishes.
+//             </p>
+//           </CardContent>
+//         </Card>
+//       </EvaluationStateWrapper>
+//     );
+//   }
+
+//   if (status === "insufficient") {
+//     return (
+//       <EvaluationStateWrapper onClose={onClose}>
+//         <Card className="border-amber-300/15 bg-[#101321] text-white">
+//           <CardContent className="flex flex-col items-center p-8 text-center sm:p-10">
+//             <div className="mb-4 flex size-14 items-center justify-center rounded-2xl border border-amber-200/15 bg-amber-300/[0.08]">
+//               <AlertCircle className="size-7 text-amber-200" />
+//             </div>
+//             <h2 className="text-xl font-semibold">
+//               Not enough signal for a fair score
+//             </h2>
+//             <p className="mt-2 max-w-lg text-sm leading-6 text-slate-400">
+//               {evaluation?.errorMessage ||
+//                 "Your interview was saved, but there wasn't enough meaningful answer content to generate a reliable evaluation."}
+//             </p>
+//             <p className="mt-4 max-w-lg text-xs leading-5 text-slate-500">
+//               Try answering with your reasoning, the approach you chose, and why
+//               it works. This helps the evaluator assess your skills rather than
+//               just answer length.
+//             </p>
+//             {onRetry && (
+//               <Button
+//                 onClick={onRetry}
+//                 variant="outline"
+//                 className="mt-5 border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.07]"
+//               >
+//                 <RefreshCw className="mr-2 size-4" /> Evaluate again
+//               </Button>
+//             )}
+//           </CardContent>
+//         </Card>
+//       </EvaluationStateWrapper>
+//     );
+//   }
+
+//   if (status === "failed" || !evaluation) {
+//     return (
+//       <EvaluationStateWrapper onClose={onClose}>
+//         <Card className="border-rose-300/15 bg-[#101321] text-white">
+//           <CardContent className="flex flex-col items-center p-8 text-center">
+//             <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-rose-400/[0.08] text-rose-200">
+//               <AlertCircle className="size-7" />
+//             </div>
+//             <h2 className="text-xl font-semibold">
+//               We couldn't finish your evaluation
+//             </h2>
+//             <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">
+//               {error ||
+//                 evaluation?.errorMessage ||
+//                 "Your interview is saved. You can retry the evaluation without taking the interview again."}
+//             </p>
+//             {onRetry && (
+//               <Button
+//                 onClick={onRetry}
+//                 className="mt-5 bg-violet-600 text-white hover:bg-violet-500"
+//               >
+//                 <RefreshCw className="mr-2 size-4" /> Retry evaluation
+//               </Button>
+//             )}
+//           </CardContent>
+//         </Card>
+//       </EvaluationStateWrapper>
+//     );
+//   }
+
+//   const report = evaluation.report;
+//   const score = evaluation.overallScore;
+//   const scoreValues = dimensions.map(({ key, short }) => ({
+//     label: short,
+//     score: evaluation[key as DimensionKey] ?? 0,
+//   }));
+//   const strongest = [...dimensions].sort(
+//     (a, b) => (evaluation[b.key] ?? -1) - (evaluation[a.key] ?? -1),
+//   )[0];
+//   const weakest = [...dimensions]
+//     .filter(({ key }) => evaluation[key] != null)
+//     .sort((a, b) => (evaluation[a.key] ?? 101) - (evaluation[b.key] ?? 101))[0];
+//   const scoredCount = dimensions.filter(
+//     ({ key }) => evaluation[key] != null,
+//   ).length;
+
+//   return (
+//     <div className="space-y-5 text-white">
+//       <Card className="relative overflow-hidden border-white/[0.08] bg-[#101321] shadow-[0_24px_80px_-45px_rgba(124,58,237,0.45)]">
+//         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/70 to-transparent" />
+//         <div className="pointer-events-none absolute -right-24 -top-28 size-72 rounded-full bg-violet-600/[0.10] blur-3xl" />
+//         <Button
+//           type="button"
+//           variant="ghost"
+//           size="icon"
+//           onClick={onClose}
+//           aria-label="Close evaluation"
+//           className="absolute right-3 top-3 z-10 size-9 text-slate-400 hover:bg-white/[0.08] hover:text-white"
+//         >
+//           <X className="size-4" />
+//         </Button>
+//         <CardContent className="relative p-5 sm:p-8">
+//           <div className="flex flex-wrap items-center justify-between gap-3">
+//             <Badge className="border-emerald-300/15 bg-emerald-300/[0.08] text-emerald-200 hover:bg-emerald-300/[0.08]">
+//               <CheckCircle2 className="mr-1.5 size-3.5" /> Evaluation complete
+//             </Badge>
+//             {evaluation.evaluatedAt && (
+//               <span className="text-xs text-slate-500">
+//                 Evaluated{" "}
+//                 {new Date(evaluation.evaluatedAt).toLocaleDateString(
+//                   undefined,
+//                   { day: "numeric", month: "short", year: "numeric" },
+//                 )}
+//               </span>
+//             )}
+//           </div>
+
+//           <div className="mt-6 grid gap-7 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+//             <div>
+//               <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+//                 Your interview snapshot
+//               </p>
+//               <div className="mt-3 flex flex-wrap items-end gap-x-3 gap-y-2">
+//                 <span className="text-7xl font-semibold leading-none tracking-[-0.07em] text-white sm:text-8xl">
+//                   {score ?? "--"}
+//                 </span>
+//                 <span className="mb-2 text-lg text-slate-500">/ 100</span>
+//                 {evaluation.grade && (
+//                   <Badge className="mb-2 border-violet-300/20 bg-violet-400/10 px-3 py-1 text-violet-100 hover:bg-violet-400/10">
+//                     {evaluation.grade}
+//                   </Badge>
+//                 )}
+//               </div>
+//               <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.07]">
+//                 <div
+//                   className="h-full rounded-full bg-gradient-to-r from-violet-500 via-indigo-400 to-fuchsia-300 transition-all"
+//                   style={{
+//                     width: `${Math.max(0, Math.min(100, score ?? 0))}%`,
+//                   }}
+//                 />
+//               </div>
+//               <p className="mt-4 max-w-xl text-sm leading-6 text-slate-300">
+//                 {report?.summary ||
+//                   "Your technical interview evaluation is ready. Review the skill breakdown and discussion notes to see where to focus next."}
+//               </p>
+//               <div className="mt-6 grid grid-cols-2 gap-3">
+//                 <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">
+//                   <div className="flex items-center gap-2 text-xs text-slate-400">
+//                     <TrendingUp className="size-3.5 text-emerald-300" />{" "}
+//                     Strongest dimension
+//                   </div>
+//                   <p className="mt-2 text-sm font-semibold text-white">
+//                     {evaluation[strongest.key] == null
+//                       ? "Not available"
+//                       : strongest.label}
+//                   </p>
+//                   <p
+//                     className={`mt-1 text-xs font-medium ${scoreTone(evaluation[strongest.key])}`}
+//                   >
+//                     {evaluation[strongest.key] ?? "--"}
+//                     {evaluation[strongest.key] != null ? "/100" : ""}
+//                   </p>
+//                 </div>
+//                 <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">
+//                   <div className="flex items-center gap-2 text-xs text-slate-400">
+//                     <Target className="size-3.5 text-amber-200" /> Biggest
+//                     opportunity
+//                   </div>
+//                   <p className="mt-2 text-sm font-semibold text-white">
+//                     {weakest ? weakest.label : "Not available"}
+//                   </p>
+//                   <p
+//                     className={`mt-1 text-xs font-medium ${scoreTone(weakest ? evaluation[weakest.key] : null)}`}
+//                   >
+//                     {weakest ? `${evaluation[weakest.key]}/100` : "Not scored"}
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+
+//             <div className="rounded-3xl border border-white/[0.07] bg-[#0b0e1a]/75 p-3 sm:p-5">
+//               <div className="flex items-center justify-between gap-3 px-2 pt-1">
+//                 <div>
+//                   <p className="text-sm font-semibold text-white">
+//                     Skill profile
+//                   </p>
+//                   <p className="mt-1 text-xs text-slate-500">
+//                     Scores across five dimensions
+//                   </p>
+//                 </div>
+//                 <span className="rounded-full border border-white/[0.08] px-2.5 py-1 text-[11px] text-slate-400">
+//                   {scoredCount}/5 scored
+//                 </span>
+//               </div>
+//               <RadarChart values={scoreValues} />
+//               <p className="pb-1 text-center text-[11px] text-slate-500">
+//                 A wider shape indicates more balanced performance.
+//               </p>
+//             </div>
+//           </div>
+//         </CardContent>
+//       </Card>
+
+//       {/* Skill breakdown */}
+//       <Card className="border-white/[0.08] bg-[#101321] text-white">
+//         <CardHeader className="pb-2">
+//           <SectionHeading
+//             eyebrow="01 / Skill signals"
+//             title="Performance breakdown"
+//             description="See how each skill contributed to your result."
+//             icon={<Compass className="size-4" />}
+//           />
+//         </CardHeader>
+//         <CardContent className="grid gap-x-8 gap-y-6 p-5 pt-4 sm:grid-cols-2 sm:p-6 sm:pt-4">
+//           {dimensions.map(({ key, label, description }) => {
+//             const value = evaluation[key];
+//             return (
+//               <div key={key} className="space-y-2.5">
+//                 <div className="flex items-start justify-between gap-3">
+//                   <div>
+//                     <p className="text-sm font-medium text-slate-200">
+//                       {label}
+//                     </p>
+//                     <p className="mt-1 text-xs leading-5 text-slate-500">
+//                       {description}
+//                     </p>
+//                   </div>
+//                   <div className="shrink-0 text-right">
+//                     <p
+//                       className={`text-lg font-semibold tabular-nums ${scoreTone(value)}`}
+//                     >
+//                       {value ?? "--"}
+//                       <span className="text-xs font-normal text-slate-500">
+//                         {" "}
+//                         /100
+//                       </span>
+//                     </p>
+//                     <p className="text-[10px] text-slate-500">
+//                       {scoreLabel(value)}
+//                     </p>
+//                   </div>
+//                 </div>
+//                 <Progress
+//                   value={value ?? 0}
+//                   className="h-1.5 bg-white/[0.07] [&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-indigo-300"
+//                 />
+//               </div>
+//             );
+//           })}
+//         </CardContent>
+//       </Card>
+
+//       {/* Strengths and improvements */}
+//       <div className="grid gap-5 lg:grid-cols-2">
+//         <Card className="border-emerald-300/10 bg-[#101321] text-white">
+//           <CardHeader className="pb-3">
+//             <SectionHeading
+//               eyebrow="02 / Keep doing"
+//               title="Your strengths"
+//               description="Behaviours worth carrying into your next interview."
+//               icon={<CheckCircle2 className="size-4" />}
+//             />
+//           </CardHeader>
+//           <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
+//             {report?.strengths?.length ? (
+//               <ul className="space-y-3">
+//                 {report.strengths.map((item, index) => (
+//                   <li
+//                     key={`${index}-${item}`}
+//                     className="flex gap-3 rounded-xl border border-emerald-200/[0.08] bg-emerald-300/[0.025] p-3.5 text-sm leading-6 text-slate-300"
+//                   >
+//                     <CheckCircle2 className="mt-1 size-4 shrink-0 text-emerald-300" />
+//                     <span>{item}</span>
+//                   </li>
+//                 ))}
+//               </ul>
+//             ) : (
+//               <p className="text-sm text-slate-500">
+//                 No specific strengths were included in this report.
+//               </p>
+//             )}
+//           </CardContent>
+//         </Card>
+
+//         <Card className="border-amber-200/10 bg-[#101321] text-white">
+//           <CardHeader className="pb-3">
+//             <SectionHeading
+//               eyebrow="03 / Focus next"
+//               title="Areas to improve"
+//               description="Turn the weakest signals into specific practice goals."
+//               icon={<Target className="size-4" />}
+//             />
+//           </CardHeader>
+//           <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
+//             {report?.improvements?.length ? (
+//               <ul className="space-y-3">
+//                 {report.improvements.map((item, index) => (
+//                   <li
+//                     key={`${index}-${item}`}
+//                     className="flex gap-3 rounded-xl border border-amber-200/[0.08] bg-amber-200/[0.025] p-3.5 text-sm leading-6 text-slate-300"
+//                   >
+//                     <ArrowUpRight className="mt-1 size-4 shrink-0 text-amber-200" />
+//                     <span>{item}</span>
+//                   </li>
+//                 ))}
+//               </ul>
+//             ) : (
+//               <p className="text-sm text-slate-500">
+//                 No specific improvement areas were included in this report.
+//               </p>
+//             )}
+//           </CardContent>
+//         </Card>
+//       </div>
+
+//       {/* Full topic-level analysis */}
+//       <Card className="border-white/[0.08] bg-[#101321] text-white">
+//         <CardHeader className="pb-3">
+//           <SectionHeading
+//             eyebrow="04 / Under the surface"
+//             title="Discussion analysis"
+//             description="The evaluator's assessment of the topics you actually discussed."
+//             icon={<CircleHelp className="size-4" />}
+//           />
+//         </CardHeader>
+//         <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
+//           {report?.discussionAnalysis?.length ? (
+//             <div className="space-y-3">
+//               {report.discussionAnalysis.map((item, index) => (
+//                 <details
+//                   key={`${index}-${item.topic}`}
+//                   className="group rounded-2xl border border-white/[0.07] bg-white/[0.02] open:border-violet-300/20 open:bg-violet-400/[0.025]"
+//                 >
+//                   <summary className="flex cursor-pointer list-none items-center gap-3 p-4 [&::-webkit-details-marker]:hidden">
+//                     <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-violet-400/[0.10] text-xs font-semibold text-violet-200">
+//                       {String(index + 1).padStart(2, "0")}
+//                     </span>
+//                     <span className="min-w-0 flex-1 text-sm font-medium leading-5 text-slate-200">
+//                       {item.topic}
+//                     </span>
+//                     <span className="text-xs text-slate-500 transition-transform group-open:rotate-180">
+//                       ⌄
+//                     </span>
+//                   </summary>
+//                   <div className="px-4 pb-4 pl-[3.75rem]">
+//                     <div className="border-l-2 border-violet-300/25 pl-3.5 text-sm leading-6 text-slate-400">
+//                       {item.assessment}
+//                     </div>
+//                   </div>
+//                 </details>
+//               ))}
+//             </div>
+//           ) : (
+//             <div className="rounded-xl border border-dashed border-white/10 p-5 text-sm leading-6 text-slate-500">
+//               Topic-level analysis wasn't returned for this evaluation. The
+//               overall summary and skill scores are shown above.
+//             </div>
+//           )}
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
+
 "use client";
 
 import {
@@ -90,10 +784,10 @@ const dimensions = [
 type DimensionKey = (typeof dimensions)[number]["key"];
 
 function scoreTone(score: number | null | undefined) {
-  if (score == null) return "text-slate-400";
-  if (score >= 75) return "text-emerald-300";
-  if (score >= 50) return "text-amber-200";
-  return "text-rose-300";
+  if (score == null) return "text-[var(--clay-muted)]";
+  if (score >= 75) return "text-[var(--clay-green-ink)]";
+  if (score >= 50) return "text-amber-700";
+  return "text-rose-700";
 }
 
 function scoreLabel(score: number | null | undefined) {
@@ -135,8 +829,8 @@ function RadarChart({
       >
         <defs>
           <linearGradient id="evaluationRadarFill" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.42" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0.12" />
+            <stop offset="0%" stopColor="#ff8b6a" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#dce9bd" stopOpacity="0.2" />
           </linearGradient>
           <filter
             id="evaluationRadarGlow"
@@ -152,16 +846,18 @@ function RadarChart({
             </feMerge>
           </filter>
         </defs>
+
         {ringPoints.map((points, index) => (
           <polygon
             key={index}
             points={points}
             transform="translate(0 0)"
             fill="none"
-            stroke="rgba(203,213,225,0.13)"
+            stroke="#ecd8c3"
             strokeWidth="1"
           />
         ))}
+
         {values.map((item, index) => {
           const end = point(index, 100).split(",").map(Number);
           return (
@@ -171,19 +867,21 @@ function RadarChart({
               y1={center}
               x2={end[0]}
               y2={end[1]}
-              stroke="rgba(203,213,225,0.15)"
+              stroke="#e5cdb9"
               strokeWidth="1"
             />
           );
         })}
+
         <polygon
           points={dataPoints}
           fill="url(#evaluationRadarFill)"
-          stroke="#a78bfa"
+          stroke="#ff8b6a"
           strokeWidth="2.5"
           strokeLinejoin="round"
           filter="url(#evaluationRadarGlow)"
         />
+
         {values.map((item, index) => {
           const [x, y] = point(index, item.score).split(",").map(Number);
           const angle = angleFor(index);
@@ -195,21 +893,22 @@ function RadarChart({
               : Math.cos(angle) < -0.35
                 ? "end"
                 : "middle";
+
           return (
             <g key={item.label}>
               <circle
                 cx={x}
                 cy={y}
                 r="4"
-                fill="#ddd6fe"
-                stroke="#7c3aed"
+                fill="#fffaf1"
+                stroke="#d86649"
                 strokeWidth="2"
               />
               <text
                 x={labelX}
                 y={labelY - 4}
                 textAnchor={anchor}
-                fill="#cbd5e1"
+                fill="#80675a"
                 fontSize="9.5"
                 fontWeight="500"
               >
@@ -219,7 +918,7 @@ function RadarChart({
                 x={labelX}
                 y={labelY + 9}
                 textAnchor={anchor}
-                fill="#f8fafc"
+                fill="#34251f"
                 fontSize="10.5"
                 fontWeight="700"
               >
@@ -246,18 +945,20 @@ function SectionHeading({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-violet-300/15 bg-violet-400/[0.08] text-violet-200">
+      <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] text-[var(--clay-coral-shadow)] shadow-[var(--clay-shadow-raised)]">
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-200/70">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--clay-coral-shadow)]">
           {eyebrow}
         </p>
-        <h3 className="mt-1 text-base font-semibold tracking-tight text-white">
+        <h3 className="mt-1 text-base font-bold tracking-tight text-[var(--clay-ink)]">
           {title}
         </h3>
         {description && (
-          <p className="mt-1 text-sm leading-5 text-slate-400">{description}</p>
+          <p className="mt-1 text-sm leading-5 text-[var(--clay-muted)]">
+            {description}
+          </p>
         )}
       </div>
     </div>
@@ -280,7 +981,7 @@ function EvaluationStateWrapper({
           size="icon"
           onClick={onClose}
           aria-label="Close evaluation"
-          className="absolute right-3 top-3 z-20 size-9 text-slate-400 hover:bg-white/[0.08] hover:text-white"
+          className="absolute right-3 top-3 z-20 size-9 rounded-xl text-[var(--clay-muted)] hover:bg-[var(--clay-surface-warm)] hover:text-[var(--clay-ink)]"
         >
           <X className="size-4" />
         </Button>
@@ -303,28 +1004,33 @@ export default function InterviewEvaluationCard({
   if (status === "evaluating") {
     return (
       <EvaluationStateWrapper onClose={onClose}>
-        <Card className="overflow-hidden border-white/[0.08] bg-[#101321] text-white shadow-[0_24px_80px_-35px_rgba(124,58,237,0.35)]">
-          <div className="h-1 bg-gradient-to-r from-violet-500 via-indigo-400 to-fuchsia-400" />
+        <Card className="overflow-hidden rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
+          <div className="h-1.5 bg-gradient-to-r from-[var(--clay-primary)] via-[#f8b28f] to-[var(--clay-sage)]" />
           <CardContent className="flex min-h-[330px] flex-col items-center justify-center p-8 text-center sm:p-12">
-            <div className="relative mb-6 flex size-20 items-center justify-center rounded-[28px] border border-violet-300/20 bg-violet-500/[0.09]">
-              <div className="absolute inset-1 rounded-[24px] border border-violet-300/10" />
-              <LoaderCircle className="size-9 animate-spin text-violet-200" />
-              <Sparkles className="absolute -right-2 -top-2 size-5 text-fuchsia-200" />
+            <div className="relative mb-6 flex size-20 items-center justify-center rounded-[28px] border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] shadow-[var(--clay-shadow-raised)]">
+              <div className="absolute inset-1 rounded-[24px] border border-[var(--clay-peach-shadow)]/50" />
+              <LoaderCircle className="size-9 animate-spin text-[var(--clay-coral-shadow)]" />
+              <Sparkles className="absolute -right-2 -top-2 size-5 text-[var(--clay-coral-shadow)]" />
             </div>
-            <Badge className="mb-3 border-violet-300/20 bg-violet-400/10 text-violet-100 hover:bg-violet-400/10">
+
+            <Badge className="mb-3 border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] text-[var(--clay-coral-shadow)] hover:bg-[var(--clay-surface-warm)]">
               <Sparkles className="mr-1.5 size-3" /> AI interview insights
             </Badge>
-            <h2 className="text-2xl font-semibold tracking-tight">
+
+            <h2 className="text-2xl font-bold tracking-tight text-[var(--clay-ink)]">
               Turning your answers into insights
             </h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
+
+            <p className="mt-3 max-w-md text-sm leading-6 text-[var(--clay-muted)]">
               Reviewing technical accuracy, reasoning, communication, and the
               details behind each answer. Your report will appear here shortly.
             </p>
-            <div className="mt-7 h-1.5 w-56 overflow-hidden rounded-full bg-white/[0.07]">
-              <div className="h-full w-2/5 animate-pulse rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-400" />
+
+            <div className="mt-7 h-2 w-56 overflow-hidden rounded-full bg-[var(--clay-border)] shadow-[var(--clay-shadow-inset)]">
+              <div className="h-full w-2/5 animate-pulse rounded-full bg-gradient-to-r from-[var(--clay-primary)] to-[#f8b28f]" />
             </div>
-            <p className="mt-3 text-xs text-slate-500">
+
+            <p className="mt-3 text-xs text-[var(--clay-subtle)]">
               Keep this page open while the evaluation finishes.
             </p>
           </CardContent>
@@ -336,28 +1042,32 @@ export default function InterviewEvaluationCard({
   if (status === "insufficient") {
     return (
       <EvaluationStateWrapper onClose={onClose}>
-        <Card className="border-amber-300/15 bg-[#101321] text-white">
+        <Card className="rounded-3xl border border-amber-200 bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
           <CardContent className="flex flex-col items-center p-8 text-center sm:p-10">
-            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl border border-amber-200/15 bg-amber-300/[0.08]">
-              <AlertCircle className="size-7 text-amber-200" />
+            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-700 shadow-[var(--clay-shadow-raised)]">
+              <AlertCircle className="size-7" />
             </div>
-            <h2 className="text-xl font-semibold">
+
+            <h2 className="text-xl font-bold">
               Not enough signal for a fair score
             </h2>
-            <p className="mt-2 max-w-lg text-sm leading-6 text-slate-400">
+
+            <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--clay-muted)]">
               {evaluation?.errorMessage ||
                 "Your interview was saved, but there wasn't enough meaningful answer content to generate a reliable evaluation."}
             </p>
-            <p className="mt-4 max-w-lg text-xs leading-5 text-slate-500">
+
+            <p className="mt-4 max-w-lg text-xs leading-5 text-[var(--clay-subtle)]">
               Try answering with your reasoning, the approach you chose, and why
               it works. This helps the evaluator assess your skills rather than
               just answer length.
             </p>
+
             {onRetry && (
               <Button
                 onClick={onRetry}
                 variant="outline"
-                className="mt-5 border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.07]"
+                className="mt-5 rounded-xl border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-raised)] hover:bg-[var(--clay-surface-warm)]"
               >
                 <RefreshCw className="mr-2 size-4" /> Evaluate again
               </Button>
@@ -371,23 +1081,26 @@ export default function InterviewEvaluationCard({
   if (status === "failed" || !evaluation) {
     return (
       <EvaluationStateWrapper onClose={onClose}>
-        <Card className="border-rose-300/15 bg-[#101321] text-white">
+        <Card className="rounded-3xl border border-rose-200 bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
           <CardContent className="flex flex-col items-center p-8 text-center">
-            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-rose-400/[0.08] text-rose-200">
+            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl border border-rose-200 bg-rose-50 text-rose-700 shadow-[var(--clay-shadow-raised)]">
               <AlertCircle className="size-7" />
             </div>
-            <h2 className="text-xl font-semibold">
+
+            <h2 className="text-xl font-bold">
               We couldn't finish your evaluation
             </h2>
-            <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">
+
+            <p className="mt-2 max-w-md text-sm leading-6 text-[var(--clay-muted)]">
               {error ||
                 evaluation?.errorMessage ||
                 "Your interview is saved. You can retry the evaluation without taking the interview again."}
             </p>
+
             {onRetry && (
               <Button
                 onClick={onRetry}
-                className="mt-5 bg-violet-600 text-white hover:bg-violet-500"
+                className="mt-5 rounded-xl bg-[var(--clay-primary)] text-[var(--clay-primary-ink)] shadow-[var(--clay-shadow-button)] hover:bg-[var(--clay-primary-hover)]"
               >
                 <RefreshCw className="mr-2 size-4" /> Retry evaluation
               </Button>
@@ -415,27 +1128,30 @@ export default function InterviewEvaluationCard({
   ).length;
 
   return (
-    <div className="space-y-5 text-white">
-      <Card className="relative overflow-hidden border-white/[0.08] bg-[#101321] shadow-[0_24px_80px_-45px_rgba(124,58,237,0.45)]">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/70 to-transparent" />
-        <div className="pointer-events-none absolute -right-24 -top-28 size-72 rounded-full bg-violet-600/[0.10] blur-3xl" />
+    <div className="space-y-5 text-[var(--clay-ink)]">
+      <Card className="relative overflow-hidden rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface)] shadow-[var(--clay-shadow-card)]">
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--clay-primary)] via-[#f8b28f] to-[var(--clay-sage)]" />
+        <div className="pointer-events-none absolute -right-24 -top-28 size-72 rounded-full bg-[var(--clay-peach)]/35 blur-3xl" />
+
         <Button
           type="button"
           variant="ghost"
           size="icon"
           onClick={onClose}
           aria-label="Close evaluation"
-          className="absolute right-3 top-3 z-10 size-9 text-slate-400 hover:bg-white/[0.08] hover:text-white"
+          className="absolute right-3 top-3 z-10 size-9 rounded-xl text-[var(--clay-muted)] hover:bg-[var(--clay-surface-warm)] hover:text-[var(--clay-ink)]"
         >
           <X className="size-4" />
         </Button>
+
         <CardContent className="relative p-5 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Badge className="border-emerald-300/15 bg-emerald-300/[0.08] text-emerald-200 hover:bg-emerald-300/[0.08]">
+            <Badge className="border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)] hover:bg-[var(--clay-green-surface)]">
               <CheckCircle2 className="mr-1.5 size-3.5" /> Evaluation complete
             </Badge>
+
             {evaluation.evaluatedAt && (
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-[var(--clay-subtle)]">
                 Evaluated{" "}
                 {new Date(evaluation.evaluatedAt).toLocaleDateString(
                   undefined,
@@ -447,60 +1163,71 @@ export default function InterviewEvaluationCard({
 
           <div className="mt-6 grid gap-7 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--clay-muted)]">
                 Your interview snapshot
               </p>
+
               <div className="mt-3 flex flex-wrap items-end gap-x-3 gap-y-2">
-                <span className="text-7xl font-semibold leading-none tracking-[-0.07em] text-white sm:text-8xl">
+                <span className="text-7xl font-bold leading-none tracking-[-0.07em] text-[var(--clay-ink)] sm:text-8xl">
                   {score ?? "--"}
                 </span>
-                <span className="mb-2 text-lg text-slate-500">/ 100</span>
+                <span className="mb-2 text-lg text-[var(--clay-subtle)]">
+                  / 100
+                </span>
+
                 {evaluation.grade && (
-                  <Badge className="mb-2 border-violet-300/20 bg-violet-400/10 px-3 py-1 text-violet-100 hover:bg-violet-400/10">
+                  <Badge className="mb-2 border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] px-3 py-1 text-[var(--clay-coral-shadow)] hover:bg-[var(--clay-surface-warm)]">
                     {evaluation.grade}
                   </Badge>
                 )}
               </div>
-              <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.07]">
+
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-[var(--clay-border)] shadow-[var(--clay-shadow-inset)]">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-violet-500 via-indigo-400 to-fuchsia-300 transition-all"
+                  className="h-full rounded-full bg-gradient-to-r from-[var(--clay-primary)] via-[#f8b28f] to-[var(--clay-sage)] transition-all"
                   style={{
                     width: `${Math.max(0, Math.min(100, score ?? 0))}%`,
                   }}
                 />
               </div>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-slate-300">
+
+              <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--clay-muted)]">
                 {report?.summary ||
                   "Your technical interview evaluation is ready. Review the skill breakdown and discussion notes to see where to focus next."}
               </p>
+
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">
-                  <div className="flex items-center gap-2 text-xs text-slate-400">
-                    <TrendingUp className="size-3.5 text-emerald-300" />{" "}
+                <div className="rounded-2xl border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] p-3.5 shadow-[var(--clay-shadow-raised)]">
+                  <div className="flex items-center gap-2 text-xs text-[var(--clay-green-ink)]">
+                    <TrendingUp className="size-3.5" />
                     Strongest dimension
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-white">
+
+                  <p className="mt-2 text-sm font-bold text-[var(--clay-ink)]">
                     {evaluation[strongest.key] == null
                       ? "Not available"
                       : strongest.label}
                   </p>
+
                   <p
-                    className={`mt-1 text-xs font-medium ${scoreTone(evaluation[strongest.key])}`}
+                    className={`mt-1 text-xs font-semibold ${scoreTone(evaluation[strongest.key])}`}
                   >
                     {evaluation[strongest.key] ?? "--"}
                     {evaluation[strongest.key] != null ? "/100" : ""}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">
-                  <div className="flex items-center gap-2 text-xs text-slate-400">
-                    <Target className="size-3.5 text-amber-200" /> Biggest
-                    opportunity
+
+                <div className="rounded-2xl border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] p-3.5 shadow-[var(--clay-shadow-raised)]">
+                  <div className="flex items-center gap-2 text-xs text-[var(--clay-coral-shadow)]">
+                    <Target className="size-3.5" /> Biggest opportunity
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-white">
+
+                  <p className="mt-2 text-sm font-bold text-[var(--clay-ink)]">
                     {weakest ? weakest.label : "Not available"}
                   </p>
+
                   <p
-                    className={`mt-1 text-xs font-medium ${scoreTone(weakest ? evaluation[weakest.key] : null)}`}
+                    className={`mt-1 text-xs font-semibold ${scoreTone(weakest ? evaluation[weakest.key] : null)}`}
                   >
                     {weakest ? `${evaluation[weakest.key]}/100` : "Not scored"}
                   </p>
@@ -508,22 +1235,25 @@ export default function InterviewEvaluationCard({
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/[0.07] bg-[#0b0e1a]/75 p-3 sm:p-5">
+            <div className="rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-3 shadow-[var(--clay-shadow-inset)] sm:p-5">
               <div className="flex items-center justify-between gap-3 px-2 pt-1">
                 <div>
-                  <p className="text-sm font-semibold text-white">
+                  <p className="text-sm font-bold text-[var(--clay-ink)]">
                     Skill profile
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-[var(--clay-muted)]">
                     Scores across five dimensions
                   </p>
                 </div>
-                <span className="rounded-full border border-white/[0.08] px-2.5 py-1 text-[11px] text-slate-400">
+
+                <span className="rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface)] px-2.5 py-1 text-[11px] text-[var(--clay-muted)]">
                   {scoredCount}/5 scored
                 </span>
               </div>
+
               <RadarChart values={scoreValues} />
-              <p className="pb-1 text-center text-[11px] text-slate-500">
+
+              <p className="pb-1 text-center text-[11px] text-[var(--clay-subtle)]">
                 A wider shape indicates more balanced performance.
               </p>
             </div>
@@ -532,7 +1262,7 @@ export default function InterviewEvaluationCard({
       </Card>
 
       {/* Skill breakdown */}
-      <Card className="border-white/[0.08] bg-[#101321] text-white">
+      <Card className="rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
         <CardHeader className="pb-2">
           <SectionHeading
             eyebrow="01 / Skill signals"
@@ -541,38 +1271,42 @@ export default function InterviewEvaluationCard({
             icon={<Compass className="size-4" />}
           />
         </CardHeader>
+
         <CardContent className="grid gap-x-8 gap-y-6 p-5 pt-4 sm:grid-cols-2 sm:p-6 sm:pt-4">
           {dimensions.map(({ key, label, description }) => {
             const value = evaluation[key];
+
             return (
               <div key={key} className="space-y-2.5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-medium text-slate-200">
+                    <p className="text-sm font-semibold text-[var(--clay-ink)]">
                       {label}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-[var(--clay-muted)]">
                       {description}
                     </p>
                   </div>
+
                   <div className="shrink-0 text-right">
                     <p
-                      className={`text-lg font-semibold tabular-nums ${scoreTone(value)}`}
+                      className={`text-lg font-bold tabular-nums ${scoreTone(value)}`}
                     >
                       {value ?? "--"}
-                      <span className="text-xs font-normal text-slate-500">
+                      <span className="text-xs font-normal text-[var(--clay-subtle)]">
                         {" "}
                         /100
                       </span>
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[var(--clay-muted)]">
                       {scoreLabel(value)}
                     </p>
                   </div>
                 </div>
+
                 <Progress
                   value={value ?? 0}
-                  className="h-1.5 bg-white/[0.07] [&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-indigo-300"
+                  className="h-2 bg-[var(--clay-border)] shadow-[var(--clay-shadow-inset)] [&>div]:bg-gradient-to-r [&>div]:from-[var(--clay-primary)] [&>div]:to-[var(--clay-sage)]"
                 />
               </div>
             );
@@ -582,7 +1316,7 @@ export default function InterviewEvaluationCard({
 
       {/* Strengths and improvements */}
       <div className="grid gap-5 lg:grid-cols-2">
-        <Card className="border-emerald-300/10 bg-[#101321] text-white">
+        <Card className="rounded-2xl border border-[var(--clay-green-shadow)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
           <CardHeader className="pb-3">
             <SectionHeading
               eyebrow="02 / Keep doing"
@@ -591,28 +1325,29 @@ export default function InterviewEvaluationCard({
               icon={<CheckCircle2 className="size-4" />}
             />
           </CardHeader>
+
           <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
             {report?.strengths?.length ? (
               <ul className="space-y-3">
                 {report.strengths.map((item, index) => (
                   <li
                     key={`${index}-${item}`}
-                    className="flex gap-3 rounded-xl border border-emerald-200/[0.08] bg-emerald-300/[0.025] p-3.5 text-sm leading-6 text-slate-300"
+                    className="flex gap-3 rounded-xl border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] p-3.5 text-sm leading-6 text-[var(--clay-ink)]"
                   >
-                    <CheckCircle2 className="mt-1 size-4 shrink-0 text-emerald-300" />
+                    <CheckCircle2 className="mt-1 size-4 shrink-0 text-[var(--clay-status)]" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[var(--clay-muted)]">
                 No specific strengths were included in this report.
               </p>
             )}
           </CardContent>
         </Card>
 
-        <Card className="border-amber-200/10 bg-[#101321] text-white">
+        <Card className="rounded-2xl border border-[var(--clay-peach)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
           <CardHeader className="pb-3">
             <SectionHeading
               eyebrow="03 / Focus next"
@@ -621,21 +1356,22 @@ export default function InterviewEvaluationCard({
               icon={<Target className="size-4" />}
             />
           </CardHeader>
+
           <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
             {report?.improvements?.length ? (
               <ul className="space-y-3">
                 {report.improvements.map((item, index) => (
                   <li
                     key={`${index}-${item}`}
-                    className="flex gap-3 rounded-xl border border-amber-200/[0.08] bg-amber-200/[0.025] p-3.5 text-sm leading-6 text-slate-300"
+                    className="flex gap-3 rounded-xl border border-[var(--clay-peach)] bg-[var(--clay-surface-warm)] p-3.5 text-sm leading-6 text-[var(--clay-ink)]"
                   >
-                    <ArrowUpRight className="mt-1 size-4 shrink-0 text-amber-200" />
+                    <ArrowUpRight className="mt-1 size-4 shrink-0 text-[var(--clay-coral-shadow)]" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[var(--clay-muted)]">
                 No specific improvement areas were included in this report.
               </p>
             )}
@@ -644,7 +1380,7 @@ export default function InterviewEvaluationCard({
       </div>
 
       {/* Full topic-level analysis */}
-      <Card className="border-white/[0.08] bg-[#101321] text-white">
+      <Card className="rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
         <CardHeader className="pb-3">
           <SectionHeading
             eyebrow="04 / Under the surface"
@@ -653,27 +1389,31 @@ export default function InterviewEvaluationCard({
             icon={<CircleHelp className="size-4" />}
           />
         </CardHeader>
+
         <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
           {report?.discussionAnalysis?.length ? (
             <div className="space-y-3">
               {report.discussionAnalysis.map((item, index) => (
                 <details
                   key={`${index}-${item.topic}`}
-                  className="group rounded-2xl border border-white/[0.07] bg-white/[0.02] open:border-violet-300/20 open:bg-violet-400/[0.025]"
+                  className="group rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] open:border-[var(--clay-peach-shadow)] open:bg-[var(--clay-surface)]"
                 >
                   <summary className="flex cursor-pointer list-none items-center gap-3 p-4 [&::-webkit-details-marker]:hidden">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-violet-400/[0.10] text-xs font-semibold text-violet-200">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-peach)] bg-[var(--clay-peach)] text-xs font-bold text-[var(--clay-coral-shadow)]">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="min-w-0 flex-1 text-sm font-medium leading-5 text-slate-200">
+
+                    <span className="min-w-0 flex-1 text-sm font-semibold leading-5 text-[var(--clay-ink)]">
                       {item.topic}
                     </span>
-                    <span className="text-xs text-slate-500 transition-transform group-open:rotate-180">
+
+                    <span className="text-xs text-[var(--clay-muted)] transition-transform group-open:rotate-180">
                       ⌄
                     </span>
                   </summary>
+
                   <div className="px-4 pb-4 pl-[3.75rem]">
-                    <div className="border-l-2 border-violet-300/25 pl-3.5 text-sm leading-6 text-slate-400">
+                    <div className="border-l-2 border-[var(--clay-peach-shadow)] pl-3.5 text-sm leading-6 text-[var(--clay-muted)]">
                       {item.assessment}
                     </div>
                   </div>
@@ -681,7 +1421,7 @@ export default function InterviewEvaluationCard({
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-dashed border-white/10 p-5 text-sm leading-6 text-slate-500">
+            <div className="rounded-xl border border-dashed border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-5 text-sm leading-6 text-[var(--clay-muted)]">
               Topic-level analysis wasn't returned for this evaluation. The
               overall summary and skill scores are shown above.
             </div>

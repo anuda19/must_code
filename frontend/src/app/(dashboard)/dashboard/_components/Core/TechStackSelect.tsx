@@ -1,107 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-// import { X, Plus, Sparkles } from "lucide-react";
-
-// interface TechStackInputProps {
-//   value: string[];
-//   onChange: (tags: string[]) => void;
-//   selectedRole?: string;
-// }
-
-// // Smart suggestions dictionary keyed by role
-// const ROLE_SUGGESTIONS: Record<string, string[]> = {
-//   "Frontend Developer": ["React", "TypeScript", "Next.js", "Tailwind CSS", "Redux", "Zod", "GraphQL"],
-//   "Backend Engineer": ["Node.js", "NestJS", "TypeScript", "PostgreSQL", "Prisma", "Redis", "Docker", "Python", "Django", "Flask"],
-//   "Full Stack Engineer": ["Next.js", "TypeScript", "Node.js", "PostgreSQL", "Tailwind CSS", "Prisma"],
-//   "Mobile App Engineer (React Native/Flutter)": ["React Native", "Flutter", "TypeScript", "Dart", "Redux", "Zustand"],
-//   "DevOps / Infrastructure Engineer": ["Docker", "Kubernetes", "AWS", "Terraform", "CI/CD", "GitHub Actions"],
-//   "System Architect": ["System Design", "Microservices", "Kafka", "Redis", "Distributed Systems", "GraphQL"],
-// };
-
-// export function TechStackInput({
-//   value,
-//   onChange,
-//   selectedRole = "",
-// }: TechStackInputProps) {
-//   const [input, setInput] = useState("");
-
-//   const suggestions = (ROLE_SUGGESTIONS[selectedRole] || ROLE_SUGGESTIONS["Frontend Developer"]).filter(
-//     (item) => !value.includes(item)
-//   );
-
-//   const addTag = (tagToAdd: string) => {
-//     const trimmed = tagToAdd.trim().replace(/,/g, "");
-//     if (trimmed && !value.includes(trimmed)) {
-//       onChange([...value, trimmed]);
-//     }
-//     setInput("");
-//   };
-
-//   const removeTag = (tagToRemove: string) => {
-//     onChange(value.filter((t) => t !== tagToRemove));
-//   };
-
-//   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-//     if (e.key === "Enter" || e.key === ",") {
-//       e.preventDefault();
-//       addTag(input);
-//     } else if (e.key === "Backspace" && !input && value.length > 0) {
-//       removeTag(value[value.length - 1]);
-//     }
-//   };
-
-//   return (
-//     <div className="space-y-2">
-//       <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-2.5 focus-within:border-indigo-500/80 transition-colors">
-//         {value.map((tag) => (
-//           <span
-//             key={tag}
-//             className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-300 animate-in fade-in zoom-in-95 duration-150"
-//           >
-//             {tag}
-//             <button
-//               type="button"
-//               onClick={() => removeTag(tag)}
-//               className="rounded p-0.5 hover:bg-indigo-500/20 text-indigo-400 hover:text-white"
-//             >
-//               <X className="h-3 w-3" />
-//             </button>
-//           </span>
-//         ))}
-
-//         <input
-//           type="text"
-//           placeholder={value.length === 0 ? "Type tech & press Enter..." : "Add more..."}
-//           value={input}
-//           onChange={(e) => setInput(e.target.value)}
-//           onKeyDown={handleKeyDown}
-//           className="flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-600 focus:outline-none min-w-[120px]"
-//         />
-//       </div>
-
-//       {/* Auto Suggestions */}
-//       {suggestions.length > 0 && (
-//         <div className="flex items-center gap-1.5 overflow-x-auto py-1 text-xs text-slate-400">
-//           <span className="flex items-center gap-1 text-[11px] text-slate-500">
-//             <Sparkles className="h-3 w-3 text-indigo-400" /> Suggested:
-//           </span>
-//           {suggestions.slice(0, 4).map((item) => (
-//             <button
-//               key={item}
-//               type="button"
-//               onClick={() => addTag(item)}
-//               className="inline-flex items-center gap-1 rounded-md border border-slate-800 bg-slate-900/60 px-2 py-0.5 text-[11px] text-slate-300 hover:border-slate-700 hover:bg-slate-800 hover:text-white transition-colors"
-//             >
-//               <Plus className="h-2.5 w-2.5 text-indigo-400" />
-//               {item}
-//             </button>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 
 "use client";
 
@@ -115,7 +11,6 @@ interface TechStackInputProps {
   selectedRole?: string;
 }
 
-// Role-based Technology Suggestions
 export const ROLE_SUGGESTIONS: Record<string, string[]> = {
   "Frontend Developer": [
     "React",
@@ -190,9 +85,8 @@ export const ROLE_SUGGESTIONS: Record<string, string[]> = {
   ],
 };
 
-// Global pool of technologies for dynamic search fallback
 const GLOBAL_TECH_POOL = Array.from(
-  new Set(Object.values(ROLE_SUGGESTIONS).flat())
+  new Set(Object.values(ROLE_SUGGESTIONS).flat()),
 );
 
 function TechBadgeLogo({ techName }: { techName: string }) {
@@ -200,7 +94,9 @@ function TechBadgeLogo({ techName }: { techName: string }) {
   const iconUrl = getTechIconUrl(techName);
 
   if (hasError) {
-    return <Code2 className="h-3.5 w-3.5 shrink-0 text-indigo-400" />;
+    return (
+      <Code2 className="size-3.5 shrink-0 text-[var(--clay-primary)]" />
+    );
   }
 
   return (
@@ -208,7 +104,7 @@ function TechBadgeLogo({ techName }: { techName: string }) {
       src={iconUrl}
       alt={`${techName} icon`}
       onError={() => setHasError(true)}
-      className="h-3.5 w-3.5 shrink-0 object-contain"
+      className="size-3.5 shrink-0 object-contain"
     />
   );
 }
@@ -222,20 +118,17 @@ export function TechStackInput({
 
   const trimmedInput = input.trim().toLowerCase();
 
-  // 1. Role-default pool when input is empty
   const defaultPool =
     ROLE_SUGGESTIONS[selectedRole] || ROLE_SUGGESTIONS["Frontend Developer"];
 
-  // 2. If user types, filter across the global technology list; otherwise show role defaults
   const activePool = trimmedInput
     ? GLOBAL_TECH_POOL.filter((tech) =>
-        tech.toLowerCase().includes(trimmedInput)
+        tech.toLowerCase().includes(trimmedInput),
       )
     : defaultPool;
 
-  // 3. Exclude items already added to badges
   const suggestions = activePool.filter(
-    (item) => !value.some((val) => val.toLowerCase() === item.toLowerCase())
+    (item) => !value.some((val) => val.toLowerCase() === item.toLowerCase()),
   );
 
   const addTag = (tagToAdd: string) => {
@@ -263,22 +156,23 @@ export function TechStackInput({
   };
 
   return (
-    <div className="space-y-2">
-      {/* Active Badges & Input Box */}
-      <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-2.5 mt-1.5 transition-colors focus-within:border-indigo-500/80">
+    <div className="space-y-3">
+      {/* Selected skills and input */}
+      <div className="mt-1.5 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-3 shadow-[inset_3px_3px_7px_rgba(234,208,192,0.6),inset_-3px_-3px_7px_rgba(255,255,255,0.8)] transition-all focus-within:border-[var(--clay-primary)] focus-within:ring-4 focus-within:ring-[var(--clay-primary)]/10">
         {value.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-300 animate-in fade-in zoom-in-95 duration-150"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)] px-2.5 py-1.5 text-xs font-semibold text-[var(--clay-primary-ink)] shadow-[inset_2px_2px_5px_rgba(255,255,255,0.45),0_2px_0_var(--clay-peach-shadow)] animate-in fade-in zoom-in-95 duration-150"
           >
             <TechBadgeLogo techName={tag} />
             <span>{tag}</span>
             <button
               type="button"
               onClick={() => removeTag(tag)}
-              className="rounded p-0.5 text-indigo-400 hover:bg-indigo-500/20 hover:text-white"
+              aria-label={`Remove ${tag}`}
+              className="ml-0.5 grid size-4 place-items-center rounded-md text-[var(--clay-muted)] transition hover:bg-[var(--clay-surface)] hover:text-[var(--clay-primary-ink)]"
             >
-              <X className="h-3 w-3" />
+              <X className="size-3" />
             </button>
           </span>
         ))}
@@ -287,40 +181,42 @@ export function TechStackInput({
           type="text"
           placeholder={
             value.length === 0
-              ? "Type tech (e.g. Angular, Python, Rust) & press Enter..."
-              : "Add tech..."
+              ? "Type a technology and press Enter..."
+              : "Add another skill..."
           }
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="min-w-[160px] flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-600 focus:outline-none"
+          className="min-w-[150px] flex-1 bg-transparent px-1 py-1.5 text-xs font-medium text-[var(--clay-ink)] placeholder:text-[var(--clay-subtle)] focus:outline-none"
         />
       </div>
 
-      {/* Filtered Suggestions Strip (Horizontal Scroll Hidden) */}
+      {/* Suggestions */}
       {suggestions.length > 0 && (
-        <div className="flex items-center gap-1.5 overflow-x-auto py-1 text-xs text-slate-400 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <span className="flex shrink-0 items-center gap-1 text-[11px] text-slate-500">
+        <div className="rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3">
+          <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--clay-muted)]">
             {trimmedInput ? (
-              <Search className="h-3 w-3 text-indigo-400" />
+              <Search className="size-3.5 text-[var(--clay-primary)]" />
             ) : (
-              <Sparkles className="h-3 w-3 text-indigo-400" />
+              <Sparkles className="size-3.5 text-[var(--clay-primary)]" />
             )}
-            {trimmedInput ? "Matching Tech:" : "Quick Add:"}
-          </span>
+            {trimmedInput ? "Matching technologies" : "Quick add"}
+          </div>
 
-          {suggestions.slice(0, 8).map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => addTag(item)}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-slate-800 bg-slate-900/60 px-2 py-1 text-[11px] text-slate-300 transition-colors hover:border-slate-700 hover:bg-slate-800 hover:text-white"
-            >
-              <TechBadgeLogo techName={item} />
-              <Plus className="h-2.5 w-2.5 text-indigo-400" />
-              <span>{item}</span>
-            </button>
-          ))}
+          <div className="flex flex-wrap gap-1.5">
+            {suggestions.slice(0, 8).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => addTag(item)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-2.5 py-1.5 text-[11px] font-medium text-[var(--clay-muted)] transition-all hover:border-[var(--clay-peach-shadow)] hover:bg-[var(--clay-peach)] hover:text-[var(--clay-primary-ink)] active:translate-y-px"
+              >
+                <TechBadgeLogo techName={item} />
+                <span>{item}</span>
+                <Plus className="size-3 text-[var(--clay-primary)]" />
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

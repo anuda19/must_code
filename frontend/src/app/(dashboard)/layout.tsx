@@ -9,12 +9,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#070A12] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="flex h-screen w-screen overflow-hidden bg-[var(--clay-bg)] font-sans text-[var(--clay-ink)] selection:bg-[var(--clay-peach)] selection:text-[var(--clay-primary-ink)]">
       <QueryProvider>
         <Sidebar />
+
         <div className="flex flex-1 flex-col overflow-hidden">
           <Topbar />
-          <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-[#070A12] to-[#05070D]">
+
+          <main className="flex-1 overflow-y-auto bg-[var(--clay-bg)] p-6">
             <TooltipProvider>{children}</TooltipProvider>
           </main>
         </div>

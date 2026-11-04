@@ -79,47 +79,40 @@ export default function FaqPage() {
   });
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-[#0A0D18] px-4 py-8 text-white antialiased sm:px-8 sm:py-10">
-      <div className="pointer-events-none absolute -left-40 top-20 h-[450px] w-[450px] rounded-full bg-indigo-600/[0.12] blur-[140px]" />
-      <div className="pointer-events-none absolute -right-40 top-[35%] h-[450px] w-[450px] rounded-full bg-violet-600/[0.09] blur-[140px]" />
+    <main className="relative min-h-screen w-full overflow-hidden bg-[var(--clay-bg)] px-4 py-8 text-[var(--clay-ink)] antialiased sm:px-8 sm:py-10">
+      <div className="pointer-events-none absolute -left-40 top-20 h-[450px] w-[450px] rounded-full bg-[var(--clay-peach)]/50 blur-[140px]" />
+      <div className="pointer-events-none absolute -right-40 top-[35%] h-[450px] w-[450px] rounded-full bg-[var(--clay-sage)]/60 blur-[140px]" />
 
-      <div className="mx-auto max-w-4xl space-y-10">
-        {/* Header Section */}
-        <header className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-400">
+      <div className="relative mx-auto max-w-4xl space-y-10">
+        <header className="space-y-4 text-center">
+          <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--clay-primary)]">
             <FileQuestion className="size-3.5" />
             <span>Help Center & Support</span>
           </div>
-          {/* <BackButton
-            label="Back"
-            className="text-slate-300 hover:bg-white/[0.07] hover:text-white"
-          /> */}
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--clay-ink)] sm:text-5xl">
             Frequently Asked Questions
           </h1>
 
-          <p className="mx-auto max-w-xl text-sm text-slate-400 sm:text-base">
+          <p className="mx-auto max-w-xl text-sm text-[var(--clay-muted)] sm:text-base">
             Find answers about our AI mock interview engine, WebRTC voice
             agents, evaluation metrics, and platform features.
           </p>
 
-          {/* Search Bar */}
           <div className="mx-auto max-w-lg pt-4">
             <div className="relative flex items-center">
-              <Search className="absolute left-4 size-4 text-slate-400" />
+              <Search className="absolute left-4 size-4 text-[var(--clay-subtle)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search questions or keywords..."
-                className="w-full rounded-2xl border border-white/10 bg-[#11162B]/90 pl-11 pr-4 py-3.5 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-indigo-500 focus:bg-[#11162B] focus:ring-4 focus:ring-indigo-500/15 shadow-xl"
+                className="w-full rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] py-3.5 pl-11 pr-4 text-sm text-[var(--clay-ink)] outline-none transition-all placeholder:text-[var(--clay-subtle)] focus:border-[var(--clay-primary)] focus:bg-[var(--clay-surface)] focus:ring-4 focus:ring-[var(--clay-primary)]/15 clay-inset"
               />
             </div>
           </div>
         </header>
 
-        {/* Category Filter Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
           {CATEGORIES.map((category) => (
             <button
@@ -127,8 +120,8 @@ export default function FaqPage() {
               onClick={() => setSelectedCategory(category)}
               className={`rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
                 selectedCategory === category
-                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/25"
-                  : "border border-white/10 bg-[#11162B]/60 text-slate-400 hover:border-indigo-500/30 hover:text-white"
+                  ? "border border-[var(--clay-peach-shadow)] bg-[var(--clay-primary)] text-[var(--clay-primary-ink)] clay-button-shadow"
+                  : "border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-muted)] hover:border-[var(--clay-peach-shadow)] hover:bg-[var(--clay-surface-warm)]"
               }`}
             >
               {category}
@@ -136,7 +129,6 @@ export default function FaqPage() {
           ))}
         </div>
 
-        {/* FAQ List */}
         <div className="space-y-4 pt-2">
           {filteredFaqs.length > 0 ? (
             filteredFaqs.map((faq, index) => (
@@ -148,12 +140,12 @@ export default function FaqPage() {
               />
             ))
           ) : (
-            <div className="rounded-3xl border border-white/10 bg-[#11162B]/80 p-12 text-center backdrop-blur-2xl">
-              <HelpCircle className="mx-auto size-10 text-slate-500 mb-3" />
-              <h3 className="text-base font-semibold text-white">
+            <div className="rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-12 text-center clay-card">
+              <HelpCircle className="mx-auto mb-3 size-10 text-[var(--clay-subtle)]" />
+              <h3 className="text-base font-semibold text-[var(--clay-ink)]">
                 No matching questions found
               </h3>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-[var(--clay-muted)]">
                 Try searching with a different keyword or browse another
                 category.
               </p>
@@ -161,26 +153,25 @@ export default function FaqPage() {
           )}
         </div>
 
-        {/* Support CTA Banner */}
-        <Card className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#11162B]/80 p-8 text-center shadow-2xl backdrop-blur-2xl">
-          <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+        <Card className="relative overflow-hidden rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-8 text-center text-[var(--clay-ink)] clay-card">
+          <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--clay-primary)] to-transparent" />
 
           <CardContent className="space-y-4 p-0">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-indigo-400/30 bg-gradient-to-b from-indigo-500/20 to-indigo-950/40 text-indigo-300">
-              <MessageSquare className="size-6 text-indigo-300" />
+            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-primary)] clay-raised">
+              <MessageSquare className="size-6" />
             </div>
 
-            <h3 className="text-lg font-bold text-white tracking-tight">
+            <h3 className="text-lg font-bold tracking-tight text-[var(--clay-ink)]">
               Still have questions or need help?
             </h3>
 
-            <p className="mx-auto max-w-md text-xs sm:text-sm text-slate-400">
+            <p className="mx-auto max-w-md text-xs text-[var(--clay-muted)] sm:text-sm">
               Our engineering support team is always ready to assist you with
               your interview preparation journey.
             </p>
 
             <div className="pt-2">
-              <Button className="rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 font-semibold text-white shadow-xl shadow-indigo-600/25 hover:scale-[1.02] transition-all">
+              <Button className="rounded-2xl bg-[var(--clay-primary)] px-6 py-3 font-semibold text-[var(--clay-primary-ink)] clay-button-shadow transition-all hover:bg-[var(--clay-primary-hover)]">
                 Contact Support
               </Button>
             </div>

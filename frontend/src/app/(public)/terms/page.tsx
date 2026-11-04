@@ -1,171 +1,407 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
-import { FileText, ShieldAlert, Scale, CreditCard, Cpu, ArrowUpRight } from "lucide-react";
-import Navbar from "@/app/components/Navigation";
+import { useEffect, useState } from "react";
+import {
+  ArrowUpRight,
+  CreditCard,
+  FileText,
+  Gavel,
+  LockKeyhole,
+  Scale,
+  ShieldAlert,
+  UserRound,
+} from "lucide-react";
 
 const SECTIONS = [
-  { id: "acceptance", label: "1. Acceptance of Terms" },
-  { id: "user-accounts", label: "2. Accounts & Registration" },
-  { id: "acceptable-use", label: "3. Acceptable Use Policy" },
-  { id: "subscriptions", label: "4. Subscriptions & Billing" },
-  { id: "intellectual-property", label: "5. Intellectual Property" },
-  { id: "limitation-liability", label: "6. Limitation of Liability" },
-  { id: "modifications", label: "7. Changes to Terms" },
+  { id: "acceptance", label: "Acceptance of Terms" },
+  { id: "user-accounts", label: "Accounts & Registration" },
+  { id: "platform-services", label: "Platform Services" },
+  { id: "acceptable-use", label: "Acceptable Use" },
+  { id: "subscriptions", label: "Pricing & Payments" },
+  { id: "intellectual-property", label: "Intellectual Property" },
+  { id: "user-content", label: "User Content & Data" },
+  { id: "disclaimer", label: "Disclaimers" },
+  { id: "limitation-liability", label: "Limitation of Liability" },
+  { id: "modifications", label: "Changes to These Terms" },
+  { id: "contact-us", label: "Contact Us" },
 ];
+
+function TermsSection({
+  id,
+  title,
+  icon: Icon,
+  children,
+}: {
+  id: string;
+  title: string;
+  icon?: React.ElementType;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      id={id}
+      className="scroll-mt-28 space-y-4 border-b border-[var(--clay-border)] pb-9 last:border-0"
+    >
+      <div className="flex items-start gap-3">
+        {Icon && (
+          <div className="clay-feature-blue mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl text-[var(--clay-blue-ink)]">
+            <Icon className="size-5" />
+          </div>
+        )}
+        <h2 className="pt-1.5 text-xl font-extrabold tracking-tight text-[var(--clay-ink)]">
+          {title}
+        </h2>
+      </div>
+      <div className="space-y-4 text-sm leading-7 text-[var(--clay-muted)]">
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export default function TermsPage() {
   const [activeSection, setActiveSection] = useState("acceptance");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      for (const section of SECTIONS) {
-        const el = document.getElementById(section.id);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section.id);
-            break;
-          }
-        }
-      }
-    };
+    const elements = SECTIONS.map(({ id }) => document.getElementById(id))
+      .filter((element): element is HTMLElement => element !== null);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top,
+          );
+
+        if (visible[0]) {
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-18% 0px -68% 0px",
+        threshold: 0,
+      },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#080a12] text-white selection:bg-indigo-500 selection:text-white flex flex-col">
-      <Navbar />
+    <main className="relative min-h-screen px-5 pb-20 pt-12 sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute -left-40 top-40 size-[420px] rounded-full bg-[var(--clay-peach)]/40 blur-[120px]" />
 
-      <main className="relative z-10 flex-1 px-5 py-12 lg:px-12 xl:px-16 max-w-[1360px] mx-auto w-full">
-        {/* Ambient Glows */}
-        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-purple-600/10 blur-[140px]" />
-          <div className="absolute top-[50%] left-[-10%] size-[500px] rounded-full bg-indigo-600/10 blur-[150px]" />
-        </div>
-
-        {/* Page Header */}
-        <div className="relative z-10 border-b border-white/10 pb-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3.5 py-1 text-xs font-semibold text-purple-300">
-            <Scale className="size-3.5 text-purple-400" />
-            <span>Legal Agreement</span>
+      <div className="relative z-10 mx-auto max-w-6xl">
+        {/* Header */}
+        <header className="clay-card rounded-[2rem] border border-[var(--clay-border)] bg-[var(--clay-surface)] p-7 sm:p-10">
+          <div className="clay-feature-blue inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-[var(--clay-blue-ink)]">
+            <Scale className="size-4" />
+            Terms of service
           </div>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+
+          <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
             Terms & Conditions
           </h1>
-          <p className="mt-2 text-sm text-slate-400">
-            Effective Date: November 2026. Please read these terms carefully before using XCode.
-          </p>
-        </div>
 
-        <div className="relative z-10 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Side Nav Anchor Bar */}
-          <aside className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-28 space-y-1 border-l border-white/10 pl-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-3">
-                Sections
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--clay-muted)] sm:text-base">
+            These terms explain the conditions for accessing and using XCode.
+            Please read them carefully before creating an account or using
+            the platform.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center gap-3 text-xs font-semibold text-[var(--clay-subtle)]">
+            <span className="rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-3 py-1.5">
+              XCode
+            </span>
+            <span>Effective date: November 5, 2026</span>
+          </div>
+        </header>
+
+        <div className="mt-9 grid gap-8 lg:grid-cols-12">
+          {/* Contents */}
+          <aside className="lg:col-span-3">
+            <div className="clay-raised rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-5 lg:sticky lg:top-28">
+              <p className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--clay-subtle)]">
+                On this page
               </p>
-              {SECTIONS.map((sec) => (
-                <a
-                  key={sec.id}
-                  href={`#${sec.id}`}
-                  className={`block py-1.5 text-xs font-medium transition-colors ${
-                    activeSection === sec.id
-                      ? "text-indigo-400 font-semibold pl-2 border-l-2 border-indigo-400 -ml-[17px]"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  {sec.label}
-                </a>
-              ))}
+
+              <nav className="space-y-1">
+                {SECTIONS.map((section, index) => {
+                  const active = activeSection === section.id;
+
+                  return (
+                    <a
+                      key={section.id}
+                      href={`#${section.id}`}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-colors ${
+                        active
+                          ? "bg-[var(--clay-blue)] text-[var(--clay-blue-ink)]"
+                          : "text-[var(--clay-muted)] hover:bg-[var(--clay-surface-warm)] hover:text-[var(--clay-ink)]"
+                      }`}
+                    >
+                      <span
+                        className={`font-mono text-[10px] ${
+                          active
+                            ? "text-[var(--clay-blue-ink)]"
+                            : "text-[var(--clay-subtle)]"
+                        }`}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {section.label}
+                    </a>
+                  );
+                })}
+              </nav>
             </div>
           </aside>
 
-          {/* Terms Content Body */}
-          <div className="lg:col-span-9 space-y-12 text-sm text-slate-300 leading-relaxed">
-            
-            {/* 1. Acceptance */}
-            <section id="acceptance" className="scroll-mt-28 space-y-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <FileText className="size-5 text-indigo-400" />
-                1. Acceptance of Terms
-              </h2>
+          {/* Terms body */}
+          <div className="clay-card space-y-9 rounded-[2rem] border border-[var(--clay-border)] bg-[var(--clay-surface)] p-6 sm:p-9 lg:col-span-9">
+            <TermsSection
+              id="acceptance"
+              title="1. Acceptance of Terms"
+              icon={FileText}
+            >
               <p>
-                By creating an account or accessing the XCode platform, you agree to be bound by these Terms & Conditions and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
+                By accessing or using XCode, creating an account, or
+                interacting with any part of the platform, you agree to be
+                bound by these Terms & Conditions and applicable laws.
               </p>
-            </section>
-
-            {/* 2. User Accounts */}
-            <section id="user-accounts" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <Cpu className="size-5 text-indigo-400" />
-                2. Accounts & Registration
-              </h2>
               <p>
-                You must provide accurate, complete information when creating an account. You are responsible for safeguarding your login credentials and for all activities that occur under your account.
+                If you do not agree with these terms, you should not access
+                or use the platform.
               </p>
-            </section>
+            </TermsSection>
 
-            {/* 3. Acceptable Use */}
-            <section id="acceptable-use" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <ShieldAlert className="size-5 text-indigo-400" />
-                3. Acceptable Use Policy
-              </h2>
-              <p>You agree not to engage in any of the following prohibited activities:</p>
-              <ul className="list-disc pl-5 space-y-2 text-slate-400">
-                <li>Reverse engineering, scraping, or attempting to extract source code from XCode AI models or sandboxes.</li>
-                <li>Using automated scripts to overload or disrupt our WebRTC audio streaming servers.</li>
-                <li>Sharing accounts or selling subscription access to unauthorized third parties.</li>
-                <li>Attempting to bypass security validation pipes or access unauthorized user data.</li>
+            <TermsSection
+              id="user-accounts"
+              title="2. Accounts & Registration"
+              icon={UserRound}
+            >
+              <p>
+                Some XCode features require an account. When registering,
+                you agree to provide accurate and up-to-date information.
+              </p>
+              <ul className="list-disc space-y-2 pl-5">
+                <li>You are responsible for maintaining the confidentiality of your login credentials.</li>
+                <li>You are responsible for activity carried out through your account.</li>
+                <li>You should notify us if you become aware of unauthorized account access.</li>
+                <li>You must not impersonate another person or provide misleading account information.</li>
               </ul>
-            </section>
+            </TermsSection>
 
-            {/* 4. Subscriptions & Billing */}
-            <section id="subscriptions" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <CreditCard className="size-5 text-indigo-400" />
-                4. Subscriptions & Billing
-              </h2>
+            <TermsSection
+              id="platform-services"
+              title="3. Platform Services"
+              icon={LockKeyhole}
+            >
               <p>
-                Certain features of XCode require a paid subscription (e.g., Pro Developer plan). Subscriptions automatically renew monthly or annually based on your billing cycle unless cancelled prior to renewal through your account settings.
+                XCode provides tools intended to help developers prepare for
+                technical interviews. Current platform capabilities include
+                profile-driven interview preparation, AI-powered mock
+                interviews, real-time voice interaction, saved transcripts,
+                and AI-generated evaluations.
               </p>
-            </section>
-
-            {/* 5. Intellectual Property */}
-            <section id="intellectual-property" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8">
-              <h2 className="text-xl font-bold text-white">5. Intellectual Property</h2>
               <p>
-                All platform content, code templates, logos, design assets, and proprietary AI evaluation software are the exclusive property of XCode. Code written by users within the sandbox remains the sole property of the user.
+                Features may change, be improved, become temporarily
+                unavailable, or be discontinued as the platform develops.
+                We do not guarantee uninterrupted or error-free availability.
               </p>
-            </section>
+            </TermsSection>
 
-            {/* 6. Limitation of Liability */}
-            <section id="limitation-liability" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8">
-              <h2 className="text-xl font-bold text-white">6. Limitation of Liability</h2>
+            <TermsSection
+              id="acceptable-use"
+              title="4. Acceptable Use"
+              icon={ShieldAlert}
+            >
               <p>
-                XCode provides technical mock interview simulation and coaching tools on an "as-is" basis. While our features prepare developers for Big Tech standards, XCode does not guarantee employment or job offers from specific companies.
+                You agree to use XCode responsibly and not to:
               </p>
-            </section>
-
-            {/* 7. Changes to Terms */}
-            <section id="modifications" className="scroll-mt-28 space-y-4 border-t border-white/5 pt-8 pb-12">
-              <h2 className="text-xl font-bold text-white">7. Changes to Terms</h2>
+              <ul className="list-disc space-y-2 pl-5">
+                <li>Use the platform for unlawful, fraudulent, or harmful activities.</li>
+                <li>Attempt to gain unauthorized access to accounts, systems, or data.</li>
+                <li>Interfere with the platform's operation, availability, or security.</li>
+                <li>Reverse engineer, copy, or exploit proprietary platform components except where permitted by applicable law.</li>
+                <li>Use automated methods to abuse, overload, or disrupt platform services.</li>
+                <li>Upload content that infringes another person's rights or contains malicious code.</li>
+                <li>Misuse another user's personal information or interview records.</li>
+              </ul>
               <p>
-                We reserve the right to modify these terms at any time. We will notify users of material changes via email or platform announcements.
+                We may restrict or suspend access when we reasonably believe
+                that an account has violated these terms or poses a risk to
+                the platform or its users.
               </p>
-              <p className="text-xs text-slate-400 pt-2">
-                For legal inquiries, contact <span className="text-indigo-400 font-mono">legal@xcode.dev</span>
-              </p>
-            </section>
+            </TermsSection>
 
+            <TermsSection
+              id="subscriptions"
+              title="5. Pricing & Payments"
+              icon={CreditCard}
+            >
+              <p>
+                Any paid features, subscriptions, or billing arrangements
+                will be subject to the prices and conditions presented at
+                the time they are made available.
+              </p>
+              <p>
+                If paid plans are introduced, applicable information about
+                pricing, billing periods, renewals, cancellations, and
+                refunds will be provided before you make a purchase.
+              </p>
+              <p>
+                Do not assume that a feature is included in a paid plan or
+                that a subscription is active unless it is explicitly
+                presented as available by XCode.
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="intellectual-property"
+              title="6. Intellectual Property"
+              icon={Gavel}
+            >
+              <p>
+                XCode and its associated branding, design, software,
+                interfaces, and original platform content are owned by or
+                licensed to the platform and are protected by applicable
+                intellectual property laws.
+              </p>
+              <p>
+                You may not reproduce, redistribute, commercially exploit,
+                or create derivative works from proprietary platform
+                materials without appropriate permission.
+              </p>
+              <p>
+                These terms do not transfer ownership of your own original
+                content to XCode merely because you submit or use it through
+                the platform.
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="user-content"
+              title="7. User Content & Data"
+              icon={FileText}
+            >
+              <p>
+                You may provide profile information, technical responses,
+                and other content while using XCode. You are responsible for
+                ensuring that you have the rights to submit that content.
+              </p>
+              <p>
+                You retain your rights in content you own. You grant XCode
+                permission to process that content as necessary to provide
+                the features you use, including interview generation,
+                transcript creation, and evaluation.
+              </p>
+              <p>
+                Your information is handled in accordance with our{" "}
+                <a
+                  href="/privacy"
+                  className="font-bold text-[var(--clay-blue-ink)] underline underline-offset-4 hover:text-[var(--clay-primary)]"
+                >
+                  Privacy Policy
+                </a>
+                .
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="disclaimer"
+              title="8. Disclaimers"
+              icon={ShieldAlert}
+            >
+              <p>
+                XCode is an interview preparation and practice platform. Its
+                AI-generated questions, responses, and evaluations are
+                intended to support learning and self-assessment.
+              </p>
+              <p>
+                AI-generated feedback may be incomplete, inaccurate, or
+                inconsistent. It should not be treated as a guarantee of
+                technical correctness, professional certification, or
+                employment suitability.
+              </p>
+              <p>
+                Using XCode does not guarantee an interview invitation, job
+                offer, promotion, or hiring outcome from any company.
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="limitation-liability"
+              title="9. Limitation of Liability"
+              icon={Scale}
+            >
+              <p>
+                To the extent permitted by applicable law, XCode and its
+                operators will not be liable for indirect, incidental,
+                special, consequential, or punitive damages arising from
+                your use of, or inability to use, the platform.
+              </p>
+              <p>
+                Nothing in these terms excludes or limits liability where
+                such exclusion or limitation is not permitted by applicable
+                law.
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="modifications"
+              title="10. Changes to These Terms"
+              icon={FileText}
+            >
+              <p>
+                We may update these Terms & Conditions as the platform,
+                features, or applicable requirements change.
+              </p>
+              <p>
+                When changes are material, we will take reasonable steps to
+                communicate them through the platform or other appropriate
+                channels. The updated effective date will appear at the top
+                of this page.
+              </p>
+              <p>
+                Continued use of XCode after updated terms become effective
+                constitutes acceptance of the revised terms, to the extent
+                permitted by applicable law.
+              </p>
+            </TermsSection>
+
+            <TermsSection
+              id="contact-us"
+              title="11. Contact Us"
+              icon={ArrowUpRight}
+            >
+              <p>
+                If you have questions about these terms or need to contact
+                us regarding the platform, reach out at:
+              </p>
+
+              <a
+                href="mailto:anurag@xcodetechnologies.com"
+                className="inline-flex items-center gap-3 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-5 py-4 text-sm font-bold text-[var(--clay-ink)] transition-colors hover:bg-[var(--clay-peach)]"
+              >
+                anurag@xcodetechnologies.com
+                <ArrowUpRight className="size-4 text-[var(--clay-primary)]" />
+              </a>
+            </TermsSection>
+
+            <div className="rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-5 text-xs leading-6 text-[var(--clay-muted)]">
+              These terms are a general product draft and should be reviewed
+              by a qualified legal professional before being used as a
+              binding agreement.
+            </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

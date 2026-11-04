@@ -11,9 +11,9 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Mic,
   Code2,
+  Menu,
 } from "lucide-react";
 
 import { LogoutButton } from "@/app/components/ui/LogoutButton";
@@ -27,115 +27,139 @@ const NAV_ITEMS = [
     label: "Technical Assessments",
     href: ROUTES.technical_assesment,
   },
-  { icon: BarChart2, label: "Analytics", href: "/dashboard/analytics" },
-  { icon: Users, label: "Team", href: "/dashboard/team" },
-  { icon: Terminal, label: "Logs", href: "/dashboard/logs" },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
+  { icon: BarChart2, label: "Analytics", href: "#" },
+  { icon: Users, label: "Team", href: "#" },
+  { icon: Terminal, label: "Logs", href: "#" },
+  { icon: Settings, label: "Settings", href: "#" },
 ];
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
 
   return (
-    <aside
-      className={`relative z-20 flex h-full shrink-0 flex-col justify-between overflow-visible border-r border-slate-800/80 bg-[#0B0F19] p-4 text-slate-300 ${
-        isCollapsed ? "w-20" : "w-64"
-      }`}
-      style={{
-        transition: "width 250ms cubic-bezier(0.2, 0, 0, 1)",
-      }}
-    >
-      {/* Collapse Toggle */}
-      <button
-        type="button"
-        onClick={() => setIsCollapsed((prev) => !prev)}
-        className="absolute -right-3.5 top-6 z-30 flex h-7 w-7 items-center justify-center rounded-full border border-slate-700 bg-[#121827] text-slate-300 transition-colors duration-200 hover:border-indigo-500 hover:text-white"
-        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        aria-expanded={!isCollapsed}
+    <>
+      {/* Mobile Toggle */}
+      {!isMobileOpen && (
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen((prev) => !prev)}
+          className="fixed left-1 top-4 z-50 flex size-8 items-center justify-center rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-ink)] shadow-md transition-colors hover:bg-[var(--clay-surface-warm)] md:hidden"
+          aria-label={isMobileOpen ? "Close sidebar" : "Open sidebar"}
+          aria-expanded={isMobileOpen}
+        >
+          <Menu size={20} />
+        </button>
+      )}
+
+      {/* Mobile Backdrop */}
+      {isMobileOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={() => setIsMobileOpen(false)}
+          className="fixed inset-0 z-30 bg-black/30 md:hidden"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 flex h-full shrink-0 flex-col justify-between overflow-visible border-r border-[var(--clay-border)] bg-[var(--clay-surface)] p-4 text-[var(--clay-ink)] transition-transform duration-250 md:relative md:z-20 md:translate-x-0 md:transition-[width] ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full"
+        } ${isCollapsed ? "md:w-20" : "md:w-64"} w-64`}
+        style={{
+          transitionTimingFunction: "cubic-bezier(0.2, 0, 0, 1)",
+        }}
       >
-        {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
-      </button>
+        {/* Desktop Collapse Toggle */}
+        <button
+          type="button"
+          onClick={() => setIsCollapsed((prev) => !prev)}
+          className="absolute -right-3.5 top-4 z-30 hidden h-7 w-7 items-center justify-center rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-muted)] shadow-sm transition-colors duration-200 hover:border-[var(--clay-primary)] hover:text-[var(--clay-ink)] md:flex"
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!isCollapsed}
+        >
+          {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
+        </button>
 
-      <div className="min-w-0">
-        {/* Brand */}
-        <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden py-3">
-          <Link
-            href={ROUTES.dashboard}
-            aria-label="X Code home"
-            className="group flex shrink-0 items-center gap-2.5"
-          >
-            <div className="flex size-10 items-center justify-center rounded-xl border border-indigo-300/20 bg-indigo-400/[0.10] text-indigo-400 transition-colors group-hover:border-indigo-200/40 group-hover:bg-indigo-400/[0.15]">
-              <Code2 className="size-[20px]" strokeWidth={2.8} />
-            </div>
+        <div className="min-w-0">
+          {/* Brand */}
+          <div className="mb-6 flex h-16 items-center gap-3 overflow-hidden py-3">
+            <Link
+              href={ROUTES.dashboard}
+              aria-label="X Code home"
+              onClick={() => setIsMobileOpen(false)}
+              className="group flex shrink-0 items-center gap-2.5"
+            >
+              <div className="flex size-10 items-center justify-center rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/55 text-[var(--clay-primary)] transition-colors group-hover:border-[var(--clay-primary)] hover:bg-[var(--clay-peach)] hover:text-[var(--clay-primary-ink)]">
+                <Code2 className="size-[20px]" strokeWidth={2.8} />
+              </div>
 
-            <span className="text-[25px] font-semibold tracking-[-0.055em] text-white">
-              X<span className="text-indigo-400"> Code</span>
-            </span>
-          </Link>
-        </div>
+              <span className="text-[25px] font-semibold tracking-[-0.055em] text-[var(--clay-ink)]">
+                X<span className="text-[var(--clay-primary)]"> Code</span>
+              </span>
+            </Link>
+          </div>
 
-        {/* Navigation */}
-        <nav className="space-y-1.5">
-          {NAV_ITEMS.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" &&
-                pathname.startsWith(`${item.href}/`)) ||
-              (item.href === "/dashboard" && pathname === "/dashboard");
+          {/* Navigation */}
+          <nav className="space-y-1.5">
+            {NAV_ITEMS.map((item, i) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/dashboard" &&
+                  pathname.startsWith(`${item.href}/`)) ||
+                (item.href === "/dashboard" && pathname === "/dashboard");
 
-            const Icon = item.icon;
+              const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                title={isCollapsed ? item.label : undefined}
-                aria-label={isCollapsed ? item.label : undefined}
-                aria-current={isActive ? "page" : undefined}
-                className={`group relative flex h-11 w-full items-center overflow-hidden rounded-xl border px-3 text-sm font-medium ${
-                  isActive
-                    ? "border-indigo-500/20 bg-indigo-600/10 text-indigo-400"
-                    : "border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
-                }`}
-              >
-                <Icon
-                  size={20}
-                  className={`min-w-5 shrink-0 transition-colors duration-200 ${
+              return (
+                <Link
+                  key={`sidebar-item-${item.label}-${item.href}-${i}`}
+                  href={item.href}
+                  title={isCollapsed ? item.label : undefined}
+                  aria-label={isCollapsed ? item.label : undefined}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={() => setIsMobileOpen(false)}
+                  className={`group relative flex h-11 w-full items-center overflow-hidden rounded-xl border px-3 text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-indigo-400"
-                      : "text-slate-400 group-hover:text-slate-200"
-                  }`}
-                />
-
-                <span
-                  aria-hidden={isCollapsed}
-                  className={`ml-3 overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ${
-                    isCollapsed ? "max-w-0 opacity-0" : "max-w-48 opacity-100"
+                      ? "border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/55 text-[var(--clay-primary-ink)]"
+                      : "border-transparent text-[var(--clay-muted)] hover:border-[var(--clay-border)] hover:bg-[var(--clay-surface-warm)] hover:text-[var(--clay-ink)]"
                   }`}
                 >
-                  {item.label}
-                </span>
+                  <Icon
+                    size={20}
+                    className={`min-w-5 shrink-0 transition-colors duration-200 ${
+                      isActive
+                        ? "text-[var(--clay-primary)]"
+                        : "text-[var(--clay-muted)] group-hover:text-[var(--clay-ink)]"
+                    }`}
+                  />
 
-                {isActive && (
-                  <span className="absolute bottom-2 left-0 top-2 w-1 rounded-r-full bg-indigo-500" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
+                  <span
+                    aria-hidden={isCollapsed}
+                    className={`ml-3 overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ${
+                      isCollapsed ? "max-w-0 opacity-0" : "max-w-48 opacity-100"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
 
-      {/* User Footer */}
-      <div className="min-w-0 border-t border-slate-800/80 pt-4">
-        <div className="flex min-h-10 min-w-0 items-center gap-3">
-          <div className="min-w-0 border-t border-slate-800/80 pt-4">
-            <div className="flex min-h-10 min-w-0 items-center justify-center">
-              <LogoutButton isCollapsed={isCollapsed} />
-            </div>
+                  {isActive && (
+                    <span className="absolute bottom-2 left-0 top-2 w-1 rounded-r-full bg-[var(--clay-primary)]" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* User Footer */}
+        <div className="min-w-0 border-t border-[var(--clay-border)] pt-4">
+          <div className="flex min-h-10 min-w-0 items-center justify-center">
+            <LogoutButton isCollapsed={isCollapsed} />
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

@@ -19,6 +19,7 @@ export const ROUTES = {
   privacy: "/privacy",
   terms: "/terms",
   about: "/about",
+  pricing: "/pricing",
   settings: "/settings",
   user_faq: "/user-faq",
 } as const;
@@ -30,6 +31,7 @@ export const PUBLIC_ROUTES = [
   ROUTES.privacy,
   ROUTES.terms,
   ROUTES.about,
+  ROUTES.pricing,
   ROUTES.forgotPassword,
   ROUTES.resetPassword,
 ] as const;

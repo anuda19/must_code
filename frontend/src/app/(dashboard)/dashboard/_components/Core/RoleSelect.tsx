@@ -1,6 +1,6 @@
+
 "use client";
 
-import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, Briefcase } from "lucide-react";
 
@@ -39,33 +39,40 @@ export function JobRoleSelect({
       disabled={disabled}
     >
       <SelectPrimitive.Trigger
-        className="flex h-11 w-full items-center justify-between rounded-lg border border-white/10 bg-slate-950 px-4 py-2 text-sm text-white outline-none transition-all placeholder:text-slate-500 hover:border-indigo-500/50 focus:border-indigo-500 focus:bg-[#0B1020] focus:ring-4 focus:ring-indigo-500/15 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-3.5 py-3 text-sm text-[var(--clay-ink)] shadow-[inset_3px_3px_6px_rgba(234,208,192,0.55),inset_-3px_-3px_6px_rgba(255,255,255,0.8)] outline-none transition-all hover:border-[var(--clay-peach-shadow)] focus:border-[var(--clay-primary)] focus:ring-4 focus:ring-[var(--clay-primary)]/10 disabled:cursor-not-allowed disabled:opacity-50"
+        aria-label="Job Role"
       >
-        <div className="flex items-center gap-2.5 truncate">
-          <Briefcase className="size-4 shrink-0 text-indigo-400" />
-          <SelectPrimitive.Value placeholder={placeholder} />
+        <div className="flex min-w-0 items-center gap-2.5">
+          <Briefcase className="size-4 shrink-0 text-[var(--clay-primary)]" />
+          <span className="truncate">
+            <SelectPrimitive.Value placeholder={placeholder} />
+          </span>
         </div>
+
         <SelectPrimitive.Icon>
-          <ChevronDown className="size-4 text-slate-400 transition-transform duration-200 data-[state=open]:rotate-180" />
+          <ChevronDown className="size-4 shrink-0 text-[var(--clay-muted)] transition-transform duration-200" />
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content
           position="popper"
-          sideOffset={8}
-          className="relative z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border border-white/10 bg-[#11162B] text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-2xl animate-in fade-in-80 zoom-in-95"
+          sideOffset={6}
+          className="relative z-[100] max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[0_16px_40px_rgba(101,70,49,0.18)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
         >
-          <SelectPrimitive.Viewport className="p-2 space-y-1">
+          <SelectPrimitive.Viewport className="space-y-1 p-1.5">
             {TECH_ROLES.map((role) => (
               <SelectPrimitive.Item
                 key={role}
                 value={role}
-                className="relative flex w-full cursor-pointer select-none items-center rounded-xl px-3.5 py-2.5 text-sm outline-none transition-colors hover:bg-indigo-600/20 hover:text-white focus:bg-indigo-600/20 focus:text-white data-[state=checked]:bg-indigo-600/30 data-[state=checked]:font-semibold data-[state=checked]:text-indigo-200"
+                className="relative flex w-full cursor-pointer select-none items-center rounded-xl px-3.5 py-3 text-sm outline-none transition-colors data-[highlighted]:bg-[var(--clay-surface-warm)] data-[highlighted]:text-[var(--clay-ink)] data-[state=checked]:bg-[var(--clay-peach)]/50 data-[state=checked]:font-semibold"
               >
                 <SelectPrimitive.ItemText>{role}</SelectPrimitive.ItemText>
+
                 <SelectPrimitive.ItemIndicator className="absolute right-3 flex items-center justify-center">
-                  <Check className="size-4 text-indigo-400" />
+                  <span className="grid size-6 place-items-center rounded-full bg-[var(--clay-green-surface)]">
+                    <Check className="size-3.5 text-[var(--clay-green-ink)]" />
+                  </span>
                 </SelectPrimitive.ItemIndicator>
               </SelectPrimitive.Item>
             ))}

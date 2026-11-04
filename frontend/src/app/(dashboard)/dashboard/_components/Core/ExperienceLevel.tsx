@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as Select from "@radix-ui/react-select";
@@ -44,42 +45,27 @@ export function ExperienceLevelSelect({
   disabled = false,
 }: ExperienceLevelSelectProps) {
   const selectedLevel = EXPERIENCE_LEVELS.find(
-    (level) => level.value === value
+    (level) => level.value === value,
   );
 
   return (
-    <Select.Root
-      value={value}
-      onValueChange={onChange}
-      disabled={disabled}
-    >
+    <Select.Root value={value} onValueChange={onChange} disabled={disabled}>
       <Select.Trigger
-        className="
-          mt-1 flex w-full items-center justify-between
-          rounded-lg border border-slate-800
-          bg-slate-950 px-3.5 py-3
-          text-sm text-white outline-none
-          transition-colors
-          hover:border-slate-700
-          focus:border-indigo-500
-          disabled:cursor-not-allowed disabled:opacity-50
-        "
+        className="mt-1 flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-3.5 py-3 text-sm text-[var(--clay-ink)] shadow-[inset_3px_3px_6px_rgba(234,208,192,0.55),inset_-3px_-3px_6px_rgba(255,255,255,0.8)] outline-none transition-all hover:border-[var(--clay-peach-shadow)] focus:border-[var(--clay-primary)] focus:ring-4 focus:ring-[var(--clay-primary)]/10 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Experience Level"
       >
-        <div className="flex items-center gap-2">
-          <Select.Value>
-            {selectedLevel?.label}
-          </Select.Value>
+        <div className="flex min-w-0 items-center gap-2">
+          <Select.Value>{selectedLevel?.label}</Select.Value>
 
           {selectedLevel && (
-            <span className="text-xs text-slate-500">
+            <span className="truncate rounded-md bg-[var(--clay-surface)] px-2 py-1 text-[10px] font-medium text-[var(--clay-subtle)]">
               {selectedLevel.description}
             </span>
           )}
         </div>
 
         <Select.Icon>
-          <ChevronDown className="h-4 w-4 text-slate-500" />
+          <ChevronDown className="size-4 shrink-0 text-[var(--clay-muted)]" />
         </Select.Icon>
       </Select.Trigger>
 
@@ -87,43 +73,29 @@ export function ExperienceLevelSelect({
         <Select.Content
           position="popper"
           sideOffset={6}
-          className="
-            z-[100]
-            w-[var(--radix-select-trigger-width)]
-            overflow-hidden
-            rounded-xl
-            border border-slate-800
-            bg-slate-900
-            shadow-2xl
-          "
+          className="z-[100] w-[var(--radix-select-trigger-width)] overflow-hidden rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-1.5 text-[var(--clay-ink)] shadow-[0_16px_40px_rgba(101,70,49,0.18)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
         >
-          <Select.Viewport className="p-1.5">
+          <Select.Viewport>
             {EXPERIENCE_LEVELS.map((level) => (
               <Select.Item
                 key={level.value}
                 value={level.value}
-                className="
-                  relative flex cursor-pointer
-                  select-none items-center
-                  rounded-lg px-3 py-2.5
-                  text-sm text-slate-300
-                  outline-none
-                  data-[highlighted]:bg-slate-800
-                  data-[highlighted]:text-white
-                "
+                className="relative flex cursor-pointer select-none items-center rounded-xl px-3 py-3 text-sm outline-none transition-colors data-[highlighted]:bg-[var(--clay-surface-warm)] data-[highlighted]:text-[var(--clay-ink)] data-[state=checked]:bg-[var(--clay-peach)]/50"
               >
-                <div className="flex flex-1 flex-col">
+                <div className="flex min-w-0 flex-1 flex-col">
                   <Select.ItemText>
-                    {level.label}
+                    <span className="font-semibold">{level.label}</span>
                   </Select.ItemText>
 
-                  <span className="mt-0.5 text-xs text-slate-500">
+                  <span className="mt-1 text-xs text-[var(--clay-muted)]">
                     {level.description}
                   </span>
                 </div>
 
                 <Select.ItemIndicator>
-                  <Check className="h-4 w-4 text-indigo-400" />
+                  <span className="grid size-6 place-items-center rounded-full bg-[var(--clay-green-surface)]">
+                    <Check className="size-3.5 text-[var(--clay-green-ink)]" />
+                  </span>
                 </Select.ItemIndicator>
               </Select.Item>
             ))}
