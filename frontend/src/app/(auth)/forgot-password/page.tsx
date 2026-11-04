@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
               <p className="text-amber-200">{"}"}</p>
 
               <p className="pt-1 text-slate-500">
-                // Getting you back on track.
+                Getting you back on track.
               </p>
             </div>
           </div>

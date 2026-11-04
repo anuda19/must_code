@@ -231,7 +231,7 @@ export default function ResetPasswordForm({
               className="flex items-center justify-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
             >
               <ArrowLeft className="size-4" />
-              Back to sign in
+              Back to login
             </Link>
           </div>
         </form>

@@ -1,5 +1,7 @@
+
 "use server";
 
+import { api } from "@/lib/api";
 import { resetPasswordSchema } from "@/lib/schema/auth";
 
 interface ResetPasswordResponse {
@@ -24,24 +26,15 @@ export async function resetPasswordAction(
   }
 
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
+    const result = await api.post<ResetPasswordResponse>(
+      "/auth/reset-password",
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: validation.data.token,
-          newPassword: validation.data.newPassword,
-        }),
-        cache: "no-store",
+        token: validation.data.token,
+        newPassword: validation.data.newPassword,
       },
     );
 
-    const result = (await response.json()) as ResetPasswordResponse;
-
-    if (!response.ok || !result.success) {
+    if (!result.success) {
       return {
         success: false,
         error: result.message ?? "Unable to reset your password.",
@@ -52,7 +45,9 @@ export async function resetPasswordAction(
       success: true,
       message: result.message ?? "Your password has been reset successfully.",
     };
-  } catch {
+  } catch(error) {
+    console.log(error);
+    
     return {
       success: false,
       error: "Unable to connect to the server. Please try again.",

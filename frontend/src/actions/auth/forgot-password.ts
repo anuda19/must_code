@@ -2,6 +2,7 @@
 "use server";
 
 import { requestResetSchema } from "@/lib/schema/auth";
+import { api } from "@/lib/api";
 
 interface ForgotPasswordResponse {
   success: boolean;
@@ -22,32 +23,17 @@ export async function requestPasswordResetAction(
   }
 
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    if (!apiUrl) {
-      throw new Error("API URL is not configured.");
-    }
-
-    const response = await fetch(
-      `${apiUrl}/auth/forgot-password`,
+    const result = await api.post<ForgotPasswordResponse>(
+      "/auth/forgot-password",
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: validation.data.email,
-        }),
-        cache: "no-store",
+        email: validation.data.email,
       }
     );
 
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
+    if (!result.success) {
       return {
         success: false,
-        error: result.message || "Unable to send reset link.",
+        error: result.error || result.message || "Unable to send reset link.",
       };
     }
 

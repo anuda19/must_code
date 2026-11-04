@@ -1,8 +1,11 @@
 export const ROUTES = {
   home: "/",
   dashboard: "/dashboard",
+
   login: "/login",
   register: "/register",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
 
   mock_interview: {
     base_url: "/interview/mock-interviews",
@@ -27,6 +30,8 @@ export const PUBLIC_ROUTES = [
   ROUTES.privacy,
   ROUTES.terms,
   ROUTES.about,
+  ROUTES.forgotPassword,
+  ROUTES.resetPassword,
 ] as const;
 
 export const AUTH_ONLY_ROUTES = [

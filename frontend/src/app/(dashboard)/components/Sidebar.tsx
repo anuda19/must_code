@@ -129,25 +129,6 @@ export default function Sidebar() {
       {/* User Footer */}
       <div className="min-w-0 border-t border-slate-800/80 pt-4">
         <div className="flex min-h-10 min-w-0 items-center gap-3">
-          {/* <div className="relative flex h-9 w-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-xs font-bold text-white">
-            {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#0B0F19]" />
-          </div> */}
-          {/* 
-          <div
-            aria-hidden={isCollapsed}
-            className={`min-w-0 flex-1 overflow-hidden transition-[opacity,max-width] duration-200 ${
-              isCollapsed ? "max-w-0 opacity-0" : "max-w-40 opacity-100"
-            }`}
-          >
-            <div className="truncate text-xs font-semibold text-slate-200">
-              {user?.name ?? "User"}
-            </div>
-            <div className="truncate text-[11px] text-slate-500">
-              {user?.email ?? ""}
-            </div>
-          </div> */}
-
           <div className="min-w-0 border-t border-slate-800/80 pt-4">
             <div className="flex min-h-10 min-w-0 items-center justify-center">
               <LogoutButton isCollapsed={isCollapsed} />
