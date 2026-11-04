@@ -196,72 +196,67 @@ export class AuthService {
 
     return user;
   }
-  
-async forgotPassword(email: string) {
-  const user = await this.prisma.user.findUnique({
-    where: { email },
-    select: {
-      id: true,
-      email: true,
-    },
-  });
 
-  // Do not reveal whether the email exists.
-  if (!user) return;
+  async forgotPassword(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
 
-  // Generate a cryptographically secure random token.
-  const resetToken = randomBytes(32).toString("hex");
+    // Do not reveal whether the email exists.
+    if (!user) return;
 
-  // Store only the SHA-256 hash.
-  const tokenHash = createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+    // Generate a cryptographically secure random token.
+    const resetToken = randomBytes(32).toString('hex');
 
-  const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+    // Store only the SHA-256 hash.
+    const tokenHash = createHash('sha256').update(resetToken).digest('hex');
 
-  // Invalidate previously issued tokens.
-  await this.prisma.passwordResetToken.deleteMany({
-    where: {
-      userId: user.id,
-    },
-  });
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 
-  await this.prisma.passwordResetToken.create({
-    data: {
-      userId: user.id,
-      tokenHash,
-      expiresAt,
-    },
-  });
+    // Invalidate previously issued tokens.
+    await this.prisma.passwordResetToken.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
 
-  const frontendUrl = process.env.FRONTEND_URL;
+    await this.prisma.passwordResetToken.create({
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt,
+      },
+    });
 
-  if (!frontendUrl) {
-    throw new Error("FRONTEND_URL is not configured.");
-  }
+    const frontendUrl = process.env.FRONTEND_URL;
 
-  const resetUrl = new URL(
-    "/reset-password",
-    frontendUrl
-  );
+    if (!frontendUrl) {
+      throw new Error('FRONTEND_URL is not configured.');
+    }
 
-  resetUrl.searchParams.set("token", resetToken);
+    const resetUrl = new URL('/reset-password', frontendUrl);
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: process.env.SMTP_SECURE === "true",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
+    resetUrl.searchParams.set('token', resetToken);
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM,
-    to: user.email,
-    subject: "Reset Your Password | Xcode Technologies",
-    html: `
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM,
+      to: user.email,
+      subject: 'Reset Your Password | Xcode Technologies',
+      html: `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#1e293b;">
         <h2 style="color:#4f46e5;">Reset your password</h2>
 
@@ -286,68 +281,68 @@ async forgotPassword(email: string) {
         </p>
       </div>
     `,
-  });
-}
-
-async resetPassword(token: string, newPassword: string) {
-  const tokenHash = createHash('sha256').update(token).digest('hex');
-  const now = new Date();
-
-  await this.prisma.$transaction(async (tx) => {
-    const resetToken = await tx.passwordResetToken.findFirst({
-      where: {
-        tokenHash,
-        usedAt: null,
-        expiresAt: { gt: now },
-      },
-      select: {
-        id: true,
-        userId: true,
-      },
     });
+  }
 
-    if (!resetToken) {
-      throw new BadRequestException(
-        'This password reset link is invalid or has expired.',
-      );
-    }
+  async resetPassword(token: string, newPassword: string) {
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+    const now = new Date();
 
-    // Claim the token so it cannot be used again.
-    const claimed = await tx.passwordResetToken.updateMany({
-      where: {
-        id: resetToken.id,
-        usedAt: null,
-        expiresAt: { gt: now },
-      },
-      data: {
-        usedAt: now,
-      },
+    await this.prisma.$transaction(async (tx) => {
+      const resetToken = await tx.passwordResetToken.findFirst({
+        where: {
+          tokenHash,
+          usedAt: null,
+          expiresAt: { gt: now },
+        },
+        select: {
+          id: true,
+          userId: true,
+        },
+      });
+
+      if (!resetToken) {
+        throw new BadRequestException(
+          'This password reset link is invalid or has expired.',
+        );
+      }
+
+      // Claim the token so it cannot be used again.
+      const claimed = await tx.passwordResetToken.updateMany({
+        where: {
+          id: resetToken.id,
+          usedAt: null,
+          expiresAt: { gt: now },
+        },
+        data: {
+          usedAt: now,
+        },
+      });
+
+      if (claimed.count !== 1) {
+        throw new BadRequestException(
+          'This password reset link is invalid or has expired.',
+        );
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      await tx.user.update({
+        where: { id: resetToken.userId },
+        data: { passwordHash: hashedPassword },
+      });
+
+      // Invalidate any other outstanding reset links for this user.
+      await tx.passwordResetToken.updateMany({
+        where: {
+          userId: resetToken.userId,
+          id: { not: resetToken.id },
+          usedAt: null,
+        },
+        data: {
+          usedAt: now,
+        },
+      });
     });
-
-    if (claimed.count !== 1) {
-      throw new BadRequestException(
-        'This password reset link is invalid or has expired.',
-      );
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-
-    await tx.user.update({
-      where: { id: resetToken.userId },
-      data: { password: hashedPassword },
-    });
-
-    // Invalidate any other outstanding reset links for this user.
-    await tx.passwordResetToken.updateMany({
-      where: {
-        userId: resetToken.userId,
-        id: { not: resetToken.id },
-        usedAt: null,
-      },
-      data: {
-        usedAt: now,
-      },
-    });
-  });
-}
+  }
 }
