@@ -1133,17 +1133,6 @@ export default function InterviewEvaluationCard({
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--clay-primary)] via-[#f8b28f] to-[var(--clay-sage)]" />
         <div className="pointer-events-none absolute -right-24 -top-28 size-72 rounded-full bg-[var(--clay-peach)]/35 blur-3xl" />
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          aria-label="Close evaluation"
-          className="absolute right-3 top-3 z-10 size-9 rounded-xl text-[var(--clay-muted)] hover:bg-[var(--clay-surface-warm)] hover:text-[var(--clay-ink)]"
-        >
-          <X className="size-4" />
-        </Button>
-
         <CardContent className="relative p-5 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Badge className="border border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)] hover:bg-[var(--clay-green-surface)]">

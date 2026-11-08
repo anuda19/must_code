@@ -589,7 +589,7 @@ function NeuralCore() {
       </div>
 
       {/* AI interviewer card */}
-      <div className="absolute left-0 top-[17%] z-10 w-[61%] min-w-0 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)]/95 p-2 shadow-[0_5px_14px_rgba(101,70,49,0.08)] backdrop-blur-md min-[380px]:p-2.5 sm:left-[-3%] sm:w-[60%] sm:rounded-2xl sm:p-3.5 lg:left-[-5%]">
+      <div className="absolute left-0 top-[12%] z-10 w-[61%] min-w-0 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)]/95 p-2 shadow-[0_5px_14px_rgba(101,70,49,0.08)] backdrop-blur-md min-[380px]:p-2.5 sm:left-[-3%] sm:w-[60%] sm:rounded-2xl sm:p-3.5 lg:left-[-5%]">
 
         <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
           <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-[var(--clay-sage)] text-[var(--clay-sage-ink)] sm:size-7">
@@ -628,7 +628,7 @@ function NeuralCore() {
 
         <p className="mt-2 text-[9px] leading-[1.55] text-[var(--clay-ink)] min-[380px]:text-[10px] sm:mt-2.5 sm:text-xs sm:leading-5">
           I&apos;d profile re-renders first, then use virtualization for large
-          lists and memoization where needed.
+          lists and memoization.
         </p>
 
         <div className="mt-2 flex min-w-0 items-center gap-1.5">
@@ -660,7 +660,7 @@ function NeuralCore() {
       </div>
 
       {/* Voice indicator */}
-      <div className="absolute bottom-[7%] left-[7%] z-20 flex max-w-[55%] items-center gap-1.5 rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface)] px-2 py-1.5 shadow-[0_4px_10px_rgba(101,70,49,0.07)] min-[380px]:gap-2 min-[380px]:px-3 min-[380px]:py-2 sm:bottom-[8%] sm:left-[5%]">
+      <div className="absolute bottom-[0%] left-[7%] z-20 flex max-w-[55%] items-center gap-1.5 rounded-full border border-[var(--clay-border)] bg-[var(--clay-surface)] px-2 py-1.5 shadow-[0_4px_10px_rgba(101,70,49,0.07)] min-[380px]:gap-2 min-[380px]:px-3 min-[380px]:py-2 sm:bottom-[0%] sm:left-[5%]">
 
         <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--clay-sage)] text-[var(--clay-sage-ink)] min-[380px]:size-7">
           <Mic2 className="size-3 sm:size-3.5" />

@@ -24,10 +24,8 @@ interface InterviewProps {
 export function Interview({ onEditProfile }: InterviewProps) {
   return (
     <div className="flex h-full min-h-0 flex-col text-[var(--clay-ink)]">
-      {/* Scrollable content */}
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
         <div className="space-y-5 pb-5">
-          {/* Header */}
           <div className="flex items-center justify-between gap-3">
             <div className="space-y-3">
               <Badge

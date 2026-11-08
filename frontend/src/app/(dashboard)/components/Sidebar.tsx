@@ -5,32 +5,62 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  BarChart2,
   Users,
-  Terminal,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Mic,
   Code2,
   Menu,
+  FileSearch,
+  BookOpen,
+  BriefcaseBusiness,
+  MessageSquareText,
 } from "lucide-react";
 
 import { LogoutButton } from "@/app/components/ui/LogoutButton";
 import { ROUTES } from "@/lib/routes";
 
 const NAV_ITEMS = [
-  { icon: LayoutDashboard, label: "Dashboard", href: ROUTES.dashboard },
-  { icon: Mic, label: "Mock Interviews", href: ROUTES.mock_interview.base_url },
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    href: ROUTES.dashboard,
+  },
+  {
+    icon: Mic,
+    label: "Mock Interviews",
+    href: ROUTES.mock_interview.base_url,
+  },
   {
     icon: Code2,
     label: "Technical Assessments",
     href: ROUTES.technical_assesment,
   },
-  { icon: BarChart2, label: "Analytics", href: "#" },
-  { icon: Users, label: "Team", href: "#" },
-  { icon: Terminal, label: "Logs", href: "#" },
-  { icon: Settings, label: "Settings", href: "#" },
+  {
+    icon: FileSearch,
+    label: "Resume & ATS Checker",
+    href: "#",
+  },
+  {
+    icon: BookOpen,
+    label: "Preparation",
+    href: "#",
+  },
+  {
+    icon: BriefcaseBusiness,
+    label: "Job Opportunities",
+    href: "#",
+  },
+  {
+    icon: Users,
+    label: "Community",
+    href: "#",
+  },
+  {
+    icon: MessageSquareText,
+    label: "Interview Experiences",
+    href: "#",
+  },
 ];
 
 export default function Sidebar() {

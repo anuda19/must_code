@@ -20,7 +20,6 @@ const InterviewEvaluationPage = async () => {
     <main className="mx-auto w-full space-y-6 p-2 sm:p-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-medium text-indigo-400">YOUR PROGRESS</p>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
             Interview evaluations
           </h1>

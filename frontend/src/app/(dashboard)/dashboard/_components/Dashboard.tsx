@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -95,10 +94,12 @@ function MetricCard({
   accent?: "peach" | "sage" | "blue" | "green";
 }) {
   const accentStyles = {
-    peach: "bg-[var(--clay-peach)] border-[var(--clay-peach-shadow)] text-[var(--clay-primary-ink)]",
+    peach:
+      "bg-[var(--clay-peach)] border-[var(--clay-peach-shadow)] text-[var(--clay-primary-ink)]",
     sage: "bg-[var(--clay-sage)] border-[var(--clay-sage-shadow)] text-[var(--clay-sage-ink)]",
     blue: "bg-[var(--clay-blue)] border-[var(--clay-blue-shadow)] text-[var(--clay-blue-ink)]",
-    green: "bg-[var(--clay-green-surface)] border-[var(--clay-green-shadow)] text-[var(--clay-green-ink)]",
+    green:
+      "bg-[var(--clay-green-surface)] border-[var(--clay-green-shadow)] text-[var(--clay-green-ink)]",
   };
 
   return (
@@ -221,7 +222,8 @@ export default function Dashboard() {
 
   const stats = data?.stats;
 
-  const scoredSkills = data?.skills.filter((skill) => skill.score != null) ?? [];
+  const scoredSkills =
+    data?.skills.filter((skill) => skill.score != null) ?? [];
   const averageSkillScore =
     scoredSkills.length > 0
       ? Math.round(
@@ -232,24 +234,6 @@ export default function Dashboard() {
 
   return (
     <main className="w-full space-y-7 pb-10">
-      {error && (
-        <div
-          role="alert"
-          className="flex flex-col gap-3 rounded-2xl border border-[#e8b4a2] bg-[#fbe7dd] p-4 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <p className="text-sm text-[#a34d37]">{error}</p>
-
-          <button
-            type="button"
-            onClick={() => setRetry((value) => value + 1)}
-            className="text-sm font-semibold text-[#a34d37] underline underline-offset-4"
-          >
-            Try again
-          </button>
-        </div>
-      )}
-
-      {/* Metrics */}
       <section>
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
@@ -468,8 +452,8 @@ export default function Dashboard() {
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-[var(--clay-muted)]">
-              Turn your feedback into progress. Practice consistently and
-              review each assessment to identify areas to improve.
+              Turn your feedback into progress. Practice consistently and review
+              each assessment to identify areas to improve.
             </p>
           </div>
 

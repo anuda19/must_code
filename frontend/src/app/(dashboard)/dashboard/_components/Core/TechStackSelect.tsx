@@ -195,10 +195,8 @@ export function TechStackInput({
       {suggestions.length > 0 && (
         <div className="rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3">
           <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--clay-muted)]">
-            {trimmedInput ? (
+            {trimmedInput && (
               <Search className="size-3.5 text-[var(--clay-primary)]" />
-            ) : (
-              <Sparkles className="size-3.5 text-[var(--clay-primary)]" />
             )}
             {trimmedInput ? "Matching technologies" : "Quick add"}
           </div>

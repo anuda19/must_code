@@ -95,3 +95,10 @@ export type EvaluationListResponse = {
     hasPreviousPage: boolean;
   };
 };
+
+export type TranscriptItem = {
+  id: string;
+  role: "assistant" | "user";
+  text: string;
+  timestamp: number;
+};
