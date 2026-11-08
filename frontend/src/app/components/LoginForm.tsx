@@ -382,7 +382,6 @@
 //   );
 // }
 
-
 "use client";
 
 import * as Label from "@radix-ui/react-label";
@@ -441,13 +440,13 @@ export default function LoginForm() {
 
       if (!res.success) {
         setError(res.error?.message || "Invalid email or password");
-      } else {
-        router.push(ROUTES.dashboard);
-        router.refresh();
+        setIsPending(false);
+        return;
       }
+      router.push(ROUTES.dashboard);
+      router.refresh();
     } catch {
       setError("An unexpected error occurred. Please try again later.");
-    } finally {
       setIsPending(false);
     }
   };
