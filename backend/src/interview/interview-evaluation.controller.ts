@@ -44,23 +44,6 @@ export class InterviewEvaluationController {
     return this.evaluationService.evaluateInterview(clientSessionId, userId);
   }
 
-  // @Get(':clientSessionId/evaluate')
-  // async getEvaluation(
-  //   @Param('clientSessionId') clientSessionId: string,
-  //   @Req() req: AuthenticatedRequest,
-  // ) {
-  //   const userId = req.user?.userId ?? req.user?.sub;
-
-  //   if (!userId) {
-  //     throw new BadRequestException('Authenticated user ID is missing');
-  //   }
-
-  //   if (!clientSessionId?.trim()) {
-  //     throw new BadRequestException('Client session ID is required');
-  //   }
-
-  //   return this.evaluationService.getEvaluation(clientSessionId, userId);
-  // }
   @Get('evaluations')
   async getEvaluations(
     @Req() req: AuthenticatedRequest,

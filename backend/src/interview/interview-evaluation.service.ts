@@ -109,23 +109,6 @@ export class InterviewEvaluationService {
       );
     }
 
-    // await this.prisma.interviewEvaluation.upsert({
-    //   where: { transcriptId: transcript.id },
-    //   create: {
-    //     transcriptId: transcript.id,
-    //     userId,
-    //     status: InterviewEvaluationStatus.PROCESSING,
-    //     model: this.model,
-    //     promptVersion: PROMPT_VERSION,
-    //   },
-    //   update: {
-    //     status: InterviewEvaluationStatus.PROCESSING,
-    //     errorMessage: null,
-    //     model: this.model,
-    //     promptVersion: PROMPT_VERSION,
-    //   },
-    // });
-
     try {
       const result = await this.generateEvaluation({
         transcriptText,
@@ -221,23 +204,6 @@ export class InterviewEvaluationService {
         `Evaluation failed for session ${clientSessionId}`,
         error instanceof Error ? error.stack : String(error),
       );
-
-      // await this.prisma.interviewEvaluation.upsert({
-      //   where: { transcriptId: transcript.id },
-      //   create: {
-      //     transcriptId: transcript.id,
-      //     userId,
-      //     status: InterviewEvaluationStatus.FAILED,
-      //     model: this.model,
-      //     promptVersion: PROMPT_VERSION,
-      //     errorMessage: 'Interview evaluation failed. Please retry.',
-      //   },
-      //   update: {
-      //     status: InterviewEvaluationStatus.FAILED,
-      //     errorMessage: 'Interview evaluation failed. Please retry.',
-      //   },
-      // });
-
       return {
         success: false,
         data: null,
@@ -246,23 +212,6 @@ export class InterviewEvaluationService {
       };
     }
   }
-
-  // async getEvaluation(clientSessionId: string, userId: string) {
-  //   const evaluation = await this.prisma.interviewEvaluation.findFirst({
-  //     where: {
-  //       userId,
-  //       transcript: {
-  //         clientSessionId,
-  //       },
-  //     },
-  //   });
-
-  //   if (!evaluation) {
-  //     throw new NotFoundException('Interview evaluation not found');
-  //   }
-
-  //   return evaluation;
-  // }
 
   async getEvaluations(userId: string, page = 1, limit = 10) {
     const safePage = Math.max(1, Math.floor(page));
