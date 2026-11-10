@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/lib/api";
-import { EvaluationListResponse, InterviewEvaluation } from "@/types/interview-evalution";
+import { EvaluationListResponse, InterviewEvaluation } from "@/types/interview-types";
 
 
 type ActionResponse<T> = {

@@ -1,44 +1,33 @@
 "use client";
 
 import { useRef, useState } from "react";
+
 import { useUser } from "@/hooks/useUser";
 
 import { startInterviewAction } from "@/actions/interview/session/start-interview";
+
 import {
   evaluateInterview,
   saveInterviewTranscript,
 } from "@/actions/interview/evaluation/interview-evaluation.actions";
-
-import type {
-  InterviewEvaluation,
+import {
+  EvaluationResponse,
   EvaluationStatus,
+  InterviewEvaluation,
+  InterviewPhase,
+  InterviewRoom,
   TranscriptItem,
-} from "@/types/interview-evalution";
+} from "@/types/interview-types";
 
 const INTERVIEW_MODEL = "gemini-3.1-flash-live-preview";
-
-export type InterviewPhase =
-  | "ready"
-  | "connecting"
-  | "live"
-  | "evaluating"
-  | "result"
-  | "ended";
-
-type InterviewRoomData = {
-  token: string;
-  roomName: string;
-  serverUrl: string;
-};
 
 export function useInterviewSession() {
   const { data: user } = useUser();
   const profile = user?.profile;
 
   const [phase, setPhase] = useState<InterviewPhase>("ready");
-  const [room, setRoom] = useState<InterviewRoomData | null>(null);
+  const [room, setRoom] = useState<InterviewRoom | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   const [evaluation, setEvaluation] = useState<InterviewEvaluation | null>(
     null,
   );
@@ -47,17 +36,9 @@ export function useInterviewSession() {
   const startedAtRef = useRef<number | null>(null);
   const finishingRef = useRef(false);
 
-  // Derived state: no additional state required.
-  const evaluationStatus: EvaluationStatus =
-    phase === "evaluating"
-      ? "evaluating"
-      : phase === "result"
-        ? evaluation?.status === "COMPLETED"
-          ? "completed"
-          : evaluation?.status === "INSUFFICIENT_DATA"
-            ? "insufficient"
-            : "failed"
-        : "idle";
+  // ============================================
+  // Start interview
+  // ============================================
 
   async function startInterview() {
     if (phase !== "ready") return;
@@ -70,9 +51,12 @@ export function useInterviewSession() {
     setPhase("connecting");
     setError(null);
     setEvaluation(null);
+
     finishingRef.current = false;
 
-    sessionIdRef.current = crypto.randomUUID();
+    const sessionId = crypto.randomUUID();
+
+    sessionIdRef.current = sessionId;
     startedAtRef.current = Date.now();
 
     try {
@@ -107,9 +91,12 @@ export function useInterviewSession() {
     }
   }
 
+  // ============================================
+  // Finish interview
+  // ============================================
+
   async function finishInterview(transcript: TranscriptItem[]) {
-    // Prevent duplicate transcript saves and evaluation requests.
-    if (finishingRef.current) return;
+    if (finishingRef.current || phase !== "live") return;
 
     finishingRef.current = true;
 
@@ -136,7 +123,8 @@ export function useInterviewSession() {
         })
         .join("\n");
 
-      // Save transcript first.
+      // Save transcript.
+
       const saveResponse = await saveInterviewTranscript({
         sessionId,
         model: INTERVIEW_MODEL,
@@ -151,59 +139,17 @@ export function useInterviewSession() {
         throw new Error(saveResponse.message);
       }
 
-      // Trigger evaluation after successful transcript persistence.
+      // Evaluate saved transcript.
       const response = await evaluateInterview(sessionId);
 
-      if (!response.success) {
-        throw new Error(response.message);
+      if (!response.success || !response.data) {
+        throw new Error(response.error?.message ?? "Evaluation failed");
       }
 
-      const payload = response.data;
-      const result = payload.data;
-      const record = result.data;
+      const { data: report, status, message } = response.data;
 
-      setEvaluation(record);
-
-      if (!payload.success || !result.success) {
-        throw new Error(
-          record?.errorMessage ??
-            result.message ??
-            "Interview evaluation failed.",
-        );
-      }
-
-      switch (result.status) {
-        case "COMPLETED":
-          setPhase("result");
-          break;
-
-        case "INSUFFICIENT_DATA":
-          setError(
-            record?.errorMessage ??
-              result.message ??
-              "The transcript is too short to evaluate reliably.",
-          );
-          setPhase("result");
-          break;
-
-        case "FAILED":
-          setError(
-            record?.errorMessage ??
-              result.message ??
-              "Interview evaluation failed.",
-          );
-          setPhase("result");
-          break;
-
-        case "PROCESSING":
-          // Evaluation is still running on the server.
-          setPhase("evaluating");
-          break;
-
-        default:
-          setError("Unknown evaluation status returned by the server.");
-          setPhase("result");
-      }
+      setEvaluation(report);
+      handleEvaluationStatus(status, report);
     } catch (err) {
       setError(
         err instanceof Error
@@ -212,29 +158,77 @@ export function useInterviewSession() {
       );
 
       setPhase("result");
+    } finally {
+      // The interview has finished. Prevent duplicate submissions.
+      finishingRef.current = false;
     }
   }
+
+  // ============================================
+  // Handle evaluation status
+  // ============================================
+
+  function handleEvaluationStatus(
+    status: EvaluationStatus,
+    record: InterviewEvaluation | null,
+  ) {
+    switch (status) {
+      case "COMPLETED":
+        setError(null);
+        setPhase("result");
+        break;
+
+      case "INSUFFICIENT_DATA":
+        setError(
+          record?.errorMessage ??
+            "The transcript is too short to evaluate reliably.",
+        );
+        setPhase("result");
+        break;
+
+      case "FAILED":
+        setError(record?.errorMessage ?? "Interview evaluation failed.");
+        setPhase("result");
+        break;
+
+      case "PROCESSING":
+        setError(null);
+        setPhase("evaluating");
+        break;
+    }
+  }
+
+  // ============================================
+  // Handle unexpected disconnect
+  // ============================================
 
   function handleDisconnect() {
     if (finishingRef.current || phase !== "live") return;
 
     setRoom(null);
     setError("Interview connection lost. Please start a new session.");
+
     setPhase("ready");
 
     sessionIdRef.current = null;
     startedAtRef.current = null;
   }
 
+  // ============================================
+  // Reset interview
+  // ============================================
+
   function resetInterview() {
     setRoom(null);
     setError(null);
     setEvaluation(null);
-    setPhase("ready");
 
     sessionIdRef.current = null;
     startedAtRef.current = null;
+
     finishingRef.current = false;
+
+    setPhase("ready");
   }
 
   return {
@@ -242,7 +236,7 @@ export function useInterviewSession() {
     room,
     error,
     evaluation,
-    evaluationStatus,
+
     startInterview,
     finishInterview,
     handleDisconnect,

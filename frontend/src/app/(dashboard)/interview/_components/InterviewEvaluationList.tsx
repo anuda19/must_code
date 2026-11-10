@@ -23,9 +23,9 @@ import InterviewEvaluationCard from "./InterviewEvaluation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { InterviewEvaluation } from "@/types/interview-evalution";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { InterviewEvaluation } from "@/types/interview-types";
 
 type Pagination = {
   page: number;
@@ -236,7 +236,7 @@ export default function InterviewEvaluationList({
         )}
 
         <InterviewEvaluationCard
-          status="completed"
+          status="COMPLETED"
           evaluation={selectedEvaluation}
         />
       </section>

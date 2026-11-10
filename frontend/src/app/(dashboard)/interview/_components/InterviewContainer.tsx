@@ -17,23 +17,17 @@ export function InterviewContainer() {
     room,
     error,
     evaluation,
-    evaluationStatus,
     startInterview,
     finishInterview,
     handleDisconnect,
     resetInterview,
   } = useInterviewSession();
 
-  // Navigate to the report after successful evaluation.
   useEffect(() => {
-    if (evaluationStatus !== "completed") return;
+    if (evaluation?.status !== "COMPLETED" || !evaluation.id) return;
 
-    const evaluationId = evaluation?.id;
-
-    if (evaluationId) {
-      router.push(`/interview/mock-interviews/evaluation/${evaluationId}`);
-    }
-  }, [evaluationStatus, evaluation?.id, router]);
+    router.push(`/interview/mock-interviews/evaluation/${evaluation.id}`);
+  }, [evaluation?.status, evaluation?.id, router]);
 
   if (phase === "live" && room) {
     return (
@@ -44,14 +38,17 @@ export function InterviewContainer() {
       />
     );
   }
+  console.log("evaluation:", evaluation);
 
-  if (phase === "evaluating" || phase === "result") {
+  if (phase === "evaluating") {
+    return <EvaluationLoaderDialog isOpen />;
+  }
+
+  if (phase === "result") {
     return (
       <div className="w-full pt-2">
-        <EvaluationLoaderDialog isOpen={phase === "evaluating"} />
-
         <InterviewEvaluation
-          status={evaluationStatus}
+          status={evaluation?.status ?? "FAILED"}
           evaluation={evaluation}
           error={error}
           onClose={resetInterview}
@@ -62,9 +59,9 @@ export function InterviewContainer() {
 
   return (
     <MockInterviewPage
-      loading={phase === "connecting" && !room}
+      loading={phase === "connecting"}
       error={error}
-      ended={phase === "ended"}
+      ended={false}
       startInterview={startInterview}
     />
   );

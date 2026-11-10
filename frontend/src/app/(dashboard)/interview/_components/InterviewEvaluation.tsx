@@ -711,6 +711,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { EvaluationStatus } from "@/types/interview-types";
 
 type DiscussionAnalysis = {
   topic: string;
@@ -726,7 +727,7 @@ type EvaluationReport = {
 };
 
 type Evaluation = {
-  status: "COMPLETED" | "INSUFFICIENT_DATA" | "FAILED" | "PROCESSING";
+  status: EvaluationStatus;
   overallScore: number | null;
   grade: string | null;
   technicalAccuracy: number | null;
@@ -741,7 +742,7 @@ type Evaluation = {
 };
 
 type Props = {
-  status: "idle" | "evaluating" | "completed" | "insufficient" | "failed";
+  status: EvaluationStatus;
   evaluation: Evaluation | null;
   error?: string | null;
   onClose?: () => void;
@@ -999,9 +1000,10 @@ export default function InterviewEvaluationCard({
   onClose,
   onRetry,
 }: Props) {
-  if (status === "idle") return null;
+  console.log("InterviewEvaluationCard status:", status);
+  if (status === "NOT_STARTED") return null;
 
-  if (status === "evaluating") {
+  if (status === "PROCESSING") {
     return (
       <EvaluationStateWrapper onClose={onClose}>
         <Card className="overflow-hidden rounded-3xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
@@ -1039,7 +1041,7 @@ export default function InterviewEvaluationCard({
     );
   }
 
-  if (status === "insufficient") {
+  if (status === "INSUFFICIENT_DATA") {
     return (
       <EvaluationStateWrapper onClose={onClose}>
         <Card className="rounded-3xl border border-amber-200 bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">
@@ -1078,7 +1080,7 @@ export default function InterviewEvaluationCard({
     );
   }
 
-  if (status === "failed" || !evaluation) {
+  if (status === "FAILED" || !evaluation) {
     return (
       <EvaluationStateWrapper onClose={onClose}>
         <Card className="rounded-3xl border border-rose-200 bg-[var(--clay-surface)] text-[var(--clay-ink)] shadow-[var(--clay-shadow-card)]">

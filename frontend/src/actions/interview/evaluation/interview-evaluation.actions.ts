@@ -2,15 +2,12 @@
 
 import { api } from "@/lib/api";
 import { ApiError } from "@/lib/error";
-import type {
-  SaveTranscriptInput,
+import {
   EvaluationResponse,
-} from "@/types/interview-evalution";
-import type { ActionResponse } from "@/types/action";
+  SaveTranscriptInput,
+} from "@/types/interview-types";
 
-export async function saveInterviewTranscript(
-  input: SaveTranscriptInput,
-) {
+export async function saveInterviewTranscript(input: SaveTranscriptInput) {
   try {
     const response = await api.post("/interview/sessions", input);
 
@@ -56,6 +53,7 @@ export async function evaluateInterview(sessionId: string) {
         success: false as const,
         message: error.message,
         error: {
+          message: error.message,
           code: error.code,
           details: error.details,
         },

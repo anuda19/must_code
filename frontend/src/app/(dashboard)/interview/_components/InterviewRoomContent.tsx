@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import VoiceIndicator from "./VoiceIndicator";
-import { TranscriptItem } from "@/types/interview-evalution";
+import { TranscriptItem } from "@/types/interview-types";
 
 function formatTime(timestamp: number) {
   return new Date(timestamp).toLocaleTimeString([], {
@@ -90,20 +90,30 @@ function InterviewRoomContent({
     setEnding(true);
 
     const finalMessages = [...messages];
+    onEnd(finalMessages);
 
     try {
       await room.disconnect();
     } catch (error) {
       console.error("LiveKit disconnect failed:", error);
     }
+  }
 
-    onEnd(finalMessages);
+  async function closePopup() {
+    if (ending) return;
+
+    setEnding(true);
+    try {
+      await room.disconnect();
+    } catch (error) {
+      console.error("LiveKit disconnect failed:", error);
+    }
   }
 
   return (
     <main className="min-h-svh bg-[var(--clay-bg)] px-4 text-[var(--clay-ink)] md:px-8">
       {!agentParticipant && (
-        <ConnectingDialog isOpen={true} onCancel={endInterview} />
+        <ConnectingDialog isOpen={true} onCancel={closePopup} />
       )}
 
       <div className="mx-auto max-w-7xl">

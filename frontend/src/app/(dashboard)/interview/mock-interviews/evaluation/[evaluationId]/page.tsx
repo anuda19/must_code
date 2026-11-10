@@ -33,7 +33,7 @@ const InterviewEvaluationPage = async ({ params }: Props) => {
         <BackButton />
       </div>
 
-      <InterviewEvaluationCard evaluation={result.data} status="completed" />
+      <InterviewEvaluationCard evaluation={result.data} status="COMPLETED" />
     </main>
   );
 };

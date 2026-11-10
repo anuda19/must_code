@@ -6,8 +6,8 @@ import {
   RoomAudioRenderer,
 } from "@livekit/components-react";
 
-import type { TranscriptItem } from "@/types/interview-evalution";
 import InterviewRoomContent from "./InterviewRoomContent";
+import { TranscriptItem } from "@/types/interview-types";
 
 
 type LiveInterviewRoomProps = {
