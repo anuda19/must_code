@@ -5,6 +5,7 @@ import { cli, defineAgent, voice, WorkerOptions } from '@livekit/agents';
 import * as google from '@livekit/agents-plugin-google';
 import { CandidateProfile } from '../types/candidate-profile.types';
 import { buildInterviewPrompt } from './prompts/interview.prompts';
+console.log('[Agent] Entry execution started');
 export default defineAgent({
   entry: async (ctx) => {
     const metadata = JSON.parse(ctx.job.metadata || '{}') as {
@@ -52,5 +53,6 @@ cli.runApp(
     agent: __filename,
     wsURL: process.env.LIVEKIT_URL!,
     agentName: process.env.LIVEKIT_AGENT_NAME!,
+    initializeProcessTimeout: 60_000,
   }),
 );

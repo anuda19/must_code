@@ -5,7 +5,7 @@ import {
 import { AccessToken } from 'livekit-server-sdk';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { randomUUID } from 'node:crypto';
-import { CandidateProfile } from '../types/candidate-profile.types';
+import type { CandidateProfile } from '../types/candidate-profile.types';
 
 @Injectable()
 export class LiveKitService {
