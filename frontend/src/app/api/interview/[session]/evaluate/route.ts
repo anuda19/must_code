@@ -1,7 +1,7 @@
 import { api } from "@/lib/api";
 import { ApiError } from "@/lib/error";
 import { ActionResponse } from "@/types/action";
-import { EvaluationResponse } from "@/types/interview-evalution";
+import { EvaluationResponse } from "@/types/interview-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(

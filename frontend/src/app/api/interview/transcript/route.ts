@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { ApiError } from "@/lib/error";
-import { SaveTranscriptInput } from "@/types/interview-evalution";
+import { SaveTranscriptInput } from "@/types/interview-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
