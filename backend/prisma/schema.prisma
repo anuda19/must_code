@@ -118,7 +118,6 @@ model InterviewEvaluation {
   @@index([userId, createdAt])
 }
 
-
 model PasswordResetToken {
   id        String    @id @default(uuid())
   userId    String

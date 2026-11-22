@@ -1,7 +1,15 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 
-import { Request } from 'express';
-
+// import { Request } from 'express';
+import type { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -18,9 +26,17 @@ export class AuthController {
     return this.authService.register(dto.name, dto.email, dto.password);
   }
 
+  // @Post('login')
+  // login(@Body() dto: LoginDto) {
+  //   return this.authService.login(dto.email, dto.password, dto.ip);
+  // }
   @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.password);
+  async login(@Body() dto: LoginDto, @Req() req: Request) {
+    const ip = req.ip;
+    if (!ip) {
+      throw new InternalServerErrorException('Unable to determine client IP');
+    }
+    return this.authService.login(dto.email, dto.password, ip);
   }
 
   @Post('refresh')

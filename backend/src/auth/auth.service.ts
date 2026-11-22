@@ -12,6 +12,7 @@ import * as nodemailer from 'nodemailer';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { createHash, randomBytes } from 'crypto';
+import { RateLimiterService } from '../common/services/rate-limiter.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly rateLimiter: RateLimiterService,
   ) {}
 
   async register(name: string, email: string, password: string) {
@@ -39,7 +41,9 @@ export class AuthService {
     return this.generateTokens(user.id);
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string, ip: string) {
+    await this.rateLimiter.assertLoginAllowed(ip, email);
+
     const user = await this.usersService.findByEmail(email);
 
     if (!user) {
@@ -137,8 +141,10 @@ export class AuthService {
 
   async logout(refreshToken: string) {
     const tokens = await this.prisma.refreshToken.findMany();
-
     for (const token of tokens) {
+      if (!refreshToken || !token.tokenHash) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
       const matches = await bcrypt.compare(refreshToken, token.tokenHash);
 
       if (matches) {
@@ -206,18 +212,14 @@ export class AuthService {
       },
     });
 
-    // Do not reveal whether the email exists.
     if (!user) return;
 
-    // Generate a cryptographically secure random token.
     const resetToken = randomBytes(32).toString('hex');
 
-    // Store only the SHA-256 hash.
     const tokenHash = createHash('sha256').update(resetToken).digest('hex');
 
     const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 
-    // Invalidate previously issued tokens.
     await this.prisma.passwordResetToken.deleteMany({
       where: {
         userId: user.id,
@@ -307,7 +309,6 @@ export class AuthService {
         );
       }
 
-      // Claim the token so it cannot be used again.
       const claimed = await tx.passwordResetToken.updateMany({
         where: {
           id: resetToken.id,
@@ -332,7 +333,6 @@ export class AuthService {
         data: { passwordHash: hashedPassword },
       });
 
-      // Invalidate any other outstanding reset links for this user.
       await tx.passwordResetToken.updateMany({
         where: {
           userId: resetToken.userId,

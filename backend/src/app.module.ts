@@ -34,6 +34,7 @@ import { UserProfileModule } from './user-profile/user-profile.module';
 import { LiveKitModule } from './livekit/livekit.module';
 import { InterviewEvaluationModule } from './interview/interview-evaluation.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthModule,
     LiveKitModule,
     InterviewEvaluationModule,
-    DashboardModule
+    DashboardModule,
+    RedisModule
   ],
   controllers: [AppController],
   providers: [AppService],
