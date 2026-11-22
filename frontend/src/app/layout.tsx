@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -107,12 +108,15 @@ export default function RootLayout({
         "font-sans",
         geist.variable,
       )}
+      suppressHydrationWarning
     >
       <body>
-        <QueryProvider>
-          <main>{children}</main>
-        </QueryProvider>
-        <Toaster />
+        <ThemeProvider>
+          <QueryProvider>
+            <main>{children}</main>
+          </QueryProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

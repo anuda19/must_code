@@ -1,23 +1,26 @@
+
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+
 import {
-  Code2,
   ArrowRight,
   Bot,
-  Video,
   BookOpen,
-  Trophy,
-  Menu,
-  X,
   ChevronDown,
+  Code2,
+  Menu,
+  Trophy,
+  Video,
+  X,
 } from "lucide-react";
 
 import { useUser } from "@/hooks/useUser";
 import { ROUTES } from "@/lib/routes";
+import { ThemeSwitcher } from "./ui/ThemeSwitcher";
 
 const FEATURE_ITEMS = [
   {
@@ -30,14 +33,16 @@ const FEATURE_ITEMS = [
   },
   {
     title: "AI Tech Assistant",
-    description: "Ask questions, debug code, and get real-time technical help.",
+    description:
+      "Ask questions, debug code, and get real-time technical help.",
     href: "/assistant",
     icon: Bot,
     status: "Soon",
   },
   {
     title: "Practice & Challenges",
-    description: "Solve real-world coding problems and algorithm challenges.",
+    description:
+      "Solve real-world coding problems and algorithm challenges.",
     href: "/practice",
     icon: Trophy,
     status: "Soon",
@@ -60,42 +65,73 @@ const MAIN_NAV_ITEMS = [
 export default function Navbar() {
   const { data: user } = useUser();
   const pathname = usePathname();
+
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--clay-border)]/80 bg-[var(--clay-bg)]/95 text-[var(--clay-ink)] backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1360px] items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 xl:px-16">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 text-foreground backdrop-blur-2xl">
+      <div className="mx-auto flex h-[72px] max-w-[1360px] items-center justify-between gap-4 px-4 sm:px-8 lg:px-12 xl:px-16">
+
         {/* Brand */}
         <Link
           href="/"
           aria-label="X Code home"
           className="group flex shrink-0 items-center gap-2.5 outline-none"
         >
-          <div className="flex size-10 items-center justify-center rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-primary)] shadow-[inset_2px_2px_5px_#fff,inset_-2px_-2px_5px_#ecd8c3,3px_4px_0_#ecd8c3] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-[var(--clay-coral-shadow)]">
+          <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-card text-primary shadow-sm transition-all duration-200 group-hover:border-primary/40 group-hover:shadow-[0_0_20px_var(--primary)]">
             <Code2
-              className="size-5 transition-transform duration-300 group-hover:scale-110"
+              className="size-5 transition-transform duration-200 group-hover:scale-110"
               strokeWidth={2.5}
             />
           </div>
 
-          <span className="text-[21px] font-extrabold tracking-tight text-[var(--clay-ink)] sm:text-[22px]">
-            X<span className="text-[var(--clay-primary)]">Code</span>
+          <span className="text-[21px] font-extrabold tracking-tight sm:text-[22px]">
+            X<span className="text-primary">Code</span>
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <NavigationMenu.Root className="relative hidden md:flex">
           <NavigationMenu.List className="flex items-center gap-1">
+
             {/* Features Dropdown */}
             <NavigationMenu.Item>
-              <NavigationMenu.Trigger className="group inline-flex items-center gap-2 rounded-xl border border-transparent px-3.5 py-2.5 text-[13px] font-semibold text-[var(--clay-muted)] transition-all duration-200 hover:border-[var(--clay-border)] hover:bg-[var(--clay-surface)] hover:text-[var(--clay-ink)] hover:shadow-[inset_2px_2px_4px_#fff,2px_3px_0_#ecd8c3] data-[state=open]:border-[var(--clay-border)] data-[state=open]:bg-[var(--clay-surface)] data-[state=open]:text-[var(--clay-primary)]">
-                <Bot className="size-4 text-[var(--clay-primary)]" />
+              <NavigationMenu.Trigger
+                className="
+                  group inline-flex h-10 items-center gap-2 rounded-lg
+                  border border-transparent px-3.5 text-[13px] font-semibold
+                  text-muted-foreground transition-all duration-200
+                  hover:border-border hover:bg-card hover:text-foreground
+                  data-[state=open]:border-border
+                  data-[state=open]:bg-card
+                  data-[state=open]:text-primary
+                "
+              >
+                <Bot className="size-4 text-primary" />
                 <span>Features</span>
-                <ChevronDown className="size-3.5 text-[var(--clay-subtle)] transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
               </NavigationMenu.Trigger>
 
-              <NavigationMenu.Content className="absolute left-0 top-full mt-3 w-[340px] rounded-[22px] border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3 shadow-[inset_4px_4px_8px_#fff,8px_10px_0_#ecd8c3,0_18px_35px_rgb(101_70_49/10%)] animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="flex flex-col gap-1.5">
+              <NavigationMenu.Content
+                className="
+                  absolute left-0 top-full mt-3 w-[370px]
+                  overflow-hidden rounded-2xl border border-border
+                  bg-popover p-2.5 text-popover-foreground
+                  shadow-2xl
+                  animate-in fade-in slide-in-from-top-2 duration-200
+                "
+              >
+                <div className="mb-2 flex items-center justify-between px-3 py-2">
+                  <div>
+                    <p className="text-xs font-bold">Explore features</p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      Everything you need to prepare.
+                    </p>
+                  </div>
+                  <Bot className="size-5 text-primary" />
+                </div>
+
+                <div className="flex flex-col gap-1">
                   {FEATURE_ITEMS.map((item) => {
                     const Icon = item.icon;
                     const isUpcoming = item.status === "Soon";
@@ -104,34 +140,48 @@ export default function Navbar() {
                       <Link
                         key={item.title}
                         href={isUpcoming ? "#" : item.href}
-                        className={`group flex items-start gap-3 rounded-2xl border border-transparent p-3 transition-all duration-200 ${
-                          isUpcoming
-                            ? "cursor-not-allowed opacity-65"
-                            : "hover:border-[var(--clay-border)] hover:bg-[var(--clay-bg)] hover:shadow-[inset_2px_2px_5px_#fff,3px_4px_0_#ecd8c3]"
-                        }`}
+                        className={`
+                          group flex items-start gap-3 rounded-xl border
+                          border-transparent p-3 transition-all duration-200
+                          ${
+                            isUpcoming
+                              ? "cursor-not-allowed opacity-55"
+                              : "hover:border-border hover:bg-accent/60"
+                          }
+                        `}
                       >
-                        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-primary)] shadow-[inset_2px_2px_5px_#fff,2px_3px_0_#e5b9a4] transition-transform duration-200 group-hover:scale-105">
-                          <Icon className="size-4.5" />
+                        <div className="
+                          flex size-10 shrink-0 items-center justify-center
+                          rounded-xl border border-border bg-card
+                          text-primary transition-colors
+                          group-hover:border-primary/30
+                          group-hover:bg-primary/10
+                        ">
+                          <Icon className="size-[18px]" />
                         </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-[13px] font-bold text-[var(--clay-ink)] transition-colors group-hover:text-[var(--clay-coral-shadow)]">
+                            <span className="text-[13px] font-semibold text-foreground transition-colors group-hover:text-primary">
                               {item.title}
                             </span>
 
                             <span
-                              className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold ${
-                                item.status === "Ready"
-                                  ? "border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)]"
-                                  : "border-[var(--clay-border)] bg-[var(--clay-bg)] text-[var(--clay-subtle)]"
-                              }`}
+                              className={`
+                                shrink-0 rounded-full border px-2 py-0.5
+                                text-[9px] font-bold
+                                ${
+                                  item.status === "Ready"
+                                    ? "border-primary/30 bg-primary/10 text-primary"
+                                    : "border-border bg-muted text-muted-foreground"
+                                }
+                              `}
                             >
                               {item.status}
                             </span>
                           </div>
 
-                          <p className="mt-1 text-[11px] leading-relaxed text-[var(--clay-muted)]">
+                          <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
                             {item.description}
                           </p>
                         </div>
@@ -151,11 +201,15 @@ export default function Navbar() {
                   <NavigationMenu.Link asChild>
                     <Link
                       href={item.href}
-                      className={`rounded-xl border px-3.5 py-2.5 text-[13px] font-semibold transition-all duration-200 ${
-                        isActive
-                          ? "border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-coral-shadow)] shadow-[inset_2px_2px_5px_#fff,2px_3px_0_#ecd8c3]"
-                          : "border-transparent text-[var(--clay-muted)] hover:border-[var(--clay-border)] hover:bg-[var(--clay-surface)] hover:text-[var(--clay-ink)]"
-                      }`}
+                      className={`
+                        inline-flex h-10 items-center rounded-lg border
+                        px-3.5 text-[13px] font-semibold transition-all duration-200
+                        ${
+                          isActive
+                            ? "border-primary/25 bg-primary/10 text-primary"
+                            : "border-transparent text-muted-foreground hover:border-border hover:bg-card hover:text-foreground"
+                        }
+                      `}
                     >
                       {item.label}
                     </Link>
@@ -167,11 +221,17 @@ export default function Navbar() {
         </NavigationMenu.Root>
 
         {/* Action Buttons */}
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-2">
+          <ThemeSwitcher />
+
           {!user && (
             <Link
               href="/login"
-              className="hidden rounded-xl px-3 py-2 text-[13px] font-semibold text-[var(--clay-muted)] transition-colors hover:text-[var(--clay-primary)] sm:inline-flex"
+              className="
+                hidden rounded-lg px-3 py-2 text-[13px] font-semibold
+                text-muted-foreground transition-colors
+                hover:text-foreground sm:inline-flex
+              "
             >
               Log in
             </Link>
@@ -179,17 +239,30 @@ export default function Navbar() {
 
           <Link
             href={user ? ROUTES.dashboard : ROUTES.register}
-            className="group inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#e8795b] bg-[var(--clay-primary)] px-3 text-[12px] font-bold text-[var(--clay-primary-ink)] shadow-[inset_2px_2px_5px_rgb(255_255_255/45%),0_4px_0_#d86649,0_7px_12px_rgb(216_102_73/12%)] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[inset_2px_2px_5px_rgb(255_255_255/45%),0_5px_0_#d86649,0_9px_15px_rgb(216_102_73/15%)] active:translate-y-1 active:shadow-[inset_2px_2px_5px_rgb(255_255_255/45%),0_1px_0_#d86649] sm:px-4 sm:text-[13px]"
+            className="
+              group inline-flex h-10 items-center gap-2 rounded-lg
+              border border-primary/30 bg-primary px-3.5
+              text-[12px] font-bold text-primary-foreground
+              shadow-sm transition-all duration-200
+              hover:-translate-y-0.5 hover:brightness-110
+              hover:shadow-lg active:translate-y-0
+              sm:px-4 sm:text-[13px]
+            "
           >
             <span>{user ? "Go to App" : "Get started"}</span>
-            <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
           </Link>
 
           {/* Mobile Menu Toggle */}
           <button
             type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="ml-1 flex size-10 items-center justify-center rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-muted)] shadow-[inset_2px_2px_5px_#fff,2px_3px_0_#ecd8c3] transition-all hover:text-[var(--clay-primary)] active:translate-y-0.5 active:shadow-none md:hidden"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="
+              ml-1 flex size-10 items-center justify-center rounded-lg
+              border border-border bg-card text-muted-foreground
+              transition-all hover:border-primary/40 hover:text-primary
+              active:scale-95 md:hidden
+            "
             aria-label="Toggle Navigation Menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -204,8 +277,9 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="border-t border-[var(--clay-border)] bg-[var(--clay-surface)] px-4 py-5 shadow-[inset_0_4px_8px_rgb(101_70_49/5%)] md:hidden sm:px-8">
-          <div className="mb-3 px-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--clay-subtle)]">
+        <div className="border-t border-border bg-background/95 px-4 py-5 shadow-xl backdrop-blur-xl md:hidden sm:px-8">
+
+          <div className="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
             Explore features
           </div>
 
@@ -219,27 +293,37 @@ export default function Navbar() {
                   key={item.title}
                   href={isUpcoming ? "#" : item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between gap-3 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-bg)] p-3 text-[var(--clay-ink)] shadow-[inset_2px_2px_5px_#fff,2px_3px_0_#ecd8c3] transition-all ${
-                    isUpcoming
-                      ? "opacity-65"
-                      : "active:translate-y-0.5 active:shadow-none"
-                  }`}
+                  className={`
+                    flex items-center justify-between gap-3 rounded-xl
+                    border border-border bg-card p-3
+                    transition-all duration-200
+                    ${
+                      isUpcoming
+                        ? "opacity-55"
+                        : "hover:border-primary/30 hover:bg-accent/50 active:scale-[0.99]"
+                    }
+                  `}
                 >
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--clay-surface-warm)] text-[var(--clay-primary)]">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-primary">
                       <Icon className="size-4" />
                     </div>
-                    <span className="truncate text-[13px] font-bold">
+
+                    <span className="truncate text-[13px] font-semibold text-foreground">
                       {item.title}
                     </span>
                   </div>
 
                   <span
-                    className={`shrink-0 rounded-full border px-2 py-1 text-[9px] font-bold ${
-                      item.status === "Ready"
-                        ? "border-[var(--clay-green-shadow)] bg-[var(--clay-green-surface)] text-[var(--clay-green-ink)]"
-                        : "border-[var(--clay-border)] bg-[var(--clay-surface)] text-[var(--clay-subtle)]"
-                    }`}
+                    className={`
+                      shrink-0 rounded-full border px-2 py-1
+                      text-[9px] font-bold
+                      ${
+                        item.status === "Ready"
+                          ? "border-primary/30 bg-primary/10 text-primary"
+                          : "border-border bg-muted text-muted-foreground"
+                      }
+                    `}
                   >
                     {item.status}
                   </span>
@@ -248,30 +332,43 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="my-4 h-px bg-[var(--clay-border)]" />
+          <div className="my-5 h-px bg-border" />
 
           <div className="grid grid-cols-2 gap-2">
-            {MAIN_NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`rounded-xl border px-3 py-2.5 text-center text-[13px] font-semibold transition-colors ${
-                  pathname === item.href
-                    ? "border-[var(--clay-border)] bg-[var(--clay-surface-warm)] text-[var(--clay-coral-shadow)]"
-                    : "border-[var(--clay-border)] bg-[var(--clay-bg)] text-[var(--clay-muted)] hover:text-[var(--clay-ink)]"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {MAIN_NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`
+                    rounded-lg border px-3 py-2.5 text-center
+                    text-[13px] font-semibold transition-colors
+                    ${
+                      isActive
+                        ? "border-primary/30 bg-primary/10 text-primary"
+                        : "border-border bg-card text-muted-foreground hover:text-foreground"
+                    }
+                  `}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Mobile Authentication Link */}
           <Link
             href={user ? ROUTES.dashboard : "/login"}
             onClick={() => setMobileMenuOpen(false)}
-            className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] py-3 text-[13px] font-bold text-[var(--clay-ink)] transition-colors hover:text-[var(--clay-primary)]"
+            className="
+              mt-3 flex items-center justify-center gap-2 rounded-lg
+              border border-border bg-card py-3 text-[13px]
+              font-bold text-foreground transition-colors
+              hover:border-primary/30 hover:text-primary
+            "
           >
             {user ? "Dashboard" : "Log in"}
             <ArrowRight className="size-3.5" />

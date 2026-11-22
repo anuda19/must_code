@@ -1,4 +1,3 @@
-
 @import "@radix-ui/colors/black-alpha.css";
 @import "@radix-ui/colors/indigo.css";
 @import "@radix-ui/colors/mauve.css";
@@ -12,126 +11,395 @@
 @custom-variant dark (&:is(.dark *));
 
 /* =========================================
-   CLAYMORPHISM DESIGN SYSTEM
+   1. DEFAULT THEME — STEALTH OPS
+   Tactical Black / Forest / Emerald
 ========================================= */
 
 :root {
+  color-scheme: dark;
+
+  /* Brand */
+  --brand: #4ade80;
+  --brand-hover: #22c55e;
+  --brand-foreground: #07180e;
+
   /* Backgrounds */
-  --clay-bg: #fff3df;
-  --clay-surface: #fffaf1;
-  --clay-surface-warm: #f8e5d7;
+  --background: #090f0c;
+  --foreground: #e5f1e8;
+
+  /* Surfaces */
+  --card: #121d17;
+  --card-foreground: #e5f1e8;
+  --popover: #19261e;
+  --popover-foreground: #e5f1e8;
+
+  --surface-elevated: #203127;
+  --surface-hover: #293d30;
+  --surface-muted: #0e1711;
 
   /* Typography */
-  --clay-ink: #34251f;
-  --clay-muted: #80675a;
-  --clay-subtle: #a17e6b;
+  --muted: #203127;
+  --muted-foreground: #9aafa0;
+  --subtle-foreground: #718879;
 
-  /* Primary */
-  --clay-primary: #ff8b6a;
-  --clay-primary-hover: #ff9a7d;
-  --clay-primary-ink: #34251f;
+  /* Interactive */
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
 
-  /* Peach */
-  --clay-peach: #ffd0bd;
-  --clay-peach-shadow: #e5b9a4;
-  --clay-coral-shadow: #d86649;
+  --secondary: #26392d;
+  --secondary-foreground: #d6eadb;
 
-  /* Sage */
-  --clay-sage: #dce9bd;
-  --clay-sage-ink: #4d6633;
-  --clay-sage-shadow: #bdcf9b;
+  --accent: #183b28;
+  --accent-foreground: #86efac;
 
-  /* Blue */
-  --clay-blue: #e0edf4;
-  --clay-blue-ink: #4d819b;
-  --clay-blue-shadow: #c9dce7;
+  /* Borders */
+  --border: #2b4033;
+  --input: #2b4033;
+  --ring: var(--brand);
 
-  /* Green */
-  --clay-green-surface: #e7edda;
-  --clay-green-ink: #658545;
-  --clay-green-shadow: #d2dfbf;
+  /* Status */
+  --destructive: #fb7185;
+  --error: #fb7185;
+  --error-bg: #321d22;
+  --error-border: #85404b;
 
-  /* Borders and status */
-  --clay-border: #ecd8c3;
-  --clay-highlight: #ffffff;
-  --clay-status: #80a85a;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --status: #4ade80;
 
-  /* Shadows - reduced intensity */
-  --clay-shadow-card:
-    inset 3px 3px 7px rgb(255 255 255 / 85%),
-    5px 7px 0 var(--clay-border),
-    0 14px 28px rgb(101 70 49 / 8%);
+  /* Charts */
+  --chart-1: #4ade80;
+  --chart-2: #86efac;
+  --chart-3: #38bdf8;
+  --chart-4: #fbbf24;
+  --chart-5: #a3e635;
 
-  --clay-shadow-button:
-    inset 2px 2px 5px rgb(255 255 255 / 55%),
-    0 4px 0 var(--clay-coral-shadow),
-    0 7px 14px rgb(216 102 73 / 10%);
+  /* Sidebar */
+  --sidebar: #0e1711;
+  --sidebar-foreground: #e5f1e8;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: #203127;
+  --sidebar-accent-foreground: #e5f1e8;
+  --sidebar-border: #2b4033;
+  --sidebar-ring: var(--brand);
 
-  --clay-shadow-button-pressed:
-    inset 2px 2px 5px rgb(255 255 255 / 55%),
-    0 2px 0 var(--clay-coral-shadow);
-
-  --clay-shadow-raised:
-    inset 3px 3px 6px rgb(255 255 255 / 85%),
-    3px 4px 0 var(--clay-peach-shadow);
-
-  --clay-shadow-inset:
-    inset 3px 3px 5px #ead0c0,
-    inset -3px -3px 5px #fff6e9;
-
-  /* Application layout */
+  /* Shape */
+  --radius: 0.75rem;
   --radius-sm: 6px;
   --radius-md: 10px;
-  --max-width: 1180px;
+  --radius-lg: 14px;
 
-  /* Semantic shadcn colors */
-  --background: var(--clay-bg);
-  --foreground: var(--clay-ink);
+  /* Elevation */
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 22%);
+  --shadow-dropdown: 0 12px 35px rgb(0 0 0 / 32%);
 
-  --card: var(--clay-surface);
-  --card-foreground: var(--clay-ink);
+  /* Application layout */
+  --max-width: 1440px;
 
-  --popover: var(--clay-surface);
-  --popover-foreground: var(--clay-ink);
+  /* Legacy clay variables — compatibility only */
+  --clay-bg: var(--background);
+  --clay-surface: var(--card);
+  --clay-surface-warm: var(--surface-muted);
 
-  --primary: var(--clay-primary);
-  --primary-foreground: var(--clay-primary-ink);
+  --clay-ink: var(--foreground);
+  --clay-muted: var(--muted-foreground);
+  --clay-subtle: var(--subtle-foreground);
 
-  --secondary: var(--clay-sage);
-  --secondary-foreground: var(--clay-sage-ink);
+  --clay-primary: var(--primary);
+  --clay-primary-hover: var(--brand-hover);
+  --clay-primary-ink: var(--primary-foreground);
 
-  --muted: var(--clay-surface-warm);
-  --muted-foreground: var(--clay-muted);
+  --clay-peach: var(--surface-elevated);
+  --clay-peach-shadow: var(--border);
+  --clay-coral-shadow: var(--brand-hover);
 
-  --accent: var(--clay-blue);
-  --accent-foreground: var(--clay-blue-ink);
+  --clay-sage: var(--secondary);
+  --clay-sage-ink: var(--secondary-foreground);
+  --clay-sage-shadow: var(--border);
 
-  --destructive: #ef4444;
+  --clay-blue: var(--accent);
+  --clay-blue-ink: var(--accent-foreground);
+  --clay-blue-shadow: var(--border);
 
-  --border: var(--clay-border);
-  --input: var(--clay-border);
-  --ring: var(--clay-primary);
+  --clay-green-surface: var(--surface-muted);
+  --clay-green-ink: var(--success);
+  --clay-green-shadow: var(--border);
 
-  --error: #ef4444;
+  --clay-border: var(--border);
+  --clay-highlight: var(--surface-hover);
+  --clay-status: var(--status);
+
+  /* Legacy shadow variables — no clay effects */
+  --clay-shadow-card: var(--shadow-card);
+  --clay-shadow-button: 0 4px 12px rgb(0 0 0 / 18%);
+  --clay-shadow-button-pressed: inset 0 2px 4px rgb(0 0 0 / 20%);
+  --clay-shadow-raised: 0 4px 14px rgb(0 0 0 / 16%);
+  --clay-shadow-inset: inset 0 1px 3px rgb(0 0 0 / 20%);
+}
+
+/* =========================================
+   2. MIDNIGHT COMMAND
+   Deep Navy / Blue / Cyan
+========================================= */
+
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+
+  --brand: #38bdf8;
+  --brand-hover: #0ea5e9;
+  --brand-foreground: #06121d;
+
+  --background: #080d18;
+  --foreground: #e8f0fa;
+
+  --card: #111c2d;
+  --card-foreground: #e8f0fa;
+  --popover: #141f30;
+  --popover-foreground: #e8f0fa;
+
+  --surface-elevated: #172438;
+  --surface-hover: #1c2a3d;
+  --surface-muted: #0e1625;
+
+  --muted: #172438;
+  --muted-foreground: #94a3b8;
+  --subtle-foreground: #64748b;
+
+  --secondary: #1c2a3d;
+  --secondary-foreground: #dbeafe;
+
+  --accent: #172d43;
+  --accent-foreground: #7dd3fc;
+
+  --border: #243349;
+  --input: #243349;
+  --ring: var(--brand);
+
+  --destructive: #fb7185;
+  --error: #fb7185;
+  --error-bg: #351c29;
+  --error-border: #9f4059;
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --status: #34d399;
+
+  --chart-1: #38bdf8;
+  --chart-2: #818cf8;
+  --chart-3: #34d399;
+  --chart-4: #fbbf24;
+  --chart-5: #f472b6;
+
+  --sidebar: #0e1625;
+  --sidebar-foreground: #e8f0fa;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: #172438;
+  --sidebar-accent-foreground: #e8f0fa;
+  --sidebar-border: #243349;
+  --sidebar-ring: var(--brand);
+
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 18%);
+  --shadow-dropdown: 0 12px 35px rgb(0 0 0 / 28%);
+}
+
+/* =========================================
+   3. STARK INDUSTRIES
+   Graphite / Silver / Cyan
+========================================= */
+
+:root[data-theme="stark"] {
+  color-scheme: dark;
+
+  --brand: #22d3ee;
+  --brand-hover: #06b6d4;
+  --brand-foreground: #061519;
+
+  --background: #0b0e12;
+  --foreground: #e5eaf0;
+
+  --card: #151b22;
+  --card-foreground: #e5eaf0;
+  --popover: #1b232c;
+  --popover-foreground: #e5eaf0;
+
+  --surface-elevated: #202a35;
+  --surface-hover: #293642;
+  --surface-muted: #11171e;
+
+  --muted: #202a35;
+  --muted-foreground: #9baab8;
+  --subtle-foreground: #71808f;
+
+  --secondary: #252f39;
+  --secondary-foreground: #d6e0e8;
+
+  --accent: #16333d;
+  --accent-foreground: #67e8f9;
+
+  --border: #303d49;
+  --input: #303d49;
+  --ring: var(--brand);
+
+  --destructive: #fb7185;
+  --error: #fb7185;
+  --error-bg: #351c29;
+  --error-border: #9f4059;
+
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --status: #4ade80;
+
+  --chart-1: #22d3ee;
+  --chart-2: #60a5fa;
+  --chart-3: #4ade80;
+  --chart-4: #fbbf24;
+  --chart-5: #a78bfa;
+
+  --sidebar: #11171e;
+  --sidebar-foreground: #e5eaf0;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: #202a35;
+  --sidebar-accent-foreground: #e5eaf0;
+  --sidebar-border: #303d49;
+  --sidebar-ring: var(--brand);
+
+  --shadow-card: 0 8px 32px rgb(0 0 0 / 25%);
+  --shadow-dropdown: 0 12px 35px rgb(0 0 0 / 35%);
+}
+
+/* =========================================
+   4. CYBERPUNK
+   Charcoal / Violet / Neon Purple
+========================================= */
+
+:root[data-theme="cyberpunk"] {
+  color-scheme: dark;
+
+  --brand: #a78bfa;
+  --brand-hover: #8b5cf6;
+  --brand-foreground: #150b2b;
+
+  --background: #0c0915;
+  --foreground: #f1edff;
+
+  --card: #181326;
+  --card-foreground: #f1edff;
+  --popover: #211a33;
+  --popover-foreground: #f1edff;
+
+  --surface-elevated: #28203d;
+  --surface-hover: #35294d;
+  --surface-muted: #130f20;
+
+  --muted: #28203d;
+  --muted-foreground: #aaa0c4;
+  --subtle-foreground: #817595;
+
+  --secondary: #302442;
+  --secondary-foreground: #e9ddff;
+
+  --accent: #33204e;
+  --accent-foreground: #c4b5fd;
+
+  --border: #392d50;
+  --input: #392d50;
+  --ring: var(--brand);
+
+  --destructive: #fb7185;
+  --error: #fb7185;
+  --error-bg: #351b2d;
+  --error-border: #963d69;
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --status: #34d399;
+
+  --chart-1: #a78bfa;
+  --chart-2: #e879f9;
+  --chart-3: #38bdf8;
+  --chart-4: #fbbf24;
+  --chart-5: #34d399;
+
+  --sidebar: #130f20;
+  --sidebar-foreground: #f1edff;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: #28203d;
+  --sidebar-accent-foreground: #f1edff;
+  --sidebar-border: #392d50;
+  --sidebar-ring: var(--brand);
+
+  --shadow-card: 0 8px 32px rgb(0 0 0 / 25%);
+  --shadow-dropdown: 0 12px 35px rgb(0 0 0 / 35%);
+}
+
+/* =========================================
+   5. ARCTIC LIGHT
+   White / Slate / Ice Blue
+========================================= */
+
+:root[data-theme="arctic"] {
+  color-scheme: light;
+
+  --brand: #0284c7;
+  --brand-hover: #0369a1;
+  --brand-foreground: #ffffff;
+
+  --background: #f4f7fb;
+  --foreground: #172033;
+
+  --card: #ffffff;
+  --card-foreground: #172033;
+  --popover: #ffffff;
+  --popover-foreground: #172033;
+
+  --surface-elevated: #ffffff;
+  --surface-hover: #edf2f8;
+  --surface-muted: #edf2f7;
+
+  --muted: #edf2f7;
+  --muted-foreground: #64748b;
+  --subtle-foreground: #94a3b8;
+
+  --secondary: #e5edf6;
+  --secondary-foreground: #334155;
+
+  --accent: #e0f2fe;
+  --accent-foreground: #0369a1;
+
+  --border: #dce4ee;
+  --input: #dce4ee;
+  --ring: var(--brand);
+
+  --destructive: #dc2626;
+  --error: #dc2626;
   --error-bg: #fef2f2;
   --error-border: #fca5a5;
 
-  --chart-1: #ff8b6a;
-  --chart-2: #80a85a;
-  --chart-3: #7ba9c0;
-  --chart-4: #d8a77f;
-  --chart-5: #a88ac2;
+  --success: #16a34a;
+  --warning: #d97706;
+  --status: #16a34a;
 
-  --radius: 0.75rem;
+  --chart-1: #0284c7;
+  --chart-2: #6366f1;
+  --chart-3: #16a34a;
+  --chart-4: #d97706;
+  --chart-5: #c026d3;
 
-  --sidebar: var(--clay-surface);
-  --sidebar-foreground: var(--clay-ink);
-  --sidebar-primary: var(--clay-primary);
-  --sidebar-primary-foreground: var(--clay-primary-ink);
-  --sidebar-accent: var(--clay-sage);
-  --sidebar-accent-foreground: var(--clay-sage-ink);
-  --sidebar-border: var(--clay-border);
-  --sidebar-ring: var(--clay-primary);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #172033;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: #edf2f8;
+  --sidebar-accent-foreground: #172033;
+  --sidebar-border: #dce4ee;
+  --sidebar-ring: var(--brand);
+
+  --shadow-card: 0 4px 20px rgb(15 23 42 / 5%);
+  --shadow-dropdown: 0 12px 30px rgb(15 23 42 / 12%);
 }
 
 /* =========================================
@@ -212,11 +480,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--clay-bg);
-  color: var(--clay-ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-manrope), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 button {
@@ -236,6 +507,7 @@ svg {
 }
 
 .container {
+  width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
@@ -255,7 +527,9 @@ svg {
 }
 
 /* =========================================
-   CLAY COMPONENT UTILITIES
+   LEGACY CLAY CLASSNAMES
+   Retained to avoid breaking existing markup.
+   These now use neutral theme styling.
 ========================================= */
 
 .clay-raised {
@@ -263,11 +537,17 @@ svg {
 }
 
 .clay-card {
-  box-shadow: var(--clay-shadow-card);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .clay-button-shadow {
   box-shadow: var(--clay-shadow-button);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
 }
 
 .clay-button-shadow:hover {
@@ -279,17 +559,35 @@ svg {
 }
 
 .clay-feature-sage {
-  background: var(--clay-green-surface);
-  box-shadow:
-    inset 2px 2px 6px var(--clay-highlight),
-    inset -2px -2px 6px var(--clay-green-shadow);
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border: 1px solid var(--border);
 }
 
 .clay-feature-blue {
-  background: var(--clay-blue);
-  box-shadow:
-    inset 2px 2px 6px var(--clay-highlight),
-    inset -2px -2px 6px var(--clay-blue-shadow);
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border: 1px solid var(--border);
+}
+
+/* =========================================
+   GENERAL SURFACE UTILITIES
+========================================= */
+
+.surface-elevated {
+  background: var(--surface-elevated);
+}
+
+.surface-muted {
+  background: var(--surface-muted);
+}
+
+.surface-hover {
+  background: var(--surface-hover);
+}
+
+.border-theme {
+  border-color: var(--border);
 }
 
 /* =========================================
@@ -321,8 +619,11 @@ svg {
 ========================================= */
 
 a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--clay-primary);
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ring);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -337,7 +638,7 @@ button:focus-visible {
 }
 
 .drawer-scrollbar:hover {
-  scrollbar-color: rgb(128 103 90 / 55%) transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
 .drawer-scrollbar::-webkit-scrollbar {
@@ -354,7 +655,7 @@ button:focus-visible {
 }
 
 .drawer-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: rgb(128 103 90 / 55%);
+  background: var(--border);
 }
 
 /* =========================================

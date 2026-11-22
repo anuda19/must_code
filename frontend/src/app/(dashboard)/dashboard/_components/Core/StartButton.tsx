@@ -1,14 +1,15 @@
+
 "use client";
 
 import { useState } from "react";
 import {
   ArrowUpRight,
-  Sparkles,
   CircleAlert,
   UserRoundCheck,
   Loader2,
   Mic,
 } from "lucide-react";
+
 import { CreateInterviewDrawer } from "./CreateInterDrawer";
 import { useUser } from "@/hooks/useUser";
 import { UserProfileData } from "@/types/user-profile-types";
@@ -23,49 +24,49 @@ export default function StartButton({ userProfile }: StartButtonProps) {
 
   const hasProfile = Boolean(user?.profile || userProfile);
 
-  // 1. Loading state view while data is being fetched
   if (isLoading) {
     return (
       <button
+        type="button"
         disabled
-        className="flex w-full items-center justify-between rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/50 px-4 py-3 text-sm font-semibold text-[var(--clay-muted)] opacity-70"
+        className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-muted-foreground opacity-70"
       >
         <span className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--clay-peach)]">
-            <Loader2 className="h-4 w-4 animate-spin text-[var(--clay-primary)]" />
+          <span className="grid size-9 place-items-center rounded-lg bg-primary/10">
+            <Loader2 className="size-4 animate-spin text-primary" />
           </span>
 
-          <span className="flex flex-col items-start gap-0.5">
-            <span className="h-4 w-32 animate-pulse rounded bg-[var(--clay-peach-shadow)]"></span>
-            <span className="h-3 w-44 animate-pulse rounded bg-[var(--clay-border)]"></span>
+          <span className="flex flex-col items-start gap-1">
+            <span className="h-4 w-32 animate-pulse rounded bg-muted" />
+            <span className="h-3 w-44 animate-pulse rounded bg-muted/70" />
           </span>
         </span>
       </button>
     );
   }
 
-  // 2. Main component render after loading finishes
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsDrawerOpen(true)}
         className={`
           group relative flex w-full items-center justify-between
           overflow-hidden rounded-xl border px-4 py-3
           text-sm font-semibold transition-all duration-300
           focus-visible:outline-none focus-visible:ring-2
-          focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--clay-bg)]
+          focus-visible:ring-primary focus-visible:ring-offset-2
+          focus-visible:ring-offset-background
           ${
             hasProfile
-              ? "border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)]/55 text-[var(--clay-primary-ink)] hover:border-[var(--clay-primary)] hover:bg-[var(--clay-peach)] focus-visible:ring-[var(--clay-primary)]"
-              : "animate-attention border-[#e8b48a] bg-[#fff0d9] text-[#8b542b] hover:border-[#d99a65] hover:bg-[#ffe8c6] focus-visible:ring-[#d99a65]"
+              ? "border-primary/25 bg-primary/10 text-foreground hover:border-primary/50 hover:bg-primary/15"
+              : "animate-attention border-warning/40 bg-warning/10 text-foreground hover:border-warning/60 hover:bg-warning/15"
           }
         `}
       >
-        {/* Subtle moving highlight */}
         <span
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent ${
+          className={`pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-foreground/10 to-transparent ${
             hasProfile
               ? "group-hover:translate-x-full group-hover:transition-transform group-hover:duration-700"
               : "animate-shimmer"
@@ -74,18 +75,18 @@ export default function StartButton({ userProfile }: StartButtonProps) {
 
         <span className="relative flex min-w-0 items-center gap-3">
           <span
-            className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+            className={`relative grid size-9 shrink-0 place-items-center rounded-lg ${
               hasProfile
-                ? "bg-[var(--clay-primary)]/20 text-[var(--clay-primary-ink)]"
-                : "bg-[#f6d9ad] text-[#8b542b]"
+                ? "bg-primary/15 text-primary"
+                : "bg-warning/15 text-warning"
             }`}
           >
             {hasProfile ? (
-              <Mic className="h-[18px] w-[18px] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <Mic className="size-[18px] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
             ) : (
               <>
-                <UserRoundCheck className="h-[18px] w-[18px]" />
-                <CircleAlert className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-[var(--clay-surface)] text-[#c47b3e]" />
+                <UserRoundCheck className="size-[18px]" />
+                <CircleAlert className="absolute -right-1 -top-1 size-4 rounded-full bg-card text-warning" />
               </>
             )}
           </span>
@@ -95,13 +96,7 @@ export default function StartButton({ userProfile }: StartButtonProps) {
               {hasProfile ? "Start AI Interview" : "Complete Profile"}
             </span>
 
-            <span
-              className={`text-xs font-normal ${
-                hasProfile
-                  ? "text-[var(--clay-muted)]"
-                  : "text-[#a16b3c]"
-              }`}
-            >
+            <span className="text-left text-xs font-normal text-muted-foreground">
               {hasProfile
                 ? "Practice with your AI interviewer"
                 : "Required before you can get started"}
@@ -110,10 +105,8 @@ export default function StartButton({ userProfile }: StartButtonProps) {
         </span>
 
         <ArrowUpRight
-          className={`relative ml-2 h-4 w-4 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-            hasProfile
-              ? "text-[var(--clay-primary)]"
-              : "text-[#b8793f]"
+          className={`relative ml-2 size-4 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+            hasProfile ? "text-primary" : "text-warning"
           }`}
         />
       </button>
@@ -124,8 +117,8 @@ export default function StartButton({ userProfile }: StartButtonProps) {
         initialData={{
           jobRole: (user?.profile?.jobRole || userProfile?.jobRole) ?? "",
           experienceLevel:
-            (user?.profile?.experienceLevel || userProfile?.experienceLevel) ??
-            "",
+            (user?.profile?.experienceLevel ||
+              userProfile?.experienceLevel) ?? "",
           skills: (user?.profile?.skills || userProfile?.skills) ?? [],
           targetCompany:
             (user?.profile?.targetCompany || userProfile?.targetCompany) ?? "",

@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Plus, Sparkles, Code2, Search } from "lucide-react";
+import { X, Plus, Code2, Search } from "lucide-react";
 import { getTechIconUrl } from "@/lib/tech.icon";
 
 interface TechStackInputProps {
@@ -94,9 +94,7 @@ function TechBadgeLogo({ techName }: { techName: string }) {
   const iconUrl = getTechIconUrl(techName);
 
   if (hasError) {
-    return (
-      <Code2 className="size-3.5 shrink-0 text-[var(--clay-primary)]" />
-    );
+    return <Code2 className="size-3.5 shrink-0 text-primary" />;
   }
 
   return (
@@ -133,12 +131,14 @@ export function TechStackInput({
 
   const addTag = (tagToAdd: string) => {
     const trimmed = tagToAdd.trim().replace(/,/g, "");
+
     if (
       trimmed &&
       !value.some((val) => val.toLowerCase() === trimmed.toLowerCase())
     ) {
       onChange([...value, trimmed]);
     }
+
     setInput("");
   };
 
@@ -158,19 +158,21 @@ export function TechStackInput({
   return (
     <div className="space-y-3">
       {/* Selected skills and input */}
-      <div className="mt-1.5 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] p-3 shadow-[inset_3px_3px_7px_rgba(234,208,192,0.6),inset_-3px_-3px_7px_rgba(255,255,255,0.8)] transition-all focus-within:border-[var(--clay-primary)] focus-within:ring-4 focus-within:ring-[var(--clay-primary)]/10">
+      <div className="mt-1.5 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl border border-border bg-card p-3 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
         {value.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--clay-peach-shadow)] bg-[var(--clay-peach)] px-2.5 py-1.5 text-xs font-semibold text-[var(--clay-primary-ink)] shadow-[inset_2px_2px_5px_rgba(255,255,255,0.45),0_2px_0_var(--clay-peach-shadow)] animate-in fade-in zoom-in-95 duration-150"
+            className="inline-flex animate-in items-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-2.5 py-1.5 text-xs font-semibold text-primary fade-in zoom-in-95 duration-150"
           >
             <TechBadgeLogo techName={tag} />
+
             <span>{tag}</span>
+
             <button
               type="button"
               onClick={() => removeTag(tag)}
               aria-label={`Remove ${tag}`}
-              className="ml-0.5 grid size-4 place-items-center rounded-md text-[var(--clay-muted)] transition hover:bg-[var(--clay-surface)] hover:text-[var(--clay-primary-ink)]"
+              className="ml-0.5 grid size-4 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-background hover:text-destructive"
             >
               <X className="size-3" />
             </button>
@@ -187,17 +189,18 @@ export function TechStackInput({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="min-w-[150px] flex-1 bg-transparent px-1 py-1.5 text-xs font-medium text-[var(--clay-ink)] placeholder:text-[var(--clay-subtle)] focus:outline-none"
+          className="min-w-[150px] flex-1 bg-transparent px-1 py-1.5 text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
       </div>
 
       {/* Suggestions */}
       {suggestions.length > 0 && (
-        <div className="rounded-xl border border-[var(--clay-border)] bg-[var(--clay-surface)] p-3">
-          <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--clay-muted)]">
+        <div className="rounded-xl border border-border bg-card p-3">
+          <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
             {trimmedInput && (
-              <Search className="size-3.5 text-[var(--clay-primary)]" />
+              <Search className="size-3.5 text-primary" />
             )}
+
             {trimmedInput ? "Matching technologies" : "Quick add"}
           </div>
 
@@ -207,11 +210,13 @@ export function TechStackInput({
                 key={item}
                 type="button"
                 onClick={() => addTag(item)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[var(--clay-border)] bg-[var(--clay-surface-warm)] px-2.5 py-1.5 text-[11px] font-medium text-[var(--clay-muted)] transition-all hover:border-[var(--clay-peach-shadow)] hover:bg-[var(--clay-peach)] hover:text-[var(--clay-primary-ink)] active:translate-y-px"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-all hover:border-primary/40 hover:bg-primary/10 hover:text-primary active:translate-y-px"
               >
                 <TechBadgeLogo techName={item} />
+
                 <span>{item}</span>
-                <Plus className="size-3 text-[var(--clay-primary)]" />
+
+                <Plus className="size-3 text-primary" />
               </button>
             ))}
           </div>

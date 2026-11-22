@@ -26,10 +26,8 @@ export async function loginAction(formData: FormData) {
       throw new Error('Email and password are required');
     }
 
-    // 1. Call login endpoint (res is already parsed LoginResponse)
     const res = await api.post<LoginResponse>('/auth/login', { email, password });
 
-    // 2. Set HttpOnly Cookie for Refresh Token
     const cookieStore = await cookies();
     cookieStore.set('refreshToken', res.refreshToken, {
       httpOnly: true,
@@ -43,10 +41,9 @@ export async function loginAction(formData: FormData) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 15 * 60, // 15 minutes
+      maxAge: 15 * 60,
     });
 
-    // 3. Return accessToken & user
     return {
       accessToken: res.accessToken,
       user: res.user,

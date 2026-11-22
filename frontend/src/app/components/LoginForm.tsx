@@ -19,6 +19,7 @@ import {
 import { loginSchema } from "@/lib/schema/auth";
 import { loginAction } from "@/actions/auth/auth";
 import { ROUTES } from "@/lib/routes";
+import { ErrorAlert } from "./ui/ErrorMessage";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -70,15 +71,7 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-[460px]">
       {/* Error */}
-      {error && (
-        <div
-          role="alert"
-          className="mb-6 flex items-start gap-3 rounded-xl border border-[var(--clay-primary)]/40 bg-[var(--clay-peach)]/50 p-3.5 text-sm text-[#a94e37]"
-        >
-          <span className="mt-0.5 shrink-0">!</span>
-          <p>{error}</p>
-        </div>
-      )}
+      {error && <ErrorAlert message={error} />}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-5">
